@@ -1,24 +1,30 @@
 @import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
-@import "../node_modules/bootstrap/scss/variables-dark";
-/* You can add global styles to this file, and also import other style files */
-//color by: https://www.realtimecolors.com/?colors=0a0500-fff4eb-e48a1b-9df674-60d390&fonts=Poppins-Poppins#how
 
-.background-body{
-  background-color: #f8e4d4;
-}
+/* You can add global styles to this file, and also import other style files */
+//color by: https://www.realtimecolors.com/?colors=0a0500-fff4eb-e48a1b-d7b490-96b0ae&fonts=Poppins-Poppins
+
+$primary: #e48a1b;
 
 // Create your own map
 $custom-colors: (
   "custom-background": #fff4eb,
   "custom-primary": #e48a1b,
-  "custom-secondary":#9df674,
-  "custom-accent-success": #5fd38f,
+  "custom-secondary":#D7B490,
+  "custom-accent-success": #96B0AE,
 );
 
+@import "../node_modules/bootstrap/scss/variables";
+
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/variables-dark";
 
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
+
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+.background-body{
+  background-color: #f8e4d4;
+}

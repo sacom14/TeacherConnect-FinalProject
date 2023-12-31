@@ -5,16 +5,17 @@ import { StudentPageComponent } from './pages/student-page/student-page.componen
 import { MapPageComponent } from './pages/map-page/map-page.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
+import { CalendarPageComponent } from './pages/calendar-page/calendar-page.component';
 
 export const routes: Routes = [
   {path: 'landing-page', component: MainPageComponent},
   {path: 'home-page', component: HomePageComponent},
   {path: 'student-page', component: StudentPageComponent},
-  {path: 'calendar-page', component: MapPageComponent},
+  {path: 'calendar-page', component: CalendarPageComponent},
   {path: 'map-page', component: MapPageComponent},
   {path: 'login-page', component: LoginComponent},
   {path: 'register-page', component: RegisterComponent},
-  
+
 
   {path: '**', pathMatch:'full', redirectTo: 'landing-page'}
 ];

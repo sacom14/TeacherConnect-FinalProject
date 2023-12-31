@@ -1,3 +1,4 @@
+//carousel
 .picsum-img-wrapper {
   width: 100%; /* Ajusta al ancho del contenedor padre */
   height: 600px; /* Altura fija, pero puedes ajustarla como necesites */
@@ -13,4 +14,43 @@
 .carousel-caption{
   background-color: rgba(96, 96, 96, 0.516);
   bottom: 100px;
+}
+
+//acordion
+.custom-accordion {
+  max-width: 600px; /* o el ancho que prefieras */
+  margin: 0 auto; /* esto centra el acordeón */
+}
+
+// Personalizar el acordeón
+.accordion-item {
+  // Fondo de cada ítem del acordeón
+  background-color: #f8f9fa; // Un gris claro, cambia a tu color preferido
+
+  // Bordes de los ítems
+  border: 1px solid #dee2e6; // Un gris, cambia a tu color preferido
+  //TODO: sombreado
+
+  // Personalizar el botón del acordeón
+  .accordion-button {
+    // Color de fondo del botón cuando está colapsado
+    background-color: #f5d6b0; // Otro gris claro, cambia a tu color preferido
+
+    &:not(.collapsed) {
+      // Color de fondo del botón cuando está expandido
+      background-color: #f8bf79; // Un verde claro, cambia a tu color preferido
+    }
+  }
+
+  // Personalizar el cuerpo del acordeón
+  .accordion-body {
+    // Color de fondo del cuerpo
+    background-color: #f4ddc3; // Blanco, cambia a tu color preferido
+
+    // Color de texto del cuerpo
+    color: #212529; // Casi negro, cambia a tu color preferido
+  }
+  .accordion-button:focus {
+  box-shadow: none !important; // Bootstrap a veces usa box-shadow para el enfoque también
+}
 }
