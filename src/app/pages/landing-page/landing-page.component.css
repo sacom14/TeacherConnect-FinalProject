@@ -1,0 +1,18 @@
+@charset "UTF-8";
+.picsum-img-wrapper {
+  width: 100%; /* Ajusta al ancho del contenedor padre */
+  height: 600px; /* Altura fija, pero puedes ajustarla como necesites */
+  overflow: hidden; /* Oculta cualquier parte de la imagen que exceda el contenedor */
+}
+
+.carousel-img {
+  width: 100%; /* Ajusta al ancho del contenedor */
+  height: 100%; /* Ajusta a la altura del contenedor */
+  -o-object-fit: cover;
+     object-fit: cover; /* Asegura que la imagen cubra completamente el área sin distorsionarse */
+}
+
+.carousel-caption {
+  background-color: rgba(96, 96, 96, 0.516);
+  bottom: 100px;
+}/*# sourceMappingURL=landing-page.component.css.map */
