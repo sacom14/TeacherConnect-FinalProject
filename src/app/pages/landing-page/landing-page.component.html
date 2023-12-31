@@ -1,1 +1,21 @@
-<p>landing-page works!</p>
+<!-- Botón iniciar sesion -->
+<!-- LINK: Aún no tienes una cuenta: registrate -->
+<main>
+  <section>
+    <ngb-carousel #carousel [interval]="2500" [pauseOnHover]="pauseOnHover" [pauseOnFocus]="pauseOnFocus"
+      (slide)="onSlide($event)">
+      @for (img of images; track img; let i = $index) {
+      <ng-template ngbSlide>
+        <div class="carousel-caption">
+          <h1>{{ slogans[i] }}</h1>
+        </div>
+        <div class="picsum-img-wrapper">
+          <img [src]="img" alt="Carousel-img" class="carousel-img" />
+        </div>
+      </ng-template>
+      }
+    </ngb-carousel>
+  </section>
+  <!-- En un futuro FAQ  en otra section-->
+</main>
+
