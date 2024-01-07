@@ -25,28 +25,27 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
-.background-body{
+.background-body{   
   background-color: #f8e4d4;
 }
 
 
 //custom scroll bar
-/* Personaliza toda la barra de desplazamiento */
 ::-webkit-scrollbar {
-  width: 10px;  /* o cualquier tamaño que prefieras */
+  width: 13px;
 }
 
-/* Personaliza el fondo de la barra de desplazamiento */
+/* bg scrollbar */
 ::-webkit-scrollbar-track {
-  background: #D7B490;  /* o cualquier color que prefieras */
+  background: #edcaa8;
 }
 
-/* Personaliza el manejador de la barra de desplazamiento */
+/* scrollbar -bar */
 ::-webkit-scrollbar-thumb {
-  background: #eba754;  /* o cualquier color que prefieras */
+  background: #f2ba75;
+  border-radius: 10px;
 }
 
-/* Cambia el color del manejador al pasar el ratón */
 ::-webkit-scrollbar-thumb:hover {
-  background: #e79531;  /* o cualquier color que prefieras */
+  background: #f2b05f;
 }

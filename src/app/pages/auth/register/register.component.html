@@ -1,1 +1,129 @@
-<p>register works!</p>
+<section class="d-flex justify-content-center">
+  <div class="w-75 w-md-100">
+    <div class="col card p-5 rounded-5">
+      <h1 class="fs-4">Create Your Account</h1>
+      <p>Star Wars is part of The Walt Disney Family of Companies. You'll be able to log into services and experiences
+        using the same email and password.</p>
+      <hr>
+      <form [formGroup]="myFormRegister" (ngSubmit)="onSubmit()" autocomplete="off">
+        <!-- Name -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Nombre (*)</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <input type="text" class="form-control" formControlName="name" placeholder="Tu nombre">
+            <span *ngIf="isValidField('name')" class="form-text text-danger">
+              Debe introducir un nombre de mínimo 2 letras y sin números
+            </span>
+          </div>
+        </div>
+
+        <!-- Surname -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Apellidos (*)</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <input type="text" class="form-control" formControlName="surname" placeholder="Tus apellidos">
+            <span *ngIf="isValidField('surname')" class="form-text text-danger">
+              Debe introducir uno o dos apellidos sin números
+            </span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Email (*)</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <input type="email" class="form-control" formControlName="email" placeholder="xxx@xxx.xx">
+            <span *ngIf="isValidField('email')" class="form-text text-danger">
+              Debe tener el formato de email correcto.
+            </span>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Teléfono (*)</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <input type="tel" class="form-control" pattern="^\d{1,9}$" formControlName="phone" placeholder="XXXXXXXXX">
+            <span *ngIf="isValidField('phone')" class="form-text text-danger">
+              Introduce un número valido de 9 dígitos
+            </span>
+          </div>
+        </div>
+
+        <!-- Birthdate -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Fecha de nacimiento (*)</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <input type="date" class="form-control" formControlName="birthdate" placeholder="XXXXXXXXX">
+            <span *ngIf="isValidField('birthdate')" class="form-text text-danger">
+              Tiene que ser una fecha válida
+            </span>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Contraseña (*)</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <input type="password" class="form-control" formControlName="password" placeholder="Escriba su contraseña">
+            <span *ngIf="isValidField('password')" class="form-text text-danger">
+              La contraseña debe tener una longitud mínima de 6
+            </span>
+          </div>
+        </div>
+
+        <!-- Password2 -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Confirmar contraseña (*)</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <input type="password" class="form-control" formControlName="password2" placeholder="Repita la contraseña">
+            <span *ngIf="isValidField('password2')" class="form-text text-danger">
+              Las contraseñas no coinciden
+            </span>
+          </div>
+        </div>
+        <!-- Submit button -->
+        <!-- <div class="row">
+          <div class="col d-flex justify-content-center">
+            <button class="btn btn-warning float-end mx-2" type="submit" (click)="goToWelcome()">
+              Welcome
+            </button>
+            <button class="btn btn-warning float-end" type="submit" (click)="newRegisterUser()">
+              Sing Up
+            </button>
+          </div>
+        </div> -->
+      </form>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- validaciones -->
+<h2>Form Valid: {{ myFormRegister.valid }} </h2>
+<h2>Form Status: {{ myFormRegister.status }} </h2>
+<h2>Form Pending: {{ myFormRegister.pending }} </h2>
+<h2>Form errors</h2>
+<pre>{{ myFormRegister.errors| json }}</pre>
+
+<h5>Name</h5>
+<pre>{{ myFormRegister.controls['name'].errors | json }}</pre>
+
+<h5>Surname</h5>
+<pre>{{ myFormRegister.controls['surname'].errors | json }}</pre>
+
+<h5>Email</h5>
+<pre>{{ myFormRegister.controls['email'].errors | json }}</pre>
+
+<h5>phone</h5>
+<pre>{{ myFormRegister.controls['phone'].errors | json }}</pre>
+
+<h5>birthdate</h5>
+<pre>{{ myFormRegister.controls['name'].errors | json }}</pre>
+
+<h5>Password</h5>
+<pre>{{ myFormRegister.controls['password'].errors | json }}</pre>
+
+<h5>Confirm Password</h5>
+<pre>{{ myFormRegister.controls['password2'].errors | json }}</pre>
