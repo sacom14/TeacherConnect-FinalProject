@@ -28,3 +28,25 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 .background-body{
   background-color: #f8e4d4;
 }
+
+
+//custom scroll bar
+/* Personaliza toda la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 10px;  /* o cualquier tamaño que prefieras */
+}
+
+/* Personaliza el fondo de la barra de desplazamiento */
+::-webkit-scrollbar-track {
+  background: #D7B490;  /* o cualquier color que prefieras */
+}
+
+/* Personaliza el manejador de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+  background: #eba754;  /* o cualquier color que prefieras */
+}
+
+/* Cambia el color del manejador al pasar el ratón */
+::-webkit-scrollbar-thumb:hover {
+  background: #e79531;  /* o cualquier color que prefieras */
+}
