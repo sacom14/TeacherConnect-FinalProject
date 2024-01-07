@@ -2,8 +2,6 @@
   <div class="w-75 w-md-100">
     <div class="col card p-5 rounded-5">
       <h1 class="fs-4">Create Your Account</h1>
-      <p>Star Wars is part of The Walt Disney Family of Companies. You'll be able to log into services and experiences
-        using the same email and password.</p>
       <hr>
       <form [formGroup]="myFormRegister" (ngSubmit)="onSubmit()" autocomplete="off">
         <!-- Name -->
@@ -11,9 +9,12 @@
           <label class="col-lg-12 col-form-label">Nombre (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
             <input type="text" class="form-control" formControlName="name" placeholder="Tu nombre">
-            <span *ngIf="isValidField('name')" class="form-text text-danger">
-              Debe introducir un nombre de mínimo 2 letras y sin números
-            </span>
+            @if (isValidField('name'))
+            {
+              <span class="form-text text-danger">
+                Debe introducir un nombre de mínimo 2 letras y sin números
+              </span>
+            }
           </div>
         </div>
 
@@ -22,9 +23,11 @@
           <label class="col-lg-12 col-form-label">Apellidos (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
             <input type="text" class="form-control" formControlName="surname" placeholder="Tus apellidos">
-            <span *ngIf="isValidField('surname')" class="form-text text-danger">
-              Debe introducir uno o dos apellidos sin números
-            </span>
+            @if (isValidField('surname')){
+              <span class="form-text text-danger">
+                Debe introducir uno o dos apellidos sin números
+              </span>
+            }
           </div>
         </div>
 
@@ -33,9 +36,12 @@
           <label class="col-lg-12 col-form-label">Email (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
             <input type="email" class="form-control" formControlName="email" placeholder="xxx@xxx.xx">
-            <span *ngIf="isValidField('email')" class="form-text text-danger">
-              Debe tener el formato de email correcto.
-            </span>
+            @if (isValidField('email')){
+              <span class="form-text text-danger">
+                Debe tener el formato de email correcto.
+              </span>
+            }
+
           </div>
         </div>
 
@@ -44,9 +50,12 @@
           <label class="col-lg-12 col-form-label">Teléfono (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
             <input type="tel" class="form-control" pattern="^\d{1,9}$" formControlName="phone" placeholder="XXXXXXXXX">
-            <span *ngIf="isValidField('phone')" class="form-text text-danger">
-              Introduce un número valido de 9 dígitos
-            </span>
+            @if (isValidField('phone')){
+              <span class="form-text text-danger">
+                Introduce un número valido de 9 dígitos
+              </span>
+            }
+
           </div>
         </div>
 
@@ -54,10 +63,12 @@
         <div class="row mb-3">
           <label class="col-lg-12 col-form-label">Fecha de nacimiento (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
-            <input type="date" class="form-control" formControlName="birthdate" placeholder="XXXXXXXXX">
-            <span *ngIf="isValidField('birthdate')" class="form-text text-danger">
-              Tiene que ser una fecha válida
-            </span>
+            <input type="date" class="form-control" formControlName="birthdate">
+            @if (isValidField('birthdate')){
+              <span class="form-text text-danger">
+                Tiene que ser una fecha válida
+              </span>
+            }
           </div>
         </div>
 
@@ -66,9 +77,12 @@
           <label class="col-lg-12 col-form-label">Contraseña (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
             <input type="password" class="form-control" formControlName="password" placeholder="Escriba su contraseña">
-            <span *ngIf="isValidField('password')" class="form-text text-danger">
-              La contraseña debe tener una longitud mínima de 6
-            </span>
+            @if (isValidField('password')){
+              <span class="form-text text-danger">
+                La contraseña debe tener una longitud mínima de 6
+              </span>
+            }
+
           </div>
         </div>
 
@@ -77,9 +91,12 @@
           <label class="col-lg-12 col-form-label">Confirmar contraseña (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
             <input type="password" class="form-control" formControlName="password2" placeholder="Repita la contraseña">
-            <span *ngIf="isValidField('password2')" class="form-text text-danger">
-              Las contraseñas no coinciden
-            </span>
+            @if (isValidField('password2')){
+              <span class="form-text text-danger">
+                Las contraseñas no coinciden
+              </span>
+            }
+
           </div>
         </div>
 
@@ -88,12 +105,14 @@
           <label class="col-lg-12 col-form-label">Foto de perfil</label>
           <div class="col-md-9 col-lg-12 w-100">
             <input type="file" class="form-control" formControlName="photo" (change)="onImageChange($event)" [accept]="'.jpg,.jpeg,.png,.webp'" placeholder="Repita la contraseña">
-            <span *ngIf="isValidField('photo')" class="form-text text-danger">
-              Las contraseñas no coinciden
-            </span>
+            @if (isValidField('photo')){
+              <span class="form-text text-danger">
+                El archivo debe tener formato .jpg,.jpeg,.png o .webp
+              </span>
+            }
           </div>
         </div>
-        
+
         <!-- Submit button -->
         <!-- <div class="row">
           <div class="col d-flex justify-content-center">

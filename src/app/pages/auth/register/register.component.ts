@@ -58,4 +58,6 @@ export class RegisterComponent {
       this.myFormRegister.get('image')?.updateValueAndValidity();
     }
   }
+
+  
 }
