@@ -1,6 +1,6 @@
 <section class="d-flex justify-content-center">
   <div class="w-75 w-md-100">
-    <div class="col card p-5 rounded-5">
+    <div class="col card p-5 rounded-5 mb-3">
       <h1 class="fs-4">Create Your Account</h1>
       <hr>
       <form [formGroup]="myFormRegister" (ngSubmit)="onSubmit()" autocomplete="off">
@@ -114,16 +114,20 @@
         </div>
 
         <!-- Submit button -->
-        <!-- <div class="row">
-          <div class="col d-flex justify-content-center">
-            <button class="btn btn-warning float-end mx-2" type="submit" (click)="goToWelcome()">
-              Welcome
-            </button>
-            <button class="btn btn-warning float-end" type="submit" (click)="newRegisterUser()">
-              Sing Up
-            </button>
+        <div class="row">
+          <div class="d-md-flex justify-content-between text-center">
+            <div>
+              <button class="btn btn-warning" type="submit" (click)="newRegisterUser()">
+                Registrarse
+              </button>
+            </div>
+            <div>
+            <a class="" aria-current="page" href="/login-page">¿Ya tienes una cuenta? Inicia Sesión</a>
+            </div>
+
+
           </div>
-        </div> -->
+        </div>
       </form>
     </div>
   </div>
@@ -132,7 +136,7 @@
 
 
 <!-- validaciones -->
-<h2>Form Valid: {{ myFormRegister.valid }} </h2>
+<!-- <h2>Form Valid: {{ myFormRegister.valid }} </h2>
 <h2>Form Status: {{ myFormRegister.status }} </h2>
 <h2>Form Pending: {{ myFormRegister.pending }} </h2>
 <h2>Form errors</h2>
@@ -157,4 +161,4 @@
 <pre>{{ myFormRegister.controls['password'].errors | json }}</pre>
 
 <h5>Confirm Password</h5>
-<pre>{{ myFormRegister.controls['password2'].errors | json }}</pre>
+<pre>{{ myFormRegister.controls['password2'].errors | json }}</pre> -->
