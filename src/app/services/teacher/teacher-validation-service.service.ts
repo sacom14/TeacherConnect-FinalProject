@@ -31,22 +31,34 @@ export class TeacherValidationServiceService {
   };
 
   //para comprobar si dos campos son iguales (pasword y password2)
-  public isPasswordOneEqualPasswordTwo(password: string, password2: string) {
+  public isPasswordOneEqualPasswordTwo(field1: string, field2: string) {
     //función que sirve para evaluar el formgroup
     return (formGroup: AbstractControl): ValidationErrors | null => {
 
       //cogemos el valor de la password y password2
-      const passwordValue = formGroup.get(password)?.value;
-      const passwordValue2 = formGroup.get(password2)?.value;
+      const fieldValue = formGroup.get(field1)?.value;
+      const fieldValue2 = formGroup.get(field2)?.value;
 
       //hacemos la comparación para ver si son iguales los password
-      if (passwordValue !== passwordValue2) {
-        formGroup.get(password2)?.setErrors({ notEqual: true });
+      if (fieldValue !== fieldValue2) {
+        formGroup.get(field2)?.setErrors({ notEqual: true });
         return { notEqual: true }
       }
-      formGroup.get(password2)?.setErrors(null);
+      formGroup.get(field2)?.setErrors(null);
       return null;
     };
+  }
+
+  public imageExtensionValidator(control: AbstractControl): ValidationErrors | null {
+    const file = control.value;
+    if (file) {
+      const extension = file.name.split('.').pop().toLowerCase();
+      const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+      if (!validExtensions.includes(extension)) {
+        return { invalidExtension: true };
+      }
+    }
+    return null;
   }
 
 }

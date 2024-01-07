@@ -31,6 +31,7 @@ export class RegisterComponent {
     birthdate: ['', [Validators.required, Validators.pattern(this.teacherValidators.birthdatePattern)]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(this.teacherValidators.passwordPattern)]],
     password2: ['', [Validators.required]],
+    photo: ['', [this.teacherValidators.imageExtensionValidator]],
   },
   {
     //las funciones de este argumento, pasan como argumento implícito todo el formulario (tenemos acceso a todo el formualio, a todos los campos)
@@ -48,4 +49,13 @@ export class RegisterComponent {
     return this.teacherValidators.isValidField(this.myFormRegister, field);
   };
 
+  //para asegurarnos de que el formato del archivo sea correcto
+  public onImageChange(event: Event): void {
+    const element = event.currentTarget as HTMLInputElement;
+    let file = element.files?.item(0);
+    if (file) {
+      this.myFormRegister.patchValue({ image: file });
+      this.myFormRegister.get('image')?.updateValueAndValidity();
+    }
+  }
 }
