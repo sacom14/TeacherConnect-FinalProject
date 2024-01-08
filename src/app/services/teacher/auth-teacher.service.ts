@@ -20,15 +20,24 @@ export class AuthTeacherService {
   }
 
     // after login we put the token on localstorage
-    public login(token: string) {
+    public login(token: string, teacherId: number) {
       localStorage.setItem('token', token);
+      localStorage.setItem('teacherId', teacherId.toString());
       this._isAuthenticated.next(true);
     }
 
     // When logout for remove token from localstorage
     public removeToken() {
       localStorage.removeItem('token');
+      localStorage.removeItem('teacherId');
       this._isAuthenticated.next(false);
     }
+
+    //get the teacherId
+    public getTeacherId():number | null {
+      const teacherId = localStorage.getItem('teacherId');
+      return teacherId ? parseInt(teacherId) : null;
+    }
+
 
 }

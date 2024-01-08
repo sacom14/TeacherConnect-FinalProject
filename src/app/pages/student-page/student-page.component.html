@@ -7,6 +7,9 @@
   <!-- en el centro lista students -->
   <article>
     <h3>AQUÍ VAN LOS CARDS DE STUDENTS</h3>
+    <div *ngFor="let student of students | async">
+      <p>{{ student.student_name }} - {{ student.student_surname }}</p>
+    </div>
   </article>
 
   <!-- aside derecha (info alumno) -->

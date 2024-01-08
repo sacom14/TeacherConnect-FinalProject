@@ -9,13 +9,13 @@ import { catchError, throwError } from 'rxjs';
 })
 export class TeacherService {
 
-  private teacherApiUrl: string = 'http://localhost:3000/api/teacher';
+  private _teacherApiUrl: string = 'http://localhost:3000/api/teacher';
   constructor(
     private http: HttpClient) { }
 
   //create teacher
   createNewTeacher(teacherData: Teacher){
-    return this.http.post(this.teacherApiUrl, teacherData)
+    return this.http.post(this._teacherApiUrl, teacherData)
     .pipe(
       catchError((error) => {
         console.error('Error en el servicio: ', error);
@@ -26,12 +26,12 @@ export class TeacherService {
 
   //chek if the email is already on BD
   public checkRepeatEmail(teacherEmail: string){
-    return this.http.post<TeacherEmailCheckResponseMessage>(`${this.teacherApiUrl}/check-email`, {teacherEmail});
+    return this.http.post<TeacherEmailCheckResponseMessage>(`${this._teacherApiUrl}/check-email`, {teacherEmail});
   }
 
   //login (take token)
   public login(teacherEmail: string, teacherPassword: string) {
-    return this.http.post<{ token: string }>(`${this.teacherApiUrl}/login`, {teacher_email: teacherEmail, teacher_password: teacherPassword});
+    return this.http.post<{ token: string, teacherId:number }>(`${this._teacherApiUrl}/login`, {teacher_email: teacherEmail, teacher_password: teacherPassword});
   }
 
 }

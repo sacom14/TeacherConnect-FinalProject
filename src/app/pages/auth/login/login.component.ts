@@ -43,7 +43,7 @@ export class LoginComponent {
 
       this.teacherService.login(email, password).subscribe({
         next: (response) => {
-          this.authTeacherService.login(response.token)//save token on localstorage?
+          this.authTeacherService.login(response.token, response.teacherId)//save token on localstorage?
           this.router.navigate(['/home-page']);
         },
         error: (error) => {
