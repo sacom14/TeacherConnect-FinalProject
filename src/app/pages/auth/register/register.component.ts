@@ -1,48 +1,53 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { TeacherValidationServiceService } from '../../../services/teacher/teacher-validation-service.service';
-import { TeacherServiceService } from '../../../services/teacher/teacher-service.service';
-import { CommonModule } from '@angular/common';
+import { TeacherService } from '../../../services/teacher/teacher-service.service';
+
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+  public emailExist:boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private teacherValidators:TeacherValidationServiceService,
-    private teacherService:TeacherServiceService,
-    private router:Router) {}
+    private teacherValidators: TeacherValidationServiceService,
+    private teacherService: TeacherService,
+    private router: Router) { }
 
   public myFormRegister: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.pattern(this.teacherValidators.namePattern)]],
-    surname: ['', [Validators.required, Validators.pattern(this.teacherValidators.surnamePattern)]],
-    email: ['', [Validators.required, Validators.pattern(this.teacherValidators.emailPattern)]], //porque no es una función, sinó expression regular
-    phone: ['', [Validators.required, Validators.pattern(this.teacherValidators.phonePattern)]],
-    birthdate: ['', [Validators.required, Validators.pattern(this.teacherValidators.birthdatePattern)]],
-    password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(this.teacherValidators.passwordPattern)]],
+    teacherName: ['', [Validators.required, Validators.pattern(this.teacherValidators.namePattern)]],
+    teacherSurname: ['', [Validators.required, Validators.pattern(this.teacherValidators.surnamePattern)]],
+    teacherEmail: ['', [Validators.required, Validators.pattern(this.teacherValidators.emailPattern)]], //porque no es una función, sinó expression regular
+    teacherPhone: ['', [Validators.required, Validators.pattern(this.teacherValidators.phonePattern)]],
+    teacherBirthdate: ['', [Validators.required, Validators.pattern(this.teacherValidators.birthdatePattern)]],
+    teacherPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(this.teacherValidators.passwordPattern)]],
     password2: ['', [Validators.required]],
-    photo: ['', [this.teacherValidators.imageExtensionValidator]],
+    teacherPhoto: ['', [this.teacherValidators.imageExtensionValidator]],
   },
-  {
-    //las funciones de este argumento, pasan como argumento implícito todo el formulario (tenemos acceso a todo el formualio, a todos los campos)
-    validators: [
-      this.teacherValidators.isPasswordOneEqualPasswordTwo('password', 'password2'),
-    ]
-  });
+    {
+      //las funciones de este argumento, pasan como argumento implícito todo el formulario (tenemos acceso a todo el formualio, a todos los campos)
+      validators: [
+        this.teacherValidators.isPasswordOneEqualPasswordTwo('teacherPassword', 'password2'),
+      ]
+    });
 
-  public onSubmit():void {
+  public onSubmit(): void {
     this.myFormRegister.markAllAsTouched();
-    console.log(this.myFormRegister)
+    if (this.myFormRegister.valid) {
+      this.checkEmail();
+    }
   };
 
   public isValidField(field: string) {
@@ -59,6 +64,43 @@ export class RegisterComponent {
     }
   }
 
-  public newRegisterUser(){}
+  public newRegisterUser() {
+    const { password2, ...formData } = this.myFormRegister.value; //excluimos el 'password2' porque no lo queremos en la bd
+    this.teacherService.createNewTeacher(formData)
+      .subscribe({
+        next: (response) => {
+          alert('El registro se ha completado correctamente');
+          //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+          //redirigir al login
+          this.router.navigate(['/login-page'])
+        },
+        error: (error) => {
+          console.error('Error al registrarse', error)
+        },
+      });
+  }
 
+  public checkEmail() {
+    const email: string = this.myFormRegister.get('teacherEmail')?.value;
+
+    this.teacherService.checkRepeatEmail(email).subscribe({
+      next: (response) => {
+        if (response.message === "Email unique") {
+          this.emailExist = false;
+          this.newRegisterUser();
+        } else {
+          this.emailExist = true;
+          return alert('El correo electrónico ya está registrado, ponga otro Email');
+        }
+      },
+      error: (errorResponse) => {
+        if (errorResponse.status === 409) {
+          this.emailExist = true;
+          alert('El correo electrónico ya está registrado, ponga otro Email');
+        } else {
+          console.error('Error checking email: ', errorResponse);
+        }
+      }
+    });
+  }
 }

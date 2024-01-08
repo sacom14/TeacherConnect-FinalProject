@@ -12,3 +12,7 @@ export interface Teacher {
   teacher_birthdate: Date;
   teacher_photo:     string;
 }
+
+export interface TeacherEmailCheckResponseMessage {
+  message: string;
+}
