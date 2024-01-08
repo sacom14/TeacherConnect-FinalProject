@@ -20,13 +20,13 @@ export class AuthTeacherService {
   }
 
     // after login we put the token on localstorage
-    login(token: string) {
+    public login(token: string) {
       localStorage.setItem('token', token);
       this._isAuthenticated.next(true);
     }
 
     // When logout for remove token from localstorage
-    removeToken() {
+    public removeToken() {
       localStorage.removeItem('token');
       this._isAuthenticated.next(false);
     }

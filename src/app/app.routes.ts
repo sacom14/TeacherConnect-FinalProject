@@ -20,6 +20,6 @@ export const routes: Routes = [
   {path: 'student-page', component: StudentPageComponent, canActivate: [authGuard]},
   {path: 'calendar-page', component: CalendarPageComponent, canActivate: [authGuard]},
   {path: 'map-page', component: MapPageComponent, canActivate: [authGuard]},
-
+  
   {path: '**', pathMatch:'full', redirectTo: 'landing-page'}
 ];
