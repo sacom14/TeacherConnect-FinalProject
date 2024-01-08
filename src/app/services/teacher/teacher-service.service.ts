@@ -29,5 +29,9 @@ export class TeacherService {
     return this.http.post<TeacherEmailCheckResponseMessage>(`${this.teacherApiUrl}/check-email`, {teacherEmail});
   }
 
+  //login (take token)
+  public login(teacherEmail: string, teacherPassword: string) {
+    return this.http.post<{ token: string }>(`${this.teacherApiUrl}/login`, {teacher_email: teacherEmail, teacher_password: teacherPassword});
+  }
 
 }

@@ -1,9 +1,11 @@
+@if (!isAuthenticated){
 <!-- before Login (landing-page) -->
 <nav class="navbar navbar-expand-lg bg-black">
   <div class="container-fluid">
     <div>
       <a class="navbar-brand text-white d-flex justify-content-center align-items-center" href="#">
-        <img src="../../../../assets/img/logo/logo(sin fondo).png" alt="logo" width="50" height="50" class="d-inline-block align-top" alt="">
+        <img src="../../../../assets/img/logo/logo(sin fondo).png" alt="logo" width="50" height="50"
+          class="d-inline-block align-top" alt="">
         TeacherConnect
       </a>
     </div>
@@ -26,12 +28,14 @@
   </div>
 </nav>
 
+} @else if (isAuthenticated) {
 <!--After LogIn -->
-<!-- <nav class="navbar navbar-expand-lg bg-black">
+<nav class="navbar navbar-expand-lg bg-black">
   <div class="container-fluid">
     <div>
       <a class="navbar-brand text-white d-flex justify-content-center align-items-center" href="#">
-        <img src="../../../../assets/img/logo/logo(sin fondo).png" alt="logo" width="50" height="50" class="d-inline-block align-top" alt="">
+        <img src="../../../../assets/img/logo/logo(sin fondo).png" alt="logo" width="50" height="50"
+          class="d-inline-block align-top" alt="">
         TeacherConnect
       </a>
     </div>
@@ -62,11 +66,13 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
               <li><a class="dropdown-item text-white" href="#">Mi cuenta</a></li>
-              <li><a class="dropdown-item text-white" href="#">Cerrar sessión</a></li>
+              <li><a class="dropdown-item text-white" (click)="logout()">Cerrar sessión</a></li>
             </ul>
           </li>
         </ul>
       </span>
     </div>
   </div>
-</nav> -->
+</nav>
+
+}

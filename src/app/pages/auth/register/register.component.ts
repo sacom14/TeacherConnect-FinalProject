@@ -29,7 +29,7 @@ export class RegisterComponent {
   public myFormRegister: FormGroup = this.fb.group({
     teacherName: ['', [Validators.required, Validators.pattern(this.teacherValidators.namePattern)]],
     teacherSurname: ['', [Validators.required, Validators.pattern(this.teacherValidators.surnamePattern)]],
-    teacherEmail: ['', [Validators.required, Validators.pattern(this.teacherValidators.emailPattern)]], //porque no es una función, sinó expression regular
+    teacherEmail: ['', [Validators.required, Validators.pattern(this.teacherValidators.emailPattern)]],
     teacherPhone: ['', [Validators.required, Validators.pattern(this.teacherValidators.phonePattern)]],
     teacherBirthdate: ['', [Validators.required, Validators.pattern(this.teacherValidators.birthdatePattern)]],
     teacherPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(this.teacherValidators.passwordPattern)]],
