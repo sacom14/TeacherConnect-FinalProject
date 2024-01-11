@@ -27,6 +27,6 @@ export class StudentPageComponent implements OnInit {
   ngOnInit(): void {
     this.studentService.getStudentsFromTeacher();
   }
-  
+
 }
 

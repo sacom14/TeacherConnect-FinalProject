@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { TeacherValidationServiceService } from '../../../services/teacher/teacher-validation-service.service';
+import { ValidationService } from '../../../services/validations/validations-service.service';
 import { TeacherService } from '../../../services/teacher/teacher-service.service';
 
 
@@ -22,24 +22,24 @@ export class RegisterComponent {
 
   constructor(
     private fb: FormBuilder,
-    private teacherValidators: TeacherValidationServiceService,
+    private validationService: ValidationService,
     private teacherService: TeacherService,
     private router: Router) { }
 
   public myFormRegister: FormGroup = this.fb.group({
-    teacherName: ['', [Validators.required, Validators.pattern(this.teacherValidators.namePattern)]],
-    teacherSurname: ['', [Validators.required, Validators.pattern(this.teacherValidators.surnamePattern)]],
-    teacherEmail: ['', [Validators.required, Validators.pattern(this.teacherValidators.emailPattern)]],
-    teacherPhone: ['', [Validators.required, Validators.pattern(this.teacherValidators.phonePattern)]],
-    teacherBirthdate: ['', [Validators.required, Validators.pattern(this.teacherValidators.birthdatePattern)]],
-    teacherPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(this.teacherValidators.passwordPattern)]],
+    teacherName: ['', [Validators.required, Validators.pattern(this.validationService.namePattern)]],
+    teacherSurname: ['', [Validators.required, Validators.pattern(this.validationService.surnamePattern)]],
+    teacherEmail: ['', [Validators.required, Validators.pattern(this.validationService.emailPattern)]],
+    teacherPhone: ['', [Validators.required, Validators.pattern(this.validationService.phonePattern)]],
+    teacherBirthdate: ['', [Validators.required, Validators.pattern(this.validationService.birthdatePattern)]],
+    teacherPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(this.validationService.passwordPattern)]],
     password2: ['', [Validators.required]],
-    teacherPhoto: ['', [this.teacherValidators.imageExtensionValidator]],
+    teacherPhoto: ['', [this.validationService.imageExtensionValidator]],
   },
     {
       //las funciones de este argumento, pasan como argumento implícito todo el formulario (tenemos acceso a todo el formualio, a todos los campos)
       validators: [
-        this.teacherValidators.isPasswordOneEqualPasswordTwo('teacherPassword', 'password2'),
+        this.validationService.isPasswordOneEqualPasswordTwo('teacherPassword', 'password2'),
       ]
     });
 
@@ -51,7 +51,7 @@ export class RegisterComponent {
   };
 
   public isValidField(field: string) {
-    return this.teacherValidators.isValidField(this.myFormRegister, field);
+    return this.validationService.isValidField(this.myFormRegister, field);
   };
 
   //para asegurarnos de que el formato del archivo sea correcto

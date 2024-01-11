@@ -8,6 +8,7 @@ import { RegisterComponent } from './pages/auth/register/register.component';
 import { CalendarPageComponent } from './pages/calendar-page/calendar-page.component';
 import { authGuard } from './pages/auth/auth.guard';
 import { noAuthGuard } from './pages/auth/no-auth.guard';
+import { NewStudentFormPageComponent } from './pages/student-page/new-student-form-page/new-student-form-page.component';
 
 export const routes: Routes = [
   //without aunthenticated
@@ -20,6 +21,8 @@ export const routes: Routes = [
   {path: 'student-page', component: StudentPageComponent, canActivate: [authGuard]},
   {path: 'calendar-page', component: CalendarPageComponent, canActivate: [authGuard]},
   {path: 'map-page', component: MapPageComponent, canActivate: [authGuard]},
+
+  {path: 'add-student', component: NewStudentFormPageComponent, canActivate: [authGuard]},
   
   {path: '**', pathMatch:'full', redirectTo: 'landing-page'}
 ];

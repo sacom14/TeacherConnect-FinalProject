@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TeacherValidationServiceService {
+export class ValidationService {
 
   //name
   public namePattern: string = '^[a-zA-Z]{2,}(?: [a-zA-Z]+)*$';
@@ -25,12 +25,12 @@ export class TeacherValidationServiceService {
   public passwordPattern: string = "^[a-zA-Z0-9]{6,}$";
 
 
-  //control de validaciones
+  //validations control
   public isValidField(form: FormGroup, field: string) {
     return form.controls[field].errors && form.controls[field].touched;
   };
 
-  //para comprobar si dos campos son iguales (pasword y password2)
+  //check if 2 items are equals (pasword y password2)
   public isPasswordOneEqualPasswordTwo(field1: string, field2: string) {
     //función que sirve para evaluar el formgroup
     return (formGroup: AbstractControl): ValidationErrors | null => {
@@ -61,4 +61,20 @@ export class TeacherValidationServiceService {
     return null;
   }
 
+  //we want minium one item selected on checkbox
+  public checkMinOneSelectedValidator(minRequired = 1): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      // Ensure the control is a FormArray
+      if (control instanceof FormArray) {
+        const totalSelected = control.controls
+          // Filter the checked control values
+          .filter(ctrl => ctrl.value).length;
+
+        // Return null if the condition is met, or an error object if not
+        return totalSelected >= minRequired ? null : { required: true };
+      }
+      // Return null if control is not a FormArray
+      return null;
+    };
+  }
 }

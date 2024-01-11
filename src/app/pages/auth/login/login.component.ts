@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { TeacherValidationServiceService } from '../../../services/teacher/teacher-validation-service.service';
+import { ValidationService } from '../../../services/validations/validations-service.service';
 import { TeacherService } from '../../../services/teacher/teacher-service.service';
 import { AuthTeacherService } from '../../../services/teacher/auth-teacher.service';
 
@@ -22,7 +22,7 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private teacherValidators: TeacherValidationServiceService,
+    private validationService: ValidationService,
     private teacherService: TeacherService,
     private authTeacherService: AuthTeacherService,
     private router: Router
@@ -57,7 +57,7 @@ export class LoginComponent {
     }
   };
   public isValidField(field: string) {
-    return this.teacherValidators.isValidField(this.myFormLogin, field);
+    return this.validationService.isValidField(this.myFormLogin, field);
   };
 
 
