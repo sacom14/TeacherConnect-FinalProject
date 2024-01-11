@@ -1,3 +1,4 @@
+import { Student, StudentResponse } from './../../../interfaces/student.interface';
 import { PaymentMethod } from './../../../interfaces/payment-method.interface';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,6 +23,9 @@ export class NewStudentFormPageComponent implements OnInit {
   public paymentMethods!: Observable<PaymentMethod[]>;
   public subjects!: Observable<Subject[]>;
   public academicYears!: Observable<AcademicYear[]>;
+
+  public emailExist:boolean = false;
+  router: any;
 
   constructor(
     private fb: FormBuilder,
@@ -56,8 +60,7 @@ export class NewStudentFormPageComponent implements OnInit {
   public onSubmit(): void {
     this.addStudentForm.markAllAsTouched();
     if (this.addStudentForm.valid) {
-      //todo: revisar si el mail esta repetido entre los estudiantes de un profesor.
-      this.addNewStudent();
+      this.checkEmail(); //check if some student from teacher has the same email.
     }
   };
 
@@ -98,7 +101,62 @@ export class NewStudentFormPageComponent implements OnInit {
     }
   }
 
-  addNewStudent() {
+  public checkEmail() {
+    const email: string = this.addStudentForm.get('studentEmail')?.value;
 
+    this.studentService.checkRepeatEmail(email).subscribe({
+      next: (response) => {
+        if (response.message === "Email unique") {
+          this.emailExist = false;
+          this.addNewStudent();
+        } else {
+          this.emailExist = true;
+          return alert('Ya tienes un estudiante con ese email, prueba con otro');
+        }
+      },
+      error: (errorResponse) => {
+        if (errorResponse.status === 409) {
+          this.emailExist = true;
+          alert('Ya tienes un estudiante con ese email, prueba con otro');
+        } else {
+          console.error('Error checking email: ', errorResponse);
+        }
+      }
+    });
+  }
+
+
+  addNewStudent() {
+    const { selectedSubjects, ...studentFormData } = this.addStudentForm.value; //dont push subjects cause they go in another table.
+    this.studentService.createNewStudent(studentFormData)
+      .subscribe({
+        next: (response) => {
+
+          const studentId = response.id_student; //take the studentId added
+          this.addNewStudentSubject(studentId);
+          alert('El alumno se ha registrado correctamente');
+          //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+
+          this.router.navigate(['/student-page'])
+        },
+        error: (error) => {
+          console.error('Error al añadir el nuevo alumno', error)
+        },
+      });
+  }
+
+  addNewStudentSubject(studentId: number){
+    const {selectedSubjects} = this.addStudentForm.value;
+    //use studentId and all subjects from formgroup
+    this.studentService.createNewStudentSubject(studentId, selectedSubjects)
+    .subscribe({
+      next: (response) => {
+        console.log('Todas las asignaturas han sido creadas', response);
+        return;
+      },
+      error: error => {
+        console.error('Error al crear las asignaturas', error);
+      }
+    });
   }
 }

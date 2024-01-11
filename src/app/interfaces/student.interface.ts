@@ -16,3 +16,18 @@ export interface Student {
   create_at_student:    Date;
   update_at_student:    Date;
 }
+
+export interface StudentEmailCheckResponseMessage {
+  message: string;
+}
+
+
+export interface StudentSubjectResponse {
+  studentSubjects: StudentSubject[];
+}
+
+export interface StudentSubject {
+  id_student_subject: number;
+  fk_id_student:      number;
+  fk_id_subject:      number;
+}
