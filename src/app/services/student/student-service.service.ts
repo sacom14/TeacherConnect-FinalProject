@@ -1,9 +1,8 @@
-import { MapPageComponent } from './../../pages/map-page/map-page.component';
-import { TeacherEmailCheckResponseMessage } from './../../interfaces/teacher.interface';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Student, StudentEmailCheckResponseMessage, StudentResponse, StudentSubject } from '../../interfaces/student.interface';
-import { BehaviorSubject, catchError, forkJoin, throwError } from 'rxjs';
+import { Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse } from '../../interfaces/student.interface';
+import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { AuthTeacherService } from '../teacher/auth-teacher.service';
 import { PaymentMethod, PaymentMethodResponse } from '../../interfaces/payment-method.interface';
 import { AcademicYear, AcademicYearResponse } from '../../interfaces/academic-year.interface';
@@ -87,7 +86,7 @@ export class StudentService {
   createNewStudent(studentData: Student) {
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId) {
-      return this.http.post<Student>(`${this._studentApiUrl}/${teacherId}`, studentData)
+      return this.http.post<StudentAddedResponse>(`${this._studentApiUrl}/${teacherId}`, studentData)
         .pipe(
           catchError((error) => {
             console.error('Error en el servicio:', error);
@@ -102,23 +101,13 @@ export class StudentService {
   }
 
   //create studentSubject
-  createNewStudentSubject(studentId: number, selectedSubjects: number[]) {
-    const requests = selectedSubjects.map(subjectId => {
-      // Create the object foll all subject
-      const data = {
-        studentId: studentId,
-        subjectId: subjectId
-      }
-
-      return this.http.post(this._studentSubjectApiUrl, data)
-        .pipe(
-          catchError((error) => {
-            console.error('Error al crear las asignaturas del estudiante', error);
-            return throwError(() => new Error('Error al crear la asignatura del estudiante'));
-          })
-        );
-    });
-
-    return forkJoin(requests); //we need wait for all http requests.
+  createNewStudentSubject(studentId: number, subjectId: number) {
+    return this.http.post(this._studentSubjectApiUrl, { studentId, subjectId })
+      .pipe(
+        catchError((error) => {
+          console.error('Error en el servicio', error);
+          return throwError(() => new Error('Error al añadir una asignatura al estudiante'));
+        })
+      );
   }
 }

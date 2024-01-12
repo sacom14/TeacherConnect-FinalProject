@@ -1,9 +1,9 @@
-import { Student, StudentResponse } from './../../../interfaces/student.interface';
 import { PaymentMethod } from './../../../interfaces/payment-method.interface';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { StudentService } from '../../../services/student/student-service.service';
 import { Observable } from 'rxjs';
@@ -24,14 +24,14 @@ export class NewStudentFormPageComponent implements OnInit {
   public subjects!: Observable<Subject[]>;
   public academicYears!: Observable<AcademicYear[]>;
 
-  public emailExist:boolean = false;
-  router: any;
+  public emailExist: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private validationService: ValidationService,
     private studentService: StudentService,
-    private subjectService: SubjectService) {
+    private subjectService: SubjectService,
+    private router:Router) {
 
     this.paymentMethods = this.studentService.paymentMethods;
     this.subjects = this.subjectService.subjects;
@@ -64,7 +64,7 @@ export class NewStudentFormPageComponent implements OnInit {
     }
   };
 
-  public isValidField(field: string):boolean | null {
+  public isValidField(field: string): boolean | null {
     return this.validationService.isValidField(this.addStudentForm, field);
   };
 
@@ -131,13 +131,15 @@ export class NewStudentFormPageComponent implements OnInit {
     this.studentService.createNewStudent(studentFormData)
       .subscribe({
         next: (response) => {
-
-          const studentId = response.id_student; //take the studentId added
-          this.addNewStudentSubject(studentId);
-          alert('El alumno se ha registrado correctamente');
-          //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
-
-          this.router.navigate(['/student-page'])
+          if (response.id_student) {
+            const studentId = response.id_student;
+            this.addNewStudentSubject(studentId);
+            alert('El alumno se ha registrado correctamente');
+            //todo:hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+            this.router.navigate(['/student-page'])
+          }else {
+            alert('No se ha obtenido correctamente el Id de estudiante');
+          }
         },
         error: (error) => {
           console.error('Error al añadir el nuevo alumno', error)
@@ -145,18 +147,19 @@ export class NewStudentFormPageComponent implements OnInit {
       });
   }
 
-  addNewStudentSubject(studentId: number){
-    const {selectedSubjects} = this.addStudentForm.value;
-    //use studentId and all subjects from formgroup
-    this.studentService.createNewStudentSubject(studentId, selectedSubjects)
-    .subscribe({
-      next: (response) => {
-        console.log('Todas las asignaturas han sido creadas', response);
-        return;
-      },
-      error: error => {
-        console.error('Error al crear las asignaturas', error);
-      }
+  addNewStudentSubject(studentId: number) {
+    const subjects: number[] = this.addStudentForm.value.selectedSubjects;
+    subjects.forEach(subjectId => {
+      this.studentService.createNewStudentSubject(studentId, subjectId).subscribe({
+        next: (response) => {
+          return
+        },
+        error: (error) => {
+          console.error('Error al añadir la asignatura', error);
+        }
+      });
     });
   }
+
+
 }
