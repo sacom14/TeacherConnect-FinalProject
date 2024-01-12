@@ -1,20 +1,30 @@
-<h1>MIS ALUMNOS</h1>
+<h1 class="text-center">MIS ALUMNOS</h1>
 <!-- ASIDE IZQUIERDA (filtros) -->
-<section>
-  <aside>
-    <app-filterbar-student></app-filterbar-student>
+<section class="d-flex row gap-2 justify-content-center">
+  <aside class="col-2 bg-danger">
+    <h4 class="text-center">Filtro</h4>
+    <app-filterbar-student class="text-center"></app-filterbar-student>
   </aside>
   <!-- en el centro lista students -->
-  <article>
-    <h3>AQUÍ VAN LOS CARDS DE STUDENTS</h3>
-    <div *ngFor="let student of students | async">
-      <p>{{ student.student_name }} - {{ student.student_surname }}</p>
+  <article class="col-6 text-center bg-primary">
+    <div class="row justify-content-center">
+      <div class="col-md-4 mt-3" style="min-width: 12rem ;" *ngFor="let student of students | async">
+        <div class="card">
+          <img src="https://i.ibb.co/8DXnr6M/8f57046bc78f.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{student.student_name}} {{student.student_surname}}</h5>
+            <div>
+              <span class="badge text-bg-secondary mx-1" *ngFor="let subject of getSubjectsForStudent(student.id_student)">{{subject.subject_name}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </article>
-  
   <!-- aside derecha (info alumno) -->
-  <aside>
-    <app-info-student></app-info-student>
+  <aside class="col-3 bg-warning">
+    <h4 class="text-center">Estudiante</h4>
+    <app-info-student class="text-center"></app-info-student>
   </aside>
 </section>
 

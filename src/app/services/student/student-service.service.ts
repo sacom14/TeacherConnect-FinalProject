@@ -1,7 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse } from '../../interfaces/student.interface';
+import { AllDataStudentSubjectsResponse, Subject, Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse } from '../../interfaces/student.interface';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { AuthTeacherService } from '../teacher/auth-teacher.service';
 import { PaymentMethod, PaymentMethodResponse } from '../../interfaces/payment-method.interface';
@@ -107,6 +107,17 @@ export class StudentService {
         catchError((error) => {
           console.error('Error en el servicio', error);
           return throwError(() => new Error('Error al añadir una asignatura al estudiante'));
+        })
+      );
+  }
+
+  //get all subjects from studentId
+  getTheStudentSubjects(studentId: number) {
+    return this.http.get<AllDataStudentSubjectsResponse>(`${this._studentSubjectApiUrl}/student/${studentId}`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error en el servicio', error);
+          return throwError(() => new Error('Error al obtener las asignaturas del estudiante con id'+ studentId));
         })
       );
   }
