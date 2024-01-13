@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,16 +17,15 @@ import { AuthTeacherService } from '../../../services/teacher/auth-teacher.servi
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private validationService = inject(ValidationService);
+  private teacherService = inject(TeacherService);
+  private authTeacherService = inject(AuthTeacherService);
+  private router = inject(Router);
 
   public correctEmailAndPassword:boolean = true;
 
-  constructor(
-    private fb: FormBuilder,
-    private validationService: ValidationService,
-    private teacherService: TeacherService,
-    private authTeacherService: AuthTeacherService,
-    private router: Router
-    ) {
+  constructor() {
       this.correctEmailAndPassword = true;
     }
 

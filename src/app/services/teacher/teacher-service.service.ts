@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Teacher, TeacherEmailCheckResponseMessage } from '../../interfaces/teacher.interface';
 import { catchError, throwError } from 'rxjs';
 
@@ -8,11 +8,10 @@ import { catchError, throwError } from 'rxjs';
 
 })
 export class TeacherService {
+  private http = inject(HttpClient)
 
   private _teacherApiUrl: string = 'http://localhost:3000/api/teacher';
-  constructor(
-    private http: HttpClient) { }
-
+  
   //create teacher
   createNewTeacher(teacherData: Teacher){
     return this.http.post(this._teacherApiUrl, teacherData)

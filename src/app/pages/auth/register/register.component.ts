@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,13 +18,12 @@ import { TeacherService } from '../../../services/teacher/teacher-service.servic
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
-  public emailExist:boolean = false;
+  private fb = inject(FormBuilder);
+  private validationService = inject(ValidationService);
+  private teacherService = inject(TeacherService);
+  private router = inject(Router);
 
-  constructor(
-    private fb: FormBuilder,
-    private validationService: ValidationService,
-    private teacherService: TeacherService,
-    private router: Router) { }
+  public emailExist:boolean = false;
 
   public myFormRegister: FormGroup = this.fb.group({
     teacherName: ['', [Validators.required, Validators.pattern(this.validationService.namePattern)]],

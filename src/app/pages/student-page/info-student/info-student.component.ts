@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { StudentService } from '../../../services/student/student-service.service';
-import { Student } from '../../../interfaces/student.interface';
+import { StudentById } from '../../../interfaces/student.interface';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,11 +13,11 @@ import { Observable } from 'rxjs';
   styleUrl: './info-student.component.scss'
 })
 export class InfoStudentComponent implements OnInit {
+  private studentService = inject(StudentService);
+
   public selectedStudentExist!:boolean;
   public selectedStudentId!: number | null;
-  public dataOfStudentSelected!: Observable<Student[] | null>;
-
-  constructor(private studentService: StudentService) {}
+  public dataOfStudentSelected!: Observable<StudentById[] | null>;
 
   ngOnInit(): void {
     this.studentService.currentStudentIdSelected

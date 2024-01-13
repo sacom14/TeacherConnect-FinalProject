@@ -1,7 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { AllDataStudentSubjectsResponse, Subject, Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse } from '../../interfaces/student.interface';
+import { Injectable, inject } from '@angular/core';
+import { AllDataStudentSubjectsResponse, Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse, StudentByIdResponse, StudentById } from '../../interfaces/student.interface';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { AuthTeacherService } from '../teacher/auth-teacher.service';
 import { PaymentMethod, PaymentMethodResponse } from '../../interfaces/payment-method.interface';
@@ -11,6 +11,9 @@ import { AcademicYear, AcademicYearResponse } from '../../interfaces/academic-ye
   providedIn: 'root'
 })
 export class StudentService {
+  private http = inject(HttpClient);
+  private authTeacherService = inject(AuthTeacherService);
+
   private _studentApiUrl: string = 'http://localhost:3000/api/student';
   private _paymentMethodApiUrl: string = 'http://localhost:3000/api/payment-method';
   private _academicYearApiUrl: string = 'http://localhost:3000/api/academic-year';
@@ -20,11 +23,7 @@ export class StudentService {
   private _paymentMethodList = new BehaviorSubject<PaymentMethod[]>([]);
   private _academicYearList = new BehaviorSubject<AcademicYear[]>([]);
   private _currentStudendIdSelected = new BehaviorSubject<number | null>(null);
-  private _dataOfStudentSelected = new BehaviorSubject<Student[] | null>(null);
-
-  constructor(
-    private http: HttpClient,
-    private authTeacherService: AuthTeacherService) { }
+  private _dataOfStudentSelected = new BehaviorSubject<StudentById[] | null>(null);
 
   public getStudentsFromTeacher() {
     const teacherId = this.authTeacherService.getTeacherId();
@@ -141,9 +140,9 @@ export class StudentService {
 
   public getStudentById(studentIdSelected: number | null){
     if (studentIdSelected) {
-      this.http.get<StudentResponse>(`${this._studentApiUrl}/${studentIdSelected}`).subscribe({
+      this.http.get<StudentByIdResponse>(`${this._studentApiUrl}/${studentIdSelected}`).subscribe({
         next: (response) => {
-          this._dataOfStudentSelected.next(response.students);
+          this._dataOfStudentSelected.next(response.studentById);
         },
         error: (error) => {
           console.error('Error al obtener la información del estudiante', error);

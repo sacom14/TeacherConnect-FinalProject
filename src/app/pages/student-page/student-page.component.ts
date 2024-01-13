@@ -1,5 +1,5 @@
 import { Student, StudentWithSubjects } from './../../interfaces/student.interface';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
@@ -19,10 +19,12 @@ import { Subject } from '../../interfaces/subject.interface';
   styleUrl: './student-page.component.scss'
 })
 export class StudentPageComponent implements OnInit {
+  private studentService = inject(StudentService);
+
   public students!: Observable<Student[]>;
   public studentsWithSubjects: StudentWithSubjects[] = [];
 
-  constructor(private studentService: StudentService) {
+  constructor() {
     this.students = this.studentService.students;
   }
 
