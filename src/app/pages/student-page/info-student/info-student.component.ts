@@ -1,4 +1,3 @@
-import { Student } from './../../../interfaces/student.interface';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
@@ -38,6 +37,10 @@ export class InfoStudentComponent implements OnInit {
     } else {
       this.selectedStudentExist = false;
     }
+  }
+
+  public calculateAge(birthdate: string): number {
+    return this.studentService.getAgeFromBirthdate(birthdate);
   }
 
   public goEditStudent(){
