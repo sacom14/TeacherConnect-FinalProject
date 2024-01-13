@@ -19,6 +19,8 @@ export class StudentService {
   private _studentsList = new BehaviorSubject<Student[]>([]);
   private _paymentMethodList = new BehaviorSubject<PaymentMethod[]>([]);
   private _academicYearList = new BehaviorSubject<AcademicYear[]>([]);
+  private _currentStudendIdSelected = new BehaviorSubject<number | null>(null);
+  private _dataOfStudentSelected = new BehaviorSubject<Student[] | null>(null);
 
   constructor(
     private http: HttpClient,
@@ -74,6 +76,15 @@ export class StudentService {
     return this._academicYearList.asObservable();
   }
 
+  get currentStudentIdSelected(){
+    return this._currentStudendIdSelected.asObservable();
+  }
+
+  get currentInfoStudentSelected(){
+    return this._dataOfStudentSelected.asObservable();
+  }
+
+  //--------------student-page.compoent---------------
   //chek if the email is already on BD by teacher ID
   public checkRepeatEmail(studentEmail: string) {
     const teacherId = this.authTeacherService.getTeacherId();
@@ -82,8 +93,20 @@ export class StudentService {
     return this.http.post<StudentEmailCheckResponseMessage>(`${this._studentApiUrl}/check-email/${teacherId}`, { studentEmail });
   }
 
+  //get all subjects from studentId
+  public getTheStudentSubjects(studentId: number) {
+    return this.http.get<AllDataStudentSubjectsResponse>(`${this._studentSubjectApiUrl}/student/${studentId}`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error en el servicio', error);
+          return throwError(() => new Error('Error al obtener las asignaturas del estudiante con id' + studentId));
+        })
+      );
+  }
+
+  //--------------new-student-form.compoent---------------
   //create student
-  createNewStudent(studentData: Student) {
+  public createNewStudent(studentData: Student) {
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId) {
       return this.http.post<StudentAddedResponse>(`${this._studentApiUrl}/${teacherId}`, studentData)
@@ -99,9 +122,8 @@ export class StudentService {
 
 
   }
-
   //create studentSubject
-  createNewStudentSubject(studentId: number, subjectId: number) {
+  public createNewStudentSubject(studentId: number, subjectId: number) {
     return this.http.post(this._studentSubjectApiUrl, { studentId, subjectId })
       .pipe(
         catchError((error) => {
@@ -111,14 +133,25 @@ export class StudentService {
       );
   }
 
-  //get all subjects from studentId
-  getTheStudentSubjects(studentId: number) {
-    return this.http.get<AllDataStudentSubjectsResponse>(`${this._studentSubjectApiUrl}/student/${studentId}`)
-      .pipe(
-        catchError((error) => {
-          console.error('Error en el servicio', error);
-          return throwError(() => new Error('Error al obtener las asignaturas del estudiante con id'+ studentId));
-        })
-      );
+  //-------------info-student.component-----------------
+  public changeCurrentStudentIdSelected(currentStudentSelected: number | null){
+    this._currentStudendIdSelected.next(currentStudentSelected);
+    this.getStudentById(currentStudentSelected);
   }
+
+  public getStudentById(studentIdSelected: number | null){
+    if (studentIdSelected) {
+      this.http.get<StudentResponse>(`${this._studentApiUrl}/${studentIdSelected}`).subscribe({
+        next: (response) => {
+          this._dataOfStudentSelected.next(response.students);
+        },
+        error: (error) => {
+          console.error('Error al obtener la información del estudiante', error);
+        }
+      });
+    } else {
+      console.error('ID del estudiante no disponible');
+    }
+  }
+
 }

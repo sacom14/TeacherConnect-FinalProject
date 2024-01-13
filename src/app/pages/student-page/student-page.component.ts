@@ -1,4 +1,4 @@
-import { AllDataStudentSubjectsResponse, Student, StudentWithSubjects } from './../../interfaces/student.interface';
+import { Student, StudentWithSubjects } from './../../interfaces/student.interface';
 import { Component, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -37,7 +37,6 @@ export class StudentPageComponent implements OnInit {
 
   //we obtain all subjects for the diferents students
   getSubjectsFromStudent(studentId: number) {
-    console.log('studentid: ' + studentId);
     this.studentService.getTheStudentSubjects(studentId)
       .subscribe(subjectResponse => {
         this.studentsWithSubjects.push({
@@ -51,6 +50,11 @@ export class StudentPageComponent implements OnInit {
   getSubjectsForStudent(studentId: number): Subject[] {
     const studentWithSubjects = this.studentsWithSubjects.find(s => s.studentId === studentId);
     return studentWithSubjects ? studentWithSubjects.subjects : [];
+  }
+
+  //change the studentId selected info for student after click on card
+  public showAllInfoForStudentIdSelected(selectedStudentId: number){
+    this.studentService.changeCurrentStudentIdSelected(selectedStudentId);
   }
 
 }
