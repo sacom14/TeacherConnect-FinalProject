@@ -1,9 +1,11 @@
+import { Student } from './../../../interfaces/student.interface';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { StudentService } from '../../../services/student/student-service.service';
 import { StudentById } from '../../../interfaces/student.interface';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-info-student',
@@ -14,6 +16,7 @@ import { Observable } from 'rxjs';
 })
 export class InfoStudentComponent implements OnInit {
   private studentService = inject(StudentService);
+  private router = inject(Router);
 
   public selectedStudentExist!:boolean;
   public selectedStudentId!: number | null;
@@ -24,6 +27,7 @@ export class InfoStudentComponent implements OnInit {
     .subscribe(studentId =>{
       this.selectedStudentId = studentId;
       this.dataOfStudentSelected = this.studentService.currentInfoStudentSelected;
+
       this.loadStudentDetails(this.selectedStudentId);
     });
   }
@@ -34,5 +38,9 @@ export class InfoStudentComponent implements OnInit {
     } else {
       this.selectedStudentExist = false;
     }
+  }
+
+  public goEditStudent(){
+    this.router.navigate(['/update-student']);
   }
 }

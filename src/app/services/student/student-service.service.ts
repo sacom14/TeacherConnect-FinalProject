@@ -118,11 +118,10 @@ export class StudentService {
     } else {
       return throwError(() => new Error('Id del profesor no disponible'));
     }
-
-
   }
   //create studentSubject
   public createNewStudentSubject(studentId: number, subjectId: number) {
+    //todo: comprobaciones para que no se repita el id de subject y no se duplique información?
     return this.http.post(this._studentSubjectApiUrl, { studentId, subjectId })
       .pipe(
         catchError((error) => {
@@ -153,4 +152,22 @@ export class StudentService {
     }
   }
 
+  //-------------update-student.component---------------------
+  updateStudent(studentData: Student, selectedStudentId: number | null){
+    const teacherId = this.authTeacherService.getTeacherId();
+    if (teacherId) {
+      //add the teacherId value on fkIdTeacher for body query for back.
+      const studentDataWithTeacherId = {...studentData, fkIdTeacher: teacherId};
+
+      return this.http.put(`${this._studentApiUrl}/${selectedStudentId}`, studentDataWithTeacherId)
+        .pipe(
+          catchError((error) => {
+            console.error('Error en el servicio:', error);
+            return throwError(() => new Error('Error al actualizar el alumno'));
+          })
+        );
+    } else {
+      return throwError(() => new Error('Id del profesor no disponible'));
+    }
+  }
 }
