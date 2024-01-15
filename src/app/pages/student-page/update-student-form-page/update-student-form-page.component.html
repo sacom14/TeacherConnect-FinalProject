@@ -83,6 +83,7 @@
           <label class="form-label">Asignaturas</label>
           <div *ngFor="let subject of subjects | async" class="form-check">
             <input type="checkbox" class="form-check-input" [value]="subject.id_subject"
+              [checked]="initialStudentSubjects.includes(subject.id_subject)"
               (change)="onCheckboxChange($event, subject.id_subject)" id="subject-{{subject.id_subject}}">
             <label class="form-check-label" for="subject-{{subject.id_subject}}">
               {{ subject.subject_name }}

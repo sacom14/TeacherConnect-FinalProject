@@ -15,7 +15,7 @@
             <h4 class="card-title">{{student.student_name}} {{student.student_surname}}</h4>
             <div>
               <span class="badge text-bg-secondary mx-1"
-                *ngFor="let subject of getSubjectsForStudent(student.id_student)">{{subject.subject_name}}</span>
+                *ngFor="let subject of getSubjectsForStudent(student.id_student) | async">{{subject.subject_name}}</span>
             </div>
           </div>
         </a>

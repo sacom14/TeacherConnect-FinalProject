@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, Form, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, window } from 'rxjs';
 import { PaymentMethod } from '../../../interfaces/payment-method.interface';
 import { Subject } from '../../../interfaces/subject.interface';
 import { AcademicYear } from '../../../interfaces/academic-year.interface';
@@ -27,6 +27,7 @@ export class UpdateStudentFormPageComponent {
   public emailExist: boolean = false;
 
   public selectedStudentId!: number | null;
+  public initialStudentSubjects: number[] = [];
   public dataOfStudentSelected!: Observable<StudentById[] | null>;
   public currentStudentEmail!: string | null;
 
@@ -76,6 +77,7 @@ export class UpdateStudentFormPageComponent {
   };
 
   public setInputInitialValues() {
+    //todo: falta poner predefifinido los checkbox y también los
     this.dataOfStudentSelected.subscribe(data => {
       if (data && data.length > 0) {
         const studentData = data[0];
@@ -91,14 +93,28 @@ export class UpdateStudentFormPageComponent {
           fkIdPaymentMethod: studentData.fk_id_payment_method || ''
           // No incluyo selectedSubjects aquí porque es un FormArray
         });
-
         this.currentStudentEmail = studentData.student_email;
 
+        this.studentService.getTheStudentSubjects(studentData.id_student).subscribe(data => {
+          this.initialStudentSubjects = data.subjects.map(subject => subject.fk_id_subject);
+          this.setSetSubjectCheckboxes();
+        });
         //todo: Para selectedSubjects, necesitarás una lógica adicional
         // dependiendo de cómo quieras manejarlo.
       }
     });
   }
+
+  public setSetSubjectCheckboxes(){
+    this.subjects.subscribe(subjectList => {
+      subjectList.forEach(subject => {
+        if (this.initialStudentSubjects.includes(subject.id_subject)){
+          const checkArray: FormArray = this.updateStudentForm.get('selectedSubjects') as FormArray;
+        }
+      });
+    });
+  }
+
   public isValidField(field: string): boolean | null {
     return this.validationService.isValidField(this.updateStudentForm, field);
   };
@@ -170,9 +186,10 @@ export class UpdateStudentFormPageComponent {
         next: (response) => {
           if (response && this.selectedStudentId) {
             this.addNewStudentSubject(this.selectedStudentId);
+            this.studentService.getSubjectsFromStudent(this.selectedStudentId);
             alert('El alumno se ha actualizado correctamente');
             //todo:hacer que salga un modal (o alert) verde como mensaje de todo correcto!
-            this.router.navigate(['/student-page'])
+            this.router.navigate(['/student-page']);
           } else {
             alert('No se ha obtenido correctamente el Id de estudiante');
           }
@@ -183,27 +200,32 @@ export class UpdateStudentFormPageComponent {
       });
   }
 
-  //todo: falta primero borrar los student subjects existentes sel studentid
-
-  //add the new student subject
   addNewStudentSubject(studentId: number) {
-    const subjects: number[] = this.updateStudentForm.value.selectedSubjects;
-    if (subjects.length > 0) {
-      subjects.forEach(subjectId => {
-        this.studentService.createNewStudentSubject(studentId, subjectId).subscribe({
-          next: (response) => {
-            return
-          },
-          error: (error) => {
-            console.error('Error al añadir la asignatura', error);
-          }
+    // Obtener las asignaturas actuales del estudiante
+    this.studentService.getTheStudentSubjects(studentId).subscribe({
+      next: (response) => {
+        const currentSubjects = response.subjects.map(s => s.fk_id_subject);
+        const newSubjects: number[] = this.updateStudentForm.value.selectedSubjects;
+
+        // Filtrar las nuevas asignaturas que no están en la lista actual
+        const subjectsToAdd = newSubjects.filter(subject => !currentSubjects.includes(subject));
+
+        // Enviar solo las nuevas asignaturas
+        subjectsToAdd.forEach(subjectId => {
+          this.studentService.createNewStudentSubject(studentId, subjectId).subscribe({
+            next: () => {
+              // Manejo de la respuesta exitosa
+            },
+            error: (error) => {
+              console.error('Error al añadir la asignatura', error);
+            }
+          });
         });
-      });
-    } else {
-      return;
-    }
-
+      },
+      error: (error) => {
+        console.error('Error al obtener las asignaturas del estudiante', error);
+      }
+    });
   }
-
 
 }

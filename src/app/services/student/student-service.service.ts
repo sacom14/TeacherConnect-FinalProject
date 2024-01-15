@@ -1,7 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { AllDataStudentSubjectsResponse, Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse, StudentByIdResponse, StudentById } from '../../interfaces/student.interface';
+import { AllDataStudentSubjectsResponse, Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse, StudentByIdResponse, StudentById, StudentWithSubjects } from '../../interfaces/student.interface';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
 import { AuthTeacherService } from '../teacher/auth-teacher.service';
 import { PaymentMethod, PaymentMethodResponse } from '../../interfaces/payment-method.interface';
@@ -24,6 +24,7 @@ export class StudentService {
   private _academicYearList = new BehaviorSubject<AcademicYear[]>([]);
   private _currentStudendIdSelected = new BehaviorSubject<number | null>(null);
   private _dataOfStudentSelected = new BehaviorSubject<StudentById[] | null>(null);
+  private _studentsWithSubjects = new BehaviorSubject<StudentWithSubjects[]> ([]);
 
   public getStudentsFromTeacher() {
     const teacherId = this.authTeacherService.getTeacherId();
@@ -67,6 +68,10 @@ export class StudentService {
     return this._studentsList.asObservable();
   }
 
+  get studentsWithSubjects(){
+    return this._studentsWithSubjects.asObservable();
+  }
+
   get paymentMethods() {
     return this._paymentMethodList.asObservable();
   }
@@ -75,11 +80,11 @@ export class StudentService {
     return this._academicYearList.asObservable();
   }
 
-  get currentStudentIdSelected(){
+  get currentStudentIdSelected() {
     return this._currentStudendIdSelected.asObservable();
   }
 
-  get currentInfoStudentSelected(){
+  get currentInfoStudentSelected() {
     return this._dataOfStudentSelected.asObservable();
   }
 
@@ -90,6 +95,24 @@ export class StudentService {
 
     this.getStudentsFromTeacher();
     return this.http.post<StudentEmailCheckResponseMessage>(`${this._studentApiUrl}/check-email/${teacherId}`, { studentEmail });
+  }
+
+  //we obtain all subjects for the diferents students
+  public getSubjectsFromStudent(studentId: number){
+    this.getTheStudentSubjects(studentId).subscribe({
+      next: (response) => {
+        const currentStudentsWithSubjects = this._studentsWithSubjects.value;
+        const newStudentWithSubjects: StudentWithSubjects = {
+          studentId: studentId,
+          subjects: response.subjects
+        };
+        const updatedStudentsWithSubjects = [...currentStudentsWithSubjects, newStudentWithSubjects];
+        this._studentsWithSubjects.next(updatedStudentsWithSubjects);
+      },
+      error: (error) => {
+        console.error('Error al obtener las asignaturas de cada estudiante', error);
+      }
+    })
   }
 
   //get all subjects from studentId
@@ -132,12 +155,12 @@ export class StudentService {
   }
 
   //-------------info-student.component-----------------
-  public changeCurrentStudentIdSelected(currentStudentSelected: number | null){
+  public changeCurrentStudentIdSelected(currentStudentSelected: number | null) {
     this._currentStudendIdSelected.next(currentStudentSelected);
     this.getStudentById(currentStudentSelected);
   }
 
-  public getStudentById(studentIdSelected: number | null){
+  public getStudentById(studentIdSelected: number | null) {
     if (studentIdSelected) {
       this.http.get<StudentByIdResponse>(`${this._studentApiUrl}/${studentIdSelected}`).subscribe({
         next: (response) => {
@@ -152,22 +175,22 @@ export class StudentService {
     }
   }
 
-  public getAgeFromBirthdate(birthdate: string): number{
-      const birthDate = new Date(birthdate);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      return age;
+  public getAgeFromBirthdate(birthdate: string): number {
+    const birthDate = new Date(birthdate);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
   }
   //-------------update-student.component---------------------
-  updateStudent(studentData: Student, selectedStudentId: number | null){
+  updateStudent(studentData: Student, selectedStudentId: number | null) {
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId) {
       //add the teacherId value on fkIdTeacher for body query for back.
-      const studentDataWithTeacherId = {...studentData, fkIdTeacher: teacherId};
+      const studentDataWithTeacherId = { ...studentData, fkIdTeacher: teacherId };
 
       return this.http.put(`${this._studentApiUrl}/${selectedStudentId}`, studentDataWithTeacherId)
         .pipe(
