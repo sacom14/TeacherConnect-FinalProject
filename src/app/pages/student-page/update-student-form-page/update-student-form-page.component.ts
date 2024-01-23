@@ -82,16 +82,17 @@ export class UpdateStudentFormPageComponent {
       if (data && data.length > 0) {
         const studentData = data[0];
 
+        const formatBirthdate = this.formatDate(studentData.student_birthdate);
+
         this.updateStudentForm.patchValue({
           studentName: studentData.student_name || '',
           studentSurname: studentData.student_surname || '',
           studentEmail: studentData.student_email || '',
-          studentBirthdate: studentData.student_birthdate || '',
+          studentBirthdate: formatBirthdate || '',
           studentPhone: studentData.student_phone || '',
           studentPhoto: studentData.student_photo || '',
           fkIdAcademicYear: studentData.fk_id_academic_year || '',
           fkIdPaymentMethod: studentData.fk_id_payment_method || ''
-          // No incluyo selectedSubjects aquí porque es un FormArray
         });
         this.currentStudentEmail = studentData.student_email;
 
@@ -99,21 +100,34 @@ export class UpdateStudentFormPageComponent {
           this.initialStudentSubjects = data.subjects.map(subject => subject.fk_id_subject);
           this.setSetSubjectCheckboxes();
         });
-        //todo: Para selectedSubjects, necesitarás una lógica adicional
-        // dependiendo de cómo quieras manejarlo.
       }
     });
   }
 
-  public setSetSubjectCheckboxes(){
+  public setSetSubjectCheckboxes() {
     this.subjects.subscribe(subjectList => {
       subjectList.forEach(subject => {
-        if (this.initialStudentSubjects.includes(subject.id_subject)){
+        if (this.initialStudentSubjects.includes(subject.id_subject)) {
           const checkArray: FormArray = this.updateStudentForm.get('selectedSubjects') as FormArray;
         }
       });
     });
   }
+
+  private formatDate(date: Date): string {
+    if (!date) return '';
+
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
 
   public isValidField(field: string): boolean | null {
     return this.validationService.isValidField(this.updateStudentForm, field);

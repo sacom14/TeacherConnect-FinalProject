@@ -42,7 +42,7 @@ export class StudentPageComponent implements OnInit {
   }
 
   //take de subjects for the concret student
-  getSubjectsForStudent(studentId: number): Observable<Subject[]> {
+  getSubjectsForStudent(studentId: number | null): Observable<Subject[]> {
     return this.studentsWithSubjects.pipe(
       map(studentsWithSubjectsArray => {
         const studentWithSubjects = studentsWithSubjectsArray.find(s => s.studentId === studentId);
