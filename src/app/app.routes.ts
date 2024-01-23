@@ -28,7 +28,7 @@ export const routes: Routes = [
   {path: 'add-student', component: NewStudentFormPageComponent, canActivate: [authGuard]},
   {path: 'update-student', component: UpdateStudentFormPageComponent, canActivate: [authGuard]},
 
-  {path: 'session-page', component: SessionPageComponent, canActivate: [authGuard]},
+  {path: 'session-page/:selectedStudentId', component: SessionPageComponent, canActivate: [authGuard]},
   {path: 'add-session', component: NewSessionFormComponent, canActivate: [authGuard]},
 
   {path: '**', pathMatch:'full', redirectTo: 'landing-page'}

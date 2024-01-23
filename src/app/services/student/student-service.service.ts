@@ -22,6 +22,7 @@ export class StudentService {
   private _studentsList = new BehaviorSubject<Student[]>([]);
   private _paymentMethodList = new BehaviorSubject<PaymentMethod[]>([]);
   private _academicYearList = new BehaviorSubject<AcademicYear[]>([]);
+  
   private _currentStudendIdSelected = new BehaviorSubject<number | null>(null);
   private _dataOfStudentSelected = new BehaviorSubject<StudentById[] | null>(null);
   private _studentsWithSubjects = new BehaviorSubject<StudentWithSubjects[]> ([]);

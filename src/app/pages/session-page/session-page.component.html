@@ -1,4 +1,6 @@
 <h1>Todas las sesiones del estudiante</h1>
 <!-- todo: mostrar lista de sessiones de un alumno -->
-
+<h2>id: {{selectedStudentId}}</h2>
+<!-- todo: cuando se haga click, mostrar la infomación detallada de la sesión en un modal? -->
+<p *ngFor="let session of sessionList |async">{{session.session_name}}</p>
 <a class="btn btn-primary" href="/add-session">Añadir sessión</a>

@@ -68,7 +68,6 @@ export class UpdateStudentFormPageComponent {
         this.setInputInitialValues();
       });
   }
-
   public onSubmit(): void {
     this.updateStudentForm.markAllAsTouched();
     if (this.updateStudentForm.valid) {

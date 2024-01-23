@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-info-student',
   standalone: true,
-  imports: [CommonModule, HttpClientModule,],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './info-student.component.html',
   styleUrl: './info-student.component.scss'
 })
@@ -45,5 +45,11 @@ export class InfoStudentComponent implements OnInit {
 
   public goEditStudent(){
     this.router.navigate(['/update-student']);
+  }
+
+  public goAllSessions(){
+    if (this.selectedStudentId !== null) {
+    this.router.navigate(['/session-page', this.selectedStudentId]);
+    }
   }
 }
