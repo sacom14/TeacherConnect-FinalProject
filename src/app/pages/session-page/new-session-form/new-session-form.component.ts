@@ -46,8 +46,8 @@ export class NewSessionFormComponent {
 
     this.activatedRoute.params.subscribe(params => {
       this.currentStudentId = +params['selectedStudentId'];
-      this.studentService.getSubjectsFromStudent(this.currentStudentId);
-    })
+      this.studentService.getSubjectsForStudentId(this.currentStudentId);
+    });
   }
 
   public onSubmit(): void {

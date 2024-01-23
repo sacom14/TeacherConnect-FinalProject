@@ -116,6 +116,22 @@ export class StudentService {
     })
   }
 
+  //we obtain all subjects for the diferents students
+  public getSubjectsForStudentId(studentId: number) {
+    this.getTheStudentSubjects(studentId).subscribe({
+      next: (response) => {
+        const newStudentWithSubjects: StudentWithSubjects = {
+          studentId: studentId,
+          subjects: response.subjects
+        };
+        this._studentsWithSubjects.next([newStudentWithSubjects]);
+      },
+      error: (error) => {
+        console.error('Error al obtener las asignaturas de cada estudiante', error);
+      }
+    })
+  }
+
   //get all subjects from studentId
   public getTheStudentSubjects(studentId: number) {
     return this.http.get<AllDataStudentSubjectsResponse>(`${this._studentSubjectApiUrl}/student/${studentId}`)
