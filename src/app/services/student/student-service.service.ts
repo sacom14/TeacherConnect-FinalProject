@@ -22,10 +22,10 @@ export class StudentService {
   private _studentsList = new BehaviorSubject<Student[]>([]);
   private _paymentMethodList = new BehaviorSubject<PaymentMethod[]>([]);
   private _academicYearList = new BehaviorSubject<AcademicYear[]>([]);
-  
+
   private _currentStudendIdSelected = new BehaviorSubject<number | null>(null);
   private _dataOfStudentSelected = new BehaviorSubject<StudentById[] | null>(null);
-  private _studentsWithSubjects = new BehaviorSubject<StudentWithSubjects[]> ([]);
+  private _studentsWithSubjects = new BehaviorSubject<StudentWithSubjects[]>([]);
 
   public getStudentsFromTeacher() {
     const teacherId = this.authTeacherService.getTeacherId();
@@ -69,7 +69,7 @@ export class StudentService {
     return this._studentsList.asObservable();
   }
 
-  get studentsWithSubjects(){
+  get studentsWithSubjects() {
     return this._studentsWithSubjects.asObservable();
   }
 
@@ -99,7 +99,7 @@ export class StudentService {
   }
 
   //we obtain all subjects for the diferents students
-  public getSubjectsFromStudent(studentId: number){
+  public getSubjectsFromStudent(studentId: number) {
     this.getTheStudentSubjects(studentId).subscribe({
       next: (response) => {
         const currentStudentsWithSubjects = this._studentsWithSubjects.value;

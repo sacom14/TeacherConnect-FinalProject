@@ -17,21 +17,33 @@ import { StudentById } from '../../interfaces/student.interface';
 })
 export class SessionPageComponent implements OnInit {
   private sessionService = inject(SessionService);
+  private studentService = inject(StudentService);
   private activatedRoute = inject(ActivatedRoute); //we obtains the studentId from the info-page.component
+  private router = inject(Router);
 
-  public selectedStudentExist!:boolean;
+  public selectedStudentExist!: boolean;
   public selectedStudentId!: number | null;
   public sessionList!: Observable<Session[] | null>;
+  public dataOfStudentSelected!: Observable<StudentById[] | null>;
 
-  constructor(){
+
+
+  constructor() {
     this.sessionList = this.sessionService.sessionList;
+
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.selectedStudentId = +params['selectedStudentId'];
       this.sessionService.getSession(this.selectedStudentId);
+      this.dataOfStudentSelected = this.studentService.currentInfoStudentSelected;
+
     })
+  }
+
+  goToNewSessionForm(){
+    this.router.navigate(['/add-session', this.selectedStudentId]);
   }
 
 }

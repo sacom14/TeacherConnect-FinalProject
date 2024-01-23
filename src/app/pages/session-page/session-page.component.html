@@ -1,6 +1,15 @@
-<h1>Todas las sesiones del estudiante</h1>
+
+<h1 *ngFor="let student of dataOfStudentSelected | async ">Todas las classes de {{student.student_name}}</h1>
 <!-- todo: mostrar lista de sessiones de un alumno -->
 <h2>id: {{selectedStudentId}}</h2>
 <!-- todo: cuando se haga click, mostrar la infomación detallada de la sesión en un modal? -->
-<p *ngFor="let session of sessionList |async">{{session.session_name}}</p>
-<a class="btn btn-primary" href="/add-session">Añadir sessión</a>
+<div *ngFor="let session of sessionList |async">
+  <p>Nombre sesión: {{session.session_name}}</p>
+  <p>Nombre objetivo: {{session.session_objective}}</p>
+  <p>Asignatura: {{session.fk_id_student_subject}}</p>
+  <p>Hora inicio: {{session.session_start}}</p>
+  <p>Tareas: {{session.session_tasks}}</p>
+  <p>Creado: {{session.create_at_session}}</p>
+</div>
+
+<a class="btn btn-primary" (click)="goToNewSessionForm()">Añadir sessión</a>
