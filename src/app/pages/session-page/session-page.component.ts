@@ -26,11 +26,8 @@ export class SessionPageComponent implements OnInit {
   public sessionList!: Observable<Session[] | null>;
   public dataOfStudentSelected!: Observable<StudentById[] | null>;
 
-
-
   constructor() {
     this.sessionList = this.sessionService.sessionList;
-
   }
 
   ngOnInit(): void {
@@ -38,8 +35,11 @@ export class SessionPageComponent implements OnInit {
       this.selectedStudentId = +params['selectedStudentId'];
       this.sessionService.getSession(this.selectedStudentId);
       this.dataOfStudentSelected = this.studentService.currentInfoStudentSelected;
-
     })
+  }
+
+  convertToLocalDateTime(utcDate:string):string{
+    return new Date(utcDate).toLocaleString();
   }
 
   goToNewSessionForm(){

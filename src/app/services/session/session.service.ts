@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Session, SessionResponse } from '../../interfaces/session.interface';
+import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { Session, SessionPost, SessionResponse } from '../../interfaces/session.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +28,25 @@ export class SessionService {
     });
   }
 
+  //create session
+  public createNewSession(sessionData: SessionPost, fkIdStudentSubject: number) {
+    console.log('hola: ', fkIdStudentSubject)
+    console.log('hola: ', sessionData)
+
+    if (fkIdStudentSubject && sessionData) {
+      console.log('esta llegando aquí; ', fkIdStudentSubject)
+      console.log('esta llegando aquí; ', sessionData)
+
+      return this.http.post<SessionResponse>(`${this._sessionApiUrl}/student-subject/${fkIdStudentSubject}`, sessionData)
+        .pipe(
+          catchError((error) => {
+            console.error('Error en el servicio:', error);
+            return throwError(() => new Error('Error al crear la sesión'));
+          })
+        );
+    } else {
+      return throwError(() => new Error('FkIdStudentsubject o sessionData no disponible'));
+    }
+  }
 
 }

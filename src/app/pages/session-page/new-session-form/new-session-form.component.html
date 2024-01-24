@@ -29,7 +29,7 @@
             @if (isValidField('sessionName'))
             {
             <span class="form-text text-danger">
-              Este campo es requerido
+              Este campo es requerido. La sesión tiene que tener un nombre
             </span>
             }
           </div>
@@ -38,7 +38,7 @@
         <div class="row mb-3">
           <label class="col-lg-12 col-form-label">Hora de inicio (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
-            <input type="date" class="form-control" formControlName="sessionStart">
+            <input type="datetime-local" class="form-control" formControlName="sessionStart">
             @if (isValidField('sessionStart')){
             <span class="form-text text-danger">
               Introduzca una fecha correcta y válida
@@ -51,7 +51,7 @@
         <div class="row mb-3">
           <label class="col-lg-12 col-form-label">Hora de finalizar (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
-            <input type="date" class="form-control" formControlName="sessionEnd">
+            <input type="datetime-local" class="form-control" formControlName="sessionEnd">
             @if (isValidField('sessionEnd')){
             <span class="form-text text-danger">
               Introduzca una fecha correcta y válida
@@ -78,9 +78,9 @@
         <div class="row mb-3">
           <label class="col-lg-12 col-form-label">Tareas de la sesión (*)</label>
           <div class="col-md-9 col-lg-12 w-100">
-            <textarea type="text" class="form-control" formControlName="sessionTask"
+            <textarea type="text" class="form-control" formControlName="sessionTasks"
               placeholder="Objetivos y/o tareas a realizar en la session"></textarea>
-            @if (isValidField('sessionTask')){
+            @if (isValidField('sessionTasks')){
             <span class="form-text text-danger">
               Introduzca una o más tareas para hacer en la sesión
             </span>

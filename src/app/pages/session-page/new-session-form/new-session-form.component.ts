@@ -8,7 +8,7 @@ import { StudentService } from '../../../services/student/student-service.servic
 import { SubjectService } from '../../../services/subject/subject.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentWithSubjects } from '../../../interfaces/student.interface';
-
+import { SessionService } from '../../../services/session/session.service';
 
 @Component({
   selector: 'app-new-session-form',
@@ -25,6 +25,7 @@ export class NewSessionFormComponent {
   private subjectService = inject(SubjectService);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+  private sessionService = inject(SessionService);
 
   public currentStudentId!: number | null;
   public subjects!: Observable<StudentWithSubjects[] | null>;
@@ -35,10 +36,10 @@ export class NewSessionFormComponent {
 
   public myFormSession: FormGroup = this.fb.group({
     sessionName: ['', [Validators.required]],
+    sessionObjective: ['', [Validators.required]],
     sessionStart: ['', [Validators.required]],
     sessionEnd: ['', [Validators.required]],
-    sessionObjective: ['', [Validators.required]],
-    sessionTask: ['', [Validators.required]],
+    sessionTasks: ['', [Validators.required]],
     fkIdStudentSubject: ['', [Validators.required]],
   });
 
@@ -62,5 +63,22 @@ export class NewSessionFormComponent {
   };
 
   addNewSessionForStudent() {
+    const { fkIdStudentSubject, ...sessionFormData } = this.myFormSession.value;
+    const idSudentSubject:number  = this.myFormSession.value.fkIdStudentSubject;
+
+    this.sessionService.createNewSession(sessionFormData, idSudentSubject).subscribe({
+      next: (response) => {
+        alert('Se ha creado la sesión correctamente');
+        //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+        //redirigir al login
+        this.router.navigate(['/student-page'])
+      },
+      error: (error) => {
+        console.error('Error al crear la sesión', error)
+      },
+    });
+
+
+
   }
 }

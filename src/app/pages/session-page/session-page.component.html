@@ -7,9 +7,9 @@
   <p>Nombre sesión: {{session.session_name}}</p>
   <p>Nombre objetivo: {{session.session_objective}}</p>
   <p>Asignatura: {{session.fk_id_student_subject}}</p>
-  <p>Hora inicio: {{session.session_start}}</p>
+  <p>Hora inicio: {{convertToLocalDateTime(session.session_start.toString())}}</p>
   <p>Tareas: {{session.session_tasks}}</p>
-  <p>Creado: {{session.create_at_session}}</p>
+  <p>Creado: {{convertToLocalDateTime(session.create_at_session.toString())}}</p>
 </div>
 
 <a class="btn btn-primary" (click)="goToNewSessionForm()">Añadir sessión</a>
