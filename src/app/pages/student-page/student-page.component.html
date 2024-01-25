@@ -1,14 +1,17 @@
 <h1 class="text-center">MIS ALUMNOS</h1>
 <!-- ASIDE IZQUIERDA (filtros) -->
 <section class="d-flex row gap-2 justify-content-center">
-  <aside class="col-2 bg-danger">
+  <aside class="col-12 bg-danger col-md-2">
     <h4 class="text-center">Filtro</h4>
     <app-filterbar-student class="text-center"></app-filterbar-student>
   </aside>
+  @if(students){
+
+  @if(studentSelected){
   <!-- en el centro lista students -->
-  <article class="col-6 text-center bg-primary">
+  <article class="col-12 col-md-6 text-center bg-primary">
     <div class="row justify-content-center">
-      <div class="col-md-4 mt-3" style="min-width: 12rem ;" *ngFor="let student of students | async">
+      <div class="col-md-3 mt-3" style="min-width: 13rem ; max-width: 16rem;" *ngFor="let student of students | async">
         <a class="card" (click)="showAllInfoForStudentIdSelected(student.id_student)" style="cursor: pointer;">
           <img src="https://i.ibb.co/8DXnr6M/8f57046bc78f.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
           <div class="card-body">
@@ -23,8 +26,39 @@
     </div>
   </article>
   <!-- aside derecha (info alumno) -->
-  <aside class="col-3 bg-warning">
+  <aside class="col-3 bg-warning d-none d-md-block">
     <h4 class="text-center">Información del estudiante</h4>
     <app-info-student></app-info-student>
   </aside>
+  <!-- TODO: HACER QUE SALTE EL MODAL DE LA INFO DEL ESTUDIANTE DESPUÉS de hacer click en una card -->
+
+
+  } @else {
+  <!-- if studentSelected = false -->
+  <!-- en el centro lista students -->
+  <article class="col-12 col-md-9 text-center bg-primary">
+    <div class="row justify-content-center">
+      <div class="col-md-3 mt-3" style="min-width: 13rem; max-width: 16rem;" *ngFor="let student of students | async">
+        <a class="card" (click)="showAllInfoForStudentIdSelected(student.id_student)" style="cursor: pointer;">
+          <img src="https://i.ibb.co/8DXnr6M/8f57046bc78f.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
+          <div class="card-body">
+            <h4 class="card-title">{{student.student_name}} {{student.student_surname}}</h4>
+            <div>
+              <span class="badge text-bg-secondary mx-1"
+                *ngFor="let subject of getSubjectsForStudent(student.id_student) | async">{{subject.subject_name}}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </article>
+  }
+  } @else {
+  <div class="alert alert-warning" role="alert">
+    Aún no tienes ningún estudiante, añade tu primer estudiante
+    <!-- todo: botón para añadir nuevo estudiante -->
+  </div>
+  }
+
+
 </section>

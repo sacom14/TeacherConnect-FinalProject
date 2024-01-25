@@ -15,6 +15,7 @@ export class SessionService {
 
   private _sessionList = new BehaviorSubject<Session[]>([]);
   private _sessionListFromTeacherId = new BehaviorSubject<SessionFromTeacherId[]>([]);
+  private _sessionData = new BehaviorSubject<Session[]>([]);
 
   get sessionList(){
     return this._sessionList.asObservable();
@@ -22,6 +23,10 @@ export class SessionService {
 
   get sessionListFromTeacherId(){
     return this._sessionListFromTeacherId.asObservable();
+  }
+
+  get sessionData(){
+    return this._sessionData.asObservable();
   }
 
   //from student Id
@@ -35,6 +40,23 @@ export class SessionService {
       }
     });
   }
+
+  //get session info from sessionId
+  public getSessionDataFromSessionId(sessionId: number | null){
+    if(sessionId){
+      this.http.get<SessionResponse>(`${this._sessionApiUrl}/${sessionId}`).subscribe({
+        next: (response) => {
+          this._sessionData.next(response.sessions);
+        },
+        error: (error) => {
+          console.error('Error al recuperar las información de la sesión', error);
+        }
+      });
+    } else {
+      console.error('No se ha encontrado la Id se la sesión');
+    }
+  }
+
 
   //Al sessions from teacher Id
   public getAllSessionsFromTeacherId(){
@@ -65,5 +87,6 @@ export class SessionService {
       return throwError(() => new Error('FkIdStudentsubject o sessionData no disponible'));
     }
   }
+
 
 }

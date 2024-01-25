@@ -1,0 +1,5 @@
+<p>modal-student-list works!</p>
+<h3>Escoge el estudiande para añadir la sesión</h3>
+<ng-container *ngFor="let student of studentList |async">
+  <a class="d-flex flex-column" (click)="goToNewSessionForm(student.id_student)" style="cursor: pointer;" >{{student.student_name}}</a>
+</ng-container>

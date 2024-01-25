@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -11,8 +11,9 @@ import esLocale from '@fullcalendar/core/locales/es';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { SessionService } from '../../services/session/session.service';
 import { SessionFromTeacherId } from '../../interfaces/session.interface';
-import { Observable } from 'rxjs';
-import { eventListeners } from '@popperjs/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalStudentListComponent } from '../../modals/modal-student-list/modal-student-list.component';
+import { ModalSessionDetailsComponent } from '../../modals/modal-session-details/modal-session-details.component';
 
 @Component({
   selector: 'app-calendar-page',
@@ -22,9 +23,9 @@ import { eventListeners } from '@popperjs/core';
   styleUrl: './calendar-page.component.scss'
 })
 export class CalendarPageComponent implements OnInit {
-
-
   private sessionService = inject(SessionService);
+  private modalService = inject(NgbModal);
+
 
   public sessionListFromTeacherId!: SessionFromTeacherId[];
 
@@ -34,7 +35,7 @@ export class CalendarPageComponent implements OnInit {
     this.sessionService.sessionListFromTeacherId.subscribe((sessions) => {
       this.sessionListFromTeacherId = sessions;
 
-    this.loadAllEvents();
+      this.loadAllEvents();
     });
   }
 
@@ -45,6 +46,7 @@ export class CalendarPageComponent implements OnInit {
           title: session.session_name,
           start: session.session_start,
           end: session.session_end,
+          id_session: session.id_session,
         }
       });
       //put the events to calendarOptions
@@ -64,17 +66,16 @@ export class CalendarPageComponent implements OnInit {
       right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     events: [],
-    eventClick: this.handleEventClick.bind(this),
-    dateClick: this.handleDateClick.bind(this),
+    eventClick: this.openSessionDetailsModal.bind(this),
+    dateClick: this.openStudentListModal.bind(this),
   };
 
-  handleEventClick(clickInfo: any) {
-    alert('event click!' + clickInfo.event.title + ' Hora de inicio: ' + clickInfo.event.start + ' Hora end: ' + clickInfo.event.end) //todo: poner los datos de la sessión
+  public openStudentListModal() {
+    this.modalService.open(ModalStudentListComponent, { centered: true });
   }
 
-  handleDateClick(arg: any) {
-    alert('date click! ' + arg.dateStr) //todo: hacer click, para añadir una nueva sesión.
+  public openSessionDetailsModal(event: EventClickArg) {
+    const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
+    modalRef.componentInstance.selectedSessionId = event.event.extendedProps['id_session']; //get the id_session from selected session
   }
-
-
 }

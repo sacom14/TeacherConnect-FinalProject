@@ -8,13 +8,15 @@ import { InfoStudentComponent } from './info-student/info-student.component';
 import { Observable, map } from 'rxjs';
 import { StudentService } from '../../services/student/student-service.service';
 import { Subject } from '../../interfaces/subject.interface';
+import { ModalStudentListComponent } from '../../modals/modal-student-list/modal-student-list.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 
 @Component({
   selector: 'app-student-page',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FilterbarStudentComponent, InfoStudentComponent],
+  imports: [CommonModule, HttpClientModule, FilterbarStudentComponent, InfoStudentComponent, ModalStudentListComponent],
   templateUrl: './student-page.component.html',
   styleUrl: './student-page.component.scss'
 })
@@ -24,6 +26,7 @@ export class StudentPageComponent implements OnInit {
   public students!: Observable<Student[]>;
   public studentsWithSubjects!: Observable< StudentWithSubjects[]>;
   public combinedStudentData!: Observable<StudentWithSubjects[]>;
+  public studentSelected: boolean = false;
 
   constructor() {
     this.students = this.studentService.students;
@@ -53,8 +56,11 @@ export class StudentPageComponent implements OnInit {
 
   //change the studentId selected info for student after click on card
   public showAllInfoForStudentIdSelected(selectedStudentId: number){
+    this.studentSelected = true;
     this.studentService.changeCurrentStudentIdSelected(selectedStudentId);
   }
+
+
 
 }
 

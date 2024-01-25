@@ -1,13 +1,17 @@
+<p>modal-session-list works!</p>
 
 <h1 *ngFor="let student of dataOfStudentSelected | async ">Todas las classes de {{student.student_name}}</h1>
 <!-- todo: mostrar lista de sessiones de un alumno -->
 <h2>id: {{selectedStudentId}}</h2>
 <!-- todo: cuando se haga click, mostrar la infomación detallada de la sesión en un modal? -->
 <div *ngFor="let session of sessionList |async">
-  <div class="card">
+  <div class="card" (click)="openSessionDetailsModal(session.id_session)" style="cursor: pointer;">
     <p>Nombre sesión: {{session.session_name}}</p>
     <p>Hora inicio: {{convertToLocalDateTime(session.session_start.toString())}}</p>
   </div>
 </div>
 
 <a class="btn btn-primary" (click)="goToNewSessionForm()">Añadir sessión</a>
+
+<a class="primary" style="cursor: pointer;" (click)="closeModal()">Volver</a>
+

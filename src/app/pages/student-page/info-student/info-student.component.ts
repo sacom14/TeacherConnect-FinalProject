@@ -5,6 +5,8 @@ import { StudentService } from '../../../services/student/student-service.servic
 import { StudentById } from '../../../interfaces/student.interface';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalSessionListComponent } from '../../../modals/modal-session-list/modal-session-list.component';
 
 @Component({
   selector: 'app-info-student',
@@ -15,6 +17,7 @@ import { Router } from '@angular/router';
 })
 export class InfoStudentComponent implements OnInit {
   private studentService = inject(StudentService);
+  private modalService = inject(NgbModal);
   private router = inject(Router);
 
   public selectedStudentExist!:boolean;
@@ -43,13 +46,19 @@ export class InfoStudentComponent implements OnInit {
     return this.studentService.getAgeFromBirthdate(birthdate);
   }
 
-  public goEditStudent(){
+  public goEditStudent(){ //todo: CAMBIAR POR MODAL?
+    this.modalService.dismissAll();
     this.router.navigate(['/update-student']);
   }
 
-  public goAllSessions(){
-    if (this.selectedStudentId !== null) {
-    this.router.navigate(['/session-page', this.selectedStudentId]);
-    }
+  public openStudentListModal(selectedStudenId: number) {
+    const modalRef = this.modalService.open(ModalSessionListComponent, { centered: true });
+    modalRef.componentInstance.selectedStudentId = selectedStudenId;
   }
+
+  // public goAllSessions(){
+  //   if (this.selectedStudentId !== null) {
+  //   this.router.navigate(['/session-page', this.selectedStudentId]);
+  //   }
+  // }
 }
