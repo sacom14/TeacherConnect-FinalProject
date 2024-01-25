@@ -1,22 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
-import { Session, SessionPost, SessionResponse } from '../../interfaces/session.interface';
+import { Session, SessionFromTeacherIDResponse, SessionFromTeacherId, SessionPost, SessionResponse } from '../../interfaces/session.interface';
+import { AuthTeacherService } from '../teacher/auth-teacher.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
   private http = inject(HttpClient);
+  private authTeacherService = inject(AuthTeacherService);
 
   private _sessionApiUrl: string = 'http://localhost:3000/api/session';
 
   private _sessionList = new BehaviorSubject<Session[]>([]);
+  private _sessionListFromTeacherId = new BehaviorSubject<SessionFromTeacherId[]>([]);
 
   get sessionList(){
     return this._sessionList.asObservable();
   }
 
+  get sessionListFromTeacherId(){
+    return this._sessionListFromTeacherId.asObservable();
+  }
+
+  //from student Id
   public getSession(studentId: number | null){
     this.http.get<SessionResponse>(`${this._sessionApiUrl}/student/${studentId}`).subscribe({
       next: (response) => {
@@ -28,14 +36,23 @@ export class SessionService {
     });
   }
 
+  //Al sessions from teacher Id
+  public getAllSessionsFromTeacherId(){
+    const teacherId = this.authTeacherService.getTeacherId();
+    this.http.get<SessionFromTeacherIDResponse>(`${this._sessionApiUrl}/teacher/${teacherId}`).subscribe({
+      next: (response) => {
+        this._sessionListFromTeacherId.next(response.sessions);
+      },
+      error: (error) => {
+        console.error('Error al recuperar las sesiones del profesor')
+      }
+    });
+  }
+
   //create session
   public createNewSession(sessionData: SessionPost, fkIdStudentSubject: number) {
-    console.log('hola: ', fkIdStudentSubject)
-    console.log('hola: ', sessionData)
 
     if (fkIdStudentSubject && sessionData) {
-      console.log('esta llegando aquí; ', fkIdStudentSubject)
-      console.log('esta llegando aquí; ', sessionData)
 
       return this.http.post<SessionResponse>(`${this._sessionApiUrl}/student-subject/${fkIdStudentSubject}`, sessionData)
         .pipe(
