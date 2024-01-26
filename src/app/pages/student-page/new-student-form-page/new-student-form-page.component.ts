@@ -11,6 +11,7 @@ import { Subject } from '../../../interfaces/subject.interface';
 import { SubjectService } from '../../../services/subject/subject.service';
 import { ValidationService } from '../../../services/validations/validations-service.service';
 import { AcademicYear } from '../../../interfaces/academic-year.interface';
+import { ImagebbService } from '../../../services/imageBB/imagebb.service';
 
 @Component({
   selector: 'app-new-student-form-page',
@@ -23,19 +24,22 @@ export class NewStudentFormPageComponent implements OnInit {
   public paymentMethods!: Observable<PaymentMethod[]>;
   public subjects!: Observable<Subject[]>;
   public academicYears!: Observable<AcademicYear[]>;
-
   public emailExist: boolean = false;
+
+  private imageUrl!: Observable<string>;
 
   constructor(
     private fb: FormBuilder,
     private validationService: ValidationService,
     private studentService: StudentService,
     private subjectService: SubjectService,
+    private imageBbService: ImagebbService,
     private router:Router) {
 
     this.paymentMethods = this.studentService.paymentMethods;
     this.subjects = this.subjectService.subjects;
     this.academicYears = this.studentService.academicYears;
+    this.imageUrl = this.imageBbService.imageUrlResponse;
   }
 
   public addStudentForm: FormGroup = this.fb.group({
@@ -44,7 +48,8 @@ export class NewStudentFormPageComponent implements OnInit {
     studentEmail: ['', [Validators.required, Validators.pattern(this.validationService.emailPattern)]],
     studentBirthdate: ['', [Validators.required, Validators.pattern(this.validationService.birthdatePattern)]],
     studentPhone: ['', [Validators.required, Validators.pattern(this.validationService.phonePattern)]],
-    studentPhoto: ['', [this.validationService.imageExtensionValidator]],
+    studentPhotoFile: [''], //we dont push this on our DB
+    studentPhoto: [''], //we push the url only don DB
     fkIdAcademicYear: ['', [Validators.required]],
     fkIdPaymentMethod: ['', [Validators.required]],
     selectedSubjects: new FormArray([], this.validationService.checkMinOneSelectedValidator(1)),
@@ -96,8 +101,7 @@ export class NewStudentFormPageComponent implements OnInit {
     const element = event.currentTarget as HTMLInputElement;
     let file = element.files?.item(0);
     if (file) {
-      this.addStudentForm.patchValue({ image: file });
-      this.addStudentForm.get('image')?.updateValueAndValidity();
+      this.addStudentForm.patchValue({ studentPhotoFile: file });
     }
   }
 
@@ -108,7 +112,7 @@ export class NewStudentFormPageComponent implements OnInit {
       next: (response) => {
         if (response.message === "Email unique") {
           this.emailExist = false;
-          this.addNewStudent();
+          this.getTheImageUrl();
         } else {
           this.emailExist = true;
           return alert('Ya tienes un estudiante con ese email, prueba con otro');
@@ -125,9 +129,23 @@ export class NewStudentFormPageComponent implements OnInit {
     });
   }
 
+  public getTheImageUrl(){
+    const imageControl = this.addStudentForm.get('studentPhotoFile');
+    const imageFile: File | null = imageControl?.value;
 
-  addNewStudent() {
-    const { selectedSubjects, ...studentFormData } = this.addStudentForm.value; //dont push subjects cause they go in another table.
+    this.imageBbService.getImageUrlFromFile(imageFile);
+
+    this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
+      if(imageUrl){
+        this.addStudentForm.patchValue({studentPhoto: imageUrl});
+        this.addNewStudent(); //add the new student
+      }
+    })
+    this.addStudentForm.value.studentPhoto = this.imageUrl;
+  }
+
+  public addNewStudent() {
+    const { selectedSubjects, studentPhotoFile, ...studentFormData } = this.addStudentForm.value; //dont push subjects cause they go in another table.
     this.studentService.createNewStudent(studentFormData)
       .subscribe({
         next: (response) => {
@@ -147,7 +165,7 @@ export class NewStudentFormPageComponent implements OnInit {
       });
   }
 
-  addNewStudentSubject(studentId: number) {
+  public addNewStudentSubject(studentId: number) {
     const subjects: number[] = this.addStudentForm.value.selectedSubjects;
     subjects.forEach(subjectId => {
       this.studentService.createNewStudentSubject(studentId, subjectId).subscribe({
@@ -160,6 +178,4 @@ export class NewStudentFormPageComponent implements OnInit {
       });
     });
   }
-
-
 }

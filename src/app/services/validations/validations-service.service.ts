@@ -52,10 +52,16 @@ export class ValidationService {
   public imageExtensionValidator(control: AbstractControl): ValidationErrors | null {
     const file = control.value;
     if (file) {
-      const extension = file.name.split('.').pop().toLowerCase();
-      const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-      if (!validExtensions.includes(extension)) {
-        return { invalidExtension: true };
+      // Verificar si es un objeto File
+    if (file instanceof File !== null) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        const validExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+        if (!validExtensions.includes(extension)) {
+          return { invalidExtension: true };
+        }
+      } else {
+        // Manejar caso donde control.value no es un objeto File
+        return { invalidFileType: true };
       }
     }
     return null;

@@ -13,7 +13,11 @@
     <div class="row justify-content-center">
       <div class="col-12 col-md-3 mt-3" style="min-width: 12rem ; max-width: 15rem;" *ngFor="let student of students | async">
         <a class="card" (click)="showAllInfoForStudentIdSelected(student.id_student)" style="cursor: pointer;">
-          <img src="https://i.ibb.co/8DXnr6M/8f57046bc78f.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
+          @if(student.student_photo){
+            <img src="{{student.student_photo}}" class="card-img-top img-fluid" alt="foto_estudiante">
+          } @else {
+            <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
+          }
           <div class="card-body">
             <h4 class="card-title">{{student.student_name}} {{student.student_surname}}</h4>
             <div>
@@ -40,7 +44,11 @@
     <div class="row justify-content-center">
       <div class="col-md-3 mt-3" style="min-width: 12rem; max-width: 15rem;" *ngFor="let student of students | async">
         <a class="card" (click)="showAllInfoForStudentIdSelected(student.id_student)" style="cursor: pointer;">
-          <img src="https://i.ibb.co/8DXnr6M/8f57046bc78f.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
+          @if(student.student_photo){
+            <img src="{{student.student_photo}}" class="card-img-top img-fluid" alt="foto_estudiante">
+          } @else {
+            <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
+          }
           <div class="card-body">
             <h4 class="card-title">{{student.student_name}} {{student.student_surname}}</h4>
             <div>
