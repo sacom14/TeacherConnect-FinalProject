@@ -35,8 +35,6 @@ export class ModalSessionListComponent {
   }
 
   ngOnInit(): void {
-        //Todo recibir selectedStudentId
-    //llamar al back para la sessionList y dataofStudentsSElected
       this.sessionService.getSession(this.selectedStudentId);
       this.studentService.getStudentById(this.selectedStudentId);
   }
@@ -54,6 +52,7 @@ export class ModalSessionListComponent {
     this.modalService.dismissAll();
     const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
     modalRef.componentInstance.selectedSessionId = selectedSessionId; //get the id_session from selected session
+    modalRef.componentInstance.selectedStudentId = this.selectedStudentId;
   }
 
   public closeModal(){

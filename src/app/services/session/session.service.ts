@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, catchError, throwError } from 'rxjs';
-import { Session, SessionFromTeacherIDResponse, SessionFromTeacherId, SessionPost, SessionResponse } from '../../interfaces/session.interface';
+import { Session, SessionFromTeacherIDResponse, SessionFromTeacherId, SessionPost, SessionPut, SessionResponse } from '../../interfaces/session.interface';
 import { AuthTeacherService } from '../teacher/auth-teacher.service';
 
 @Injectable({
@@ -88,5 +88,19 @@ export class SessionService {
     }
   }
 
+  //update session
+    public updateSession(sessionData: SessionPut, sessionId: number | null) {
+      if (sessionId && sessionData) {
+        return this.http.put<SessionResponse>(`${this._sessionApiUrl}/${sessionId}`, sessionData)
+          .pipe(
+            catchError((error) => {
+              console.error('Error en el servicio:', error);
+              return throwError(() => new Error('Error al actualizar la sesión'));
+            })
+          );
+      } else {
+        return throwError(() => new Error('SesionId o sessionData no disponibles'));
+      }
+    }
 
 }

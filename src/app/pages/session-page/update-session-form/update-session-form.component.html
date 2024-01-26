@@ -1,95 +1,115 @@
 <section class="d-flex justify-content-center">
   <div class="w-75 w-md-100">
     <div class="col card p-5 rounded-5 mb-3">
-      <h1 class="fs-4">Modifica la sesión de: [NOMBRE]</h1>
+      <ng-container *ngFor="let name of session | async">
+        <h1 class="fs-4">Modifica la sesión de {{name.student_name}} </h1>
+      </ng-container>
       <hr>
-      <form [formGroup]="myFormSession" (ngSubmit)="onSubmit()" autocomplete="off">
+      <form [formGroup]="updateSessionForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div *ngFor="let sessionData of session | async">
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <!-- if we dont wanna let user change the subject session -->
+              <select class="form-select" formControlName="fkIdStudentSubject">
+                <option [value]="sessionData.fk_id_student_subject" selected>{{sessionData.subject_name}}</option>
+              </select>
+              @if (isValidField('fkIdStudentSubject')){
+              <span class="form-text text-danger">
+                Seleccione la asignatura que se va a dar en la sesión
+              </span>
+              }
+              <!-- if we want to let user for change the subject session -->
+              <!-- <select class="form-select" formControlName="fkIdStudentSubject">
+                <option value="" disabled selected>Escoge la asignatura para la sesión</option>
+                <ng-container *ngFor="let allSubjects of subjects | async">
+                  <option *ngFor="let subject of allSubjects.subjects" [value]="subject.id_student_subject">
+                    {{subject.subject_name}}</option>
+                </ng-container>
+              </select>
+              @if (isValidField('fkIdStudentSubject')){
+              <span class="form-text text-danger">
+                Seleccione la asignatura que se va a dar en la sesión
+              </span>
+              } -->
+            </div>
 
-        <div class="col-xs-12 col-sm-6">
-          <select class="form-select" formControlName="fkIdStudentSubject">
-            <option value="" disabled selected>Escoge la asignatura para la sesión</option>
+            <!-- todo: payed boolean-->
+            <div class="col-xs-12 col-sm-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" formControlName="sessionPayed">
+                <label class="form-check-label" for="flexSwitchCheckDefault" >Pagado</label>
+              </div>
+            </div>
 
-            <ng-container *ngFor="let allSubjects of subjects | async">
-              <option *ngFor="let subject of allSubjects.subjects" [value]="subject.id_student_subject">
-                {{subject.subject_name}}</option>
-            </ng-container>
-          </select>
-          @if (isValidField('fkIdStudentSubject')){
-          <span class="form-text text-danger">
-            Seleccione la asignatura que se va a dar en la sesión
-          </span>
-          }
-        </div>
+          </div>
 
-        <!-- Name -->
-        <div class="row mb-3">
-          <label class="col-lg-12 col-form-label">Nombre de la sesión (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="text" class="form-control" formControlName="sessionName" placeholder="Nombre de la sesión">
-            @if (isValidField('sessionName'))
-            {
-            <span class="form-text text-danger">
-              Este campo es requerido. La sesión tiene que tener un nombre
-            </span>
-            }
+          <!-- Name -->
+          <div class="row mb-3">
+            <label class="col-lg-12 col-form-label">Nombre de la sesión (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <input type="text" class="form-control" formControlName="sessionName" placeholder="Nombre de la sesión">
+              @if (isValidField('sessionName'))
+              {
+              <span class="form-text text-danger">
+                Este campo es requerido. La sesión tiene que tener un nombre
+              </span>
+              }
+            </div>
+          </div>
+          <!-- Start hour -->
+          <div class="row mb-3">
+            <label class="col-lg-12 col-form-label">Hora de inicio (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <input type="datetime-local" class="form-control" formControlName="sessionStart" step="60">
+              @if (isValidField('sessionStart')){
+              <span class="form-text text-danger">
+                Introduzca una fecha correcta y válida
+              </span>
+              }
+            </div>
+          </div>
+
+          <!-- Start hour -->
+          <div class="row mb-3">
+            <label class="col-lg-12 col-form-label">Hora de finalizar (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <input type="datetime-local" class="form-control" formControlName="sessionEnd" step="60">
+              @if (isValidField('sessionEnd')){
+              <span class="form-text text-danger">
+                Introduzca una fecha correcta y válida
+              </span>
+              }
+            </div>
+          </div>
+
+          <!-- Objectives -->
+          <div class="row mb-3">
+            <label class="col-lg-12 col-form-label">Objectivos de la sesión (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <textarea type="text" class="form-control" formControlName="sessionObjective"
+                placeholder="Objetivos y/o tareas a realizar en la session"></textarea>
+              @if (isValidField('sessionObjective')){
+              <span class="form-text text-danger">
+                Introduzca el objectivo de la sesión
+              </span>
+              }
+            </div>
+          </div>
+
+          <!-- Tasks for -->
+          <div class="row mb-3">
+            <label class="col-lg-12 col-form-label">Tareas de la sesión (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <textarea type="text" class="form-control" formControlName="sessionTasks"
+                placeholder="Objetivos y/o tareas a realizar en la session"></textarea>
+              @if (isValidField('sessionTasks')){
+              <span class="form-text text-danger">
+                Introduzca una o más tareas para hacer en la sesión
+              </span>
+              }
+            </div>
           </div>
         </div>
-        <!-- Start hour -->
-        <div class="row mb-3">
-          <label class="col-lg-12 col-form-label">Hora de inicio (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="datetime-local" class="form-control" formControlName="sessionStart">
-            @if (isValidField('sessionStart')){
-            <span class="form-text text-danger">
-              Introduzca una fecha correcta y válida
-            </span>
-            }
-          </div>
-        </div>
-
-        <!-- Start hour -->
-        <div class="row mb-3">
-          <label class="col-lg-12 col-form-label">Hora de finalizar (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="datetime-local" class="form-control" formControlName="sessionEnd">
-            @if (isValidField('sessionEnd')){
-            <span class="form-text text-danger">
-              Introduzca una fecha correcta y válida
-            </span>
-            }
-          </div>
-        </div>
-
-        <!-- Objectives -->
-        <div class="row mb-3">
-          <label class="col-lg-12 col-form-label">Objectivos de la sesión (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <textarea type="text" class="form-control" formControlName="sessionObjective"
-              placeholder="Objetivos y/o tareas a realizar en la session"></textarea>
-            @if (isValidField('sessionObjective')){
-            <span class="form-text text-danger">
-              Introduzca el objectivo de la sesión
-            </span>
-            }
-          </div>
-        </div>
-
-        <!-- Tasks for -->
-        <div class="row mb-3">
-          <label class="col-lg-12 col-form-label">Tareas de la sesión (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <textarea type="text" class="form-control" formControlName="sessionTasks"
-              placeholder="Objetivos y/o tareas a realizar en la session"></textarea>
-            @if (isValidField('sessionTasks')){
-            <span class="form-text text-danger">
-              Introduzca una o más tareas para hacer en la sesión
-            </span>
-            }
-          </div>
-        </div>
-
-
-
         <!-- Submit button -->
         <div class="row">
           <div class="d-md-flex justify-content-between text-center">
@@ -99,7 +119,7 @@
               </button>
             </div>
             <div>
-              <a class="" aria-current="page" href="/session-page">Cancelar</a>
+              <a class="" aria-current="page" href="/student-page">Cancelar</a>
             </div>
           </div>
         </div>

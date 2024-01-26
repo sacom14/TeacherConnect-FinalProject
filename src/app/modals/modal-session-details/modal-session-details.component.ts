@@ -7,6 +7,7 @@ import { StudentService } from '../../services/student/student-service.service';
 import { Observable } from 'rxjs';
 import { Session } from '../../interfaces/session.interface';
 import { SessionService } from '../../services/session/session.service';
+import { ModalSessionListComponent } from '../modal-session-list/modal-session-list.component';
 
 @Component({
   selector: 'app-modal-session-details',
@@ -26,6 +27,7 @@ export class ModalSessionDetailsComponent {
   // public selectedSessionExist!: boolean;
   public selectedSessionId!: number | null;
   public sessionData!: Observable<Session[] | null>;
+  public selectedStudentId!:number | null;
 
   constructor() {
     this.sessionData = this.sessionService.sessionData;
@@ -34,7 +36,6 @@ export class ModalSessionDetailsComponent {
   ngOnInit(): void {
     if (this.selectedSessionId) {
       this.sessionService.getSessionDataFromSessionId(this.selectedSessionId);
-      console.log(this.selectedSessionId);
     }
   }
 
@@ -44,6 +45,13 @@ export class ModalSessionDetailsComponent {
 
   goToEditSessionForm() {
     this.modalService.dismissAll();//close the modal
-    this.router.navigate(['/edit-session', this.selectedSessionId]);
+    this.router.navigate(['/edit-session', this.selectedSessionId, this.selectedStudentId]);
   }
+
+
+  public openStudentListModal() {
+    const modalRef = this.modalService.open(ModalSessionListComponent, { centered: true });
+    modalRef.componentInstance.selectedStudentId = this.selectedStudentId;
+  }
+
 }
