@@ -47,6 +47,7 @@ export class UpdateSessionFormComponent {
     sessionStart: ['', [Validators.required]],
     sessionEnd: ['', [Validators.required]],
     sessionTasks: ['', [Validators.required]],
+    sessionMaterial: [''],
     sessionPayed:['', Validators.required],
     fkIdStudentSubject: ['', [Validators.required]],
   });
@@ -86,6 +87,7 @@ export class UpdateSessionFormComponent {
           sessionStart: formatSessionStart || '',
           sessionEnd: formatSessionEnd || '',
           sessionTasks: sessionData.session_tasks || '',
+          sessionMaterial: sessionData.session_material || '',
           sessionPayed: formatSessionPayed || false,
           fkIdStudentSubject: sessionData.fk_id_student_subject || '',
         });

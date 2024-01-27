@@ -1,15 +1,16 @@
 <h1 class="text-center">MIS ALUMNOS</h1>
 <!-- ASIDE IZQUIERDA (filtros) -->
 <section class="d-flex row gap-2 justify-content-center">
-  <aside class="col-12 bg-danger col-md-2">
+  <!-- todo: en un futuro hacer los filtros para lsita de estudiantes -->
+  <!-- <aside class="col-12 bg-danger col-md-2">
     <h4 class="text-center">Filtro</h4>
     <app-filterbar-student class="text-center"></app-filterbar-student>
-  </aside>
+  </aside> -->
   @if(students){
 
   @if(studentSelected){
   <!-- en el centro lista students -->
-  <article class="col-6 text-center bg-primary">
+  <article class="col-8 text-center bg-primary">
     <div class="row justify-content-center">
       <div class="col-12 col-md-3 mt-3" style="min-width: 12rem ; max-width: 15rem;" *ngFor="let student of students | async">
         <a class="card" (click)="showAllInfoForStudentIdSelected(student.id_student)" style="cursor: pointer;">

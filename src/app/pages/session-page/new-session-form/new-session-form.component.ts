@@ -40,6 +40,7 @@ export class NewSessionFormComponent {
     sessionStart: ['', [Validators.required]],
     sessionEnd: ['', [Validators.required]],
     sessionTasks: ['', [Validators.required]],
+    sessionMaterial: [''],
     fkIdStudentSubject: ['', [Validators.required]],
   });
 

@@ -8,6 +8,7 @@ export interface SessionPost {
   session_start: Date;
   session_end: Date;
   session_tasks: null | string;
+  session_material: string | null;
 }
 
 export interface SessionPut {
@@ -16,6 +17,7 @@ export interface SessionPut {
   session_start: Date;
   session_end: Date;
   session_tasks: null | string;
+  session_material: string | null;
   session_payed: SessionPayed;
 }
 
@@ -26,6 +28,7 @@ export interface Session {
   session_start: Date;
   session_end: Date;
   session_tasks: string;
+  session_material: string | null;
   session_payed: SessionPayed;
   fk_id_student_subject: number;
   create_at_session: Date;
@@ -53,6 +56,7 @@ export interface SessionFromTeacherId {
   session_start: Date;
   session_end: Date;
   session_tasks: string;
+  session_material: string | null;
   session_payed: SessionPayed | null;
   fk_id_student_subject: number;
   create_at_session: Date;

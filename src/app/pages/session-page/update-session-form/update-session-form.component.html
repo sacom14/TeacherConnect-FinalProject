@@ -36,8 +36,9 @@
             <!-- todo: payed boolean-->
             <div class="col-xs-12 col-sm-6">
               <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" formControlName="sessionPayed">
-                <label class="form-check-label" for="flexSwitchCheckDefault" >Pagado</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                  formControlName="sessionPayed">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Pagado</label>
               </div>
             </div>
 
@@ -110,6 +111,16 @@
             </div>
           </div>
         </div>
+
+        <!-- Material for session -->
+        <div class="row mb-3">
+          <label class="col-lg-12 col-form-label">Material para la sesión</label>
+          <div class="col-md-9 col-lg-12 w-100">
+            <textarea type="text" class="form-control" formControlName="sessionMaterial"
+              placeholder="Escriba si necesita algun material especial para la sesión"></textarea>
+          </div>
+        </div>
+        
         <!-- Submit button -->
         <div class="row">
           <div class="d-md-flex justify-content-between text-center">
