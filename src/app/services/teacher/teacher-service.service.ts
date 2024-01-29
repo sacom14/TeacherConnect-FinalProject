@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Teacher, TeacherEmailCheckResponseMessage } from '../../interfaces/teacher.interface';
-import { catchError, throwError } from 'rxjs';
+import { Teacher, TeacherEmailCheckResponseMessage, TeacherResponse } from '../../interfaces/teacher.interface';
+import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { AuthTeacherService } from './auth-teacher.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +10,31 @@ import { catchError, throwError } from 'rxjs';
 })
 export class TeacherService {
   private http = inject(HttpClient)
+  private authTeacherService = inject (AuthTeacherService);
 
   private _teacherApiUrl: string = 'http://localhost:3000/api/teacher';
-  
+
+  private _teacherData = new BehaviorSubject<Teacher[]>([]);
+
+  get teacherData(){
+    return this._teacherData.asObservable();
+  }
+
+  public getTeacherDataById(){
+    const teacherId = this.authTeacherService.getTeacherId();
+    this.http.get<TeacherResponse>(`${this._teacherApiUrl}/${teacherId}`).subscribe({
+      next: (response) => {
+        this._teacherData.next(response.teachers);
+      },
+      error: (error) => {
+        console.error('Error al obtener los datos de teacher');
+      }
+    })
+
+  }
+
   //create teacher
-  createNewTeacher(teacherData: Teacher){
+  public createNewTeacher(teacherData: Teacher){
     return this.http.post(this._teacherApiUrl, teacherData)
     .pipe(
       catchError((error) => {

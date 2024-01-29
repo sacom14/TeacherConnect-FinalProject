@@ -11,7 +11,7 @@ import { ImageBbResponse } from '../../interfaces/imagebb-interface';
 export class ImagebbService {
   private http = inject(HttpClient);
   private _imageBBApiUrl: string = 'https://api.imgbb.com/1/upload';
-  private _apiKey: string = environment.apiKey;
+  private _apiKeyImageBB: string = environment.apiKeyImageBB;
 
   private _imageUrlResponse = new BehaviorSubject<string>('');
 
@@ -24,7 +24,7 @@ export class ImagebbService {
       const formData = new FormData();
       formData.append('image', image);
 
-      this.http.post<ImageBbResponse>(this._imageBBApiUrl, formData,{ params: { key: this._apiKey } }).subscribe({
+      this.http.post<ImageBbResponse>(this._imageBBApiUrl, formData,{ params: { key: this._apiKeyImageBB } }).subscribe({
         next: (response) => {
           if (response.data && response.data.url) {
             this._imageUrlResponse.next(response.data.url); // Almacena la URL de la imagen en el BehaviorSubject

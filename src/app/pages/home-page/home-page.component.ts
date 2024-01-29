@@ -17,6 +17,10 @@ import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { StudentService } from '../../services/student/student-service.service';
 import { Observable } from 'rxjs';
 import { Student } from '../../interfaces/student.interface';
+import { TeacherService } from '../../services/teacher/teacher-service.service';
+import { Teacher } from '../../interfaces/teacher.interface';
+import { Article } from '../../interfaces/gnewsApi.interface.';
+import { GNewsApiService } from '../../services/gnewsApi/gnews-api.service';
 
 @Component({
   selector: 'app-home-page',
@@ -29,23 +33,32 @@ export class HomePageComponent {
   private sessionService = inject(SessionService);
   private modalService = inject(NgbModal);
   private studentService = inject(StudentService);
+  private teacherService = inject(TeacherService);
+  private gnewsApiService = inject(GNewsApiService);
+
 
   public sessionListFromTeacherId!: SessionFromTeacherId[];
   public selectedStudentId!: number | null;
   public students!: Observable<Student[]>;
+  public teacherData!: Observable<Teacher[]>;
+  public educationNews!: Observable<Article[]>;
 
   constructor(){
     this.students = this.studentService.students;
+    this.teacherData = this.teacherService.teacherData;
+    this.educationNews = this.gnewsApiService.educationNews;
   }
   ngOnInit(): void {
     this.sessionService.getAllSessionsFromTeacherId();
     this.studentService.getStudentsFromTeacher();
+    this.teacherService.getTeacherDataById();
+    this.gnewsApiService.getEducationNews();
     this.sessionService.sessionListFromTeacherId.subscribe((sessions) => {
       this.sessionListFromTeacherId = sessions;
       this.loadAllEvents();
     });
   }
-
+  
   public loadAllEvents() {
     if (this.sessionListFromTeacherId) {
       const events = this.sessionListFromTeacherId.map((session) => {

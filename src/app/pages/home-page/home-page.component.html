@@ -1,5 +1,7 @@
 <main>
-  <h1>Hola, Nombre y apellidos Teacher</h1>
+  @for (teacher of teacherData | async; track $index) {
+    <h1 class="text-center">Hola {{teacher.teacher_name.toLocaleUpperCase()}} {{teacher.teacher_surname.toLocaleUpperCase()}} !</h1>
+  }
   <section class="row text-center">
     <article class="col-12 col-md-4 bg-primary">
       <h3>TUS CLASES DE HOY</h3>
@@ -8,19 +10,40 @@
       </div>
     </article>
     <article class="col-12 col-md-4 bg-secondary">
-      <h3>ÚLTIMOS ALUMNOS AÑADIDOS</h3>
       <div>
-        @for (student of students | async; track $index)
-        {
-          <div class="card">
-            <p>{{student.student_name}} {{student.student_surname}}</p>
+        <h3>ÚLTIMOS ALUMNOS AÑADIDOS</h3>
+        <div>
+          <div>
+            @for (student of students | async; track $index)
+            {
+              @if ($index < 4)
+              {
+                <div class="card">
+                  <p>{{student.student_name}} {{student.student_surname}}</p>
+                </div>
+              }
+            }
           </div>
-        }
+          <div>
+            <a class="" href="/student-page">Ver más estudiantes</a>
+          </div>
+        </div>
       </div>
+      <div>
+        <img src="../../../assets/img/logo/logo_nombreV2(sin fondo).png" alt="logo" width="70%">
+        <!-- logo -->
+      </div>
+
     </article>
     <aside class="col-12 col-md-4 bg-warning">
-      <h3>NOTICAS</h3>
-      <div>Lista de noticias (3) o así</div>
+      <h3>ÚLTIMAS NOTÍCIAS</h3>
+      @for (article of educationNews | async; track $index)
+      {
+        <h5> {{article.title}}</h5>
+        <img src="{{article.image}}" alt="new image" width="100%">
+        <p> {{article.description}}</p>
+        <a href="{{article.url}}">Leer más</a>
+      }
     </aside>
   </section>
 </main>
