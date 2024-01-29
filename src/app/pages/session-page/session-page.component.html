@@ -1,13 +1,14 @@
+<main>
+  @for (student of dataOfStudentSelected | async; track $index){
+    <h1>Todas las classes de {{student.student_name}}</h1>
+  }
 
-<h1 *ngFor="let student of dataOfStudentSelected | async ">Todas las classes de {{student.student_name}}</h1>
-<!-- todo: mostrar lista de sessiones de un alumno -->
-<h2>id: {{selectedStudentId}}</h2>
-<!-- todo: cuando se haga click, mostrar la infomación detallada de la sesión en un modal? -->
-<div *ngFor="let session of sessionList |async">
-  <div class="card">
-    <p>Nombre sesión: {{session.session_name}}</p>
-    <p>Hora inicio: {{convertToLocalDateTime(session.session_start.toString())}}</p>
-  </div>
-</div>
+  @for (session of sessionList | async; track $index) {
+    <div class="card">
+      <p>Nombre sesión: {{session.session_name}}</p>
+      <p>Hora inicio: {{convertToLocalDateTime(session.session_start.toString())}}</p>
+    </div>
+  }
 
-<a class="btn btn-primary" (click)="goToNewSessionForm()">Añadir sessión</a>
+  <a class="btn btn-primary" (click)="goToNewSessionForm()">Añadir sessión</a>
+</main>

@@ -1,12 +1,14 @@
 <section class="d-flex justify-content-center">
   <div class="w-75 w-md-100">
     <div class="col card p-5 rounded-5 mb-3">
-      <ng-container *ngFor="let name of session | async">
-        <h1 class="fs-4">Modifica la sesión de {{name.student_name}} </h1>
-      </ng-container>
+      @for (sessionData of session | async; track $index) {
+        <h1 class="fs-4">Modifica la sesión de {{sessionData.student_name}} </h1>
+
+      }
       <hr>
       <form [formGroup]="updateSessionForm" (ngSubmit)="onSubmit()" autocomplete="off">
-        <div *ngFor="let sessionData of session | async">
+        @for (sessionData of session | async; track $index) {
+        <div>
           <div class="row">
             <div class="col-xs-12 col-sm-6">
               <!-- if we dont wanna let user change the subject session -->
@@ -19,21 +21,21 @@
               </span>
               }
               <!-- if we want to let user for change the subject session -->
+
               <!-- <select class="form-select" formControlName="fkIdStudentSubject">
-                <option value="" disabled selected>Escoge la asignatura para la sesión</option>
-                <ng-container *ngFor="let allSubjects of subjects | async">
-                  <option *ngFor="let subject of allSubjects.subjects" [value]="subject.id_student_subject">
-                    {{subject.subject_name}}</option>
-                </ng-container>
-              </select>
-              @if (isValidField('fkIdStudentSubject')){
-              <span class="form-text text-danger">
-                Seleccione la asignatura que se va a dar en la sesión
-              </span>
-              } -->
+                    <option value="" disabled selected>Escoge la asignatura para la sesión</option>
+                    <ng-container *ngFor="let allSubjects of subjects | async">
+                      <option *ngFor="let subject of allSubjects.subjects" [value]="subject.id_student_subject">
+                        {{subject.subject_name}}</option>
+                    </ng-container>
+                  </select>
+                  @if (isValidField('fkIdStudentSubject')){
+                  <span class="form-text text-danger">
+                    Seleccione la asignatura que se va a dar en la sesión
+                  </span>
+                  } -->
             </div>
 
-            <!-- todo: payed boolean-->
             <div class="col-xs-12 col-sm-6">
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
@@ -110,7 +112,9 @@
               }
             </div>
           </div>
+
         </div>
+        }
 
         <!-- Material for session -->
         <div class="row mb-3">
@@ -120,7 +124,7 @@
               placeholder="Escriba si necesita algun material especial para la sesión"></textarea>
           </div>
         </div>
-        
+
         <!-- Submit button -->
         <div class="row">
           <div class="d-md-flex justify-content-between text-center">
@@ -139,7 +143,6 @@
   </div>
 
 </section>
-
 
 
 

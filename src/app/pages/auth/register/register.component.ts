@@ -7,6 +7,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { ValidationService } from '../../../services/validations/validations-service.service';
 import { TeacherService } from '../../../services/teacher/teacher-service.service';
+import { ImagebbService } from '../../../services/imageBB/imagebb.service';
+import { Observable } from 'rxjs';
 
 
 
@@ -21,9 +23,12 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private validationService = inject(ValidationService);
   private teacherService = inject(TeacherService);
+  private imageBbService = inject(ImagebbService);
   private router = inject(Router);
 
+  private imageUrl!: Observable<string>;
   public emailExist:boolean = false;
+
 
   public myFormRegister: FormGroup = this.fb.group({
     teacherName: ['', [Validators.required, Validators.pattern(this.validationService.namePattern)]],
@@ -33,7 +38,8 @@ export class RegisterComponent {
     teacherBirthdate: ['', [Validators.required, Validators.pattern(this.validationService.birthdatePattern)]],
     teacherPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(this.validationService.passwordPattern)]],
     password2: ['', [Validators.required]],
-    teacherPhoto: ['', [this.validationService.imageExtensionValidator]],
+    teacherPhotoFile: ['', [this.validationService.imageExtensionValidator]],
+    teacherPhoto: [''],
   },
     {
       //las funciones de este argumento, pasan como argumento implícito todo el formulario (tenemos acceso a todo el formualio, a todos los campos)
@@ -58,25 +64,8 @@ export class RegisterComponent {
     const element = event.currentTarget as HTMLInputElement;
     let file = element.files?.item(0);
     if (file) {
-      this.myFormRegister.patchValue({ image: file });
-      this.myFormRegister.get('image')?.updateValueAndValidity();
+      this.myFormRegister.patchValue({ teacherPhotoFile: file });
     }
-  }
-
-  public newRegisterUser() {
-    const { password2, ...formData } = this.myFormRegister.value; //excluimos el 'password2' porque no lo queremos en la bd
-    this.teacherService.createNewTeacher(formData)
-      .subscribe({
-        next: (response) => {
-          alert('El registro se ha completado correctamente');
-          //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
-          //redirigir al login
-          this.router.navigate(['/login-page'])
-        },
-        error: (error) => {
-          console.error('Error al registrarse', error)
-        },
-      });
   }
 
   public checkEmail() {
@@ -86,7 +75,7 @@ export class RegisterComponent {
       next: (response) => {
         if (response.message === "Email unique") {
           this.emailExist = false;
-          this.newRegisterUser();
+          this.getTheImageUrl();
         } else {
           this.emailExist = true;
           return alert('El correo electrónico ya está registrado, ponga otro Email');
@@ -101,5 +90,37 @@ export class RegisterComponent {
         }
       }
     });
+  }
+
+
+  public getTheImageUrl(){
+    const imageControl = this.myFormRegister.get('teacherPhotoFile');
+    const imageFile: File | null = imageControl?.value;
+
+    this.imageBbService.getImageUrlFromFile(imageFile);
+
+    this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
+      if(imageUrl){
+        this.myFormRegister.patchValue({teacherPhoto: imageUrl});
+        this.newRegisterUser(); //add the new student
+      }
+    })
+    this.myFormRegister.value.teacherPhoto = this.imageUrl;
+  }
+
+  public newRegisterUser() {
+    const { password2, teacherPhotoFile, ...formData } = this.myFormRegister.value; //excluimos el 'password2' porque no lo queremos en la bd
+    this.teacherService.createNewTeacher(formData)
+      .subscribe({
+        next: (response) => {
+          alert('El registro se ha completado correctamente');
+          //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+          //redirigir al login
+          this.router.navigate(['/login-page'])
+        },
+        error: (error) => {
+          console.error('Error al registrarse', error)
+        },
+      });
   }
 }

@@ -1,8 +1,8 @@
+import { PaymentMethod } from './../../../interfaces/payment-method.interface';
 import { Component } from '@angular/core';
 import { AbstractControl, Form, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, window } from 'rxjs';
-import { PaymentMethod } from '../../../interfaces/payment-method.interface';
 import { Subject } from '../../../interfaces/subject.interface';
 import { AcademicYear } from '../../../interfaces/academic-year.interface';
 import { ValidationService } from '../../../services/validations/validations-service.service';
@@ -11,6 +11,7 @@ import { SubjectService } from '../../../services/subject/subject.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { StudentById } from '../../../interfaces/student.interface';
+import { ImagebbService } from '../../../services/imageBB/imagebb.service';
 
 @Component({
   selector: 'app-update-student-form-page',
@@ -31,11 +32,15 @@ export class UpdateStudentFormPageComponent {
   public dataOfStudentSelected!: Observable<StudentById[] | null>;
   public currentStudentEmail!: string | null;
 
+  private imageUrl!: Observable<string>;
+
+
   constructor(
     private fb: FormBuilder,
     private validationService: ValidationService,
     private studentService: StudentService,
     private subjectService: SubjectService,
+    private imageBbService:ImagebbService,
     private router: Router) {
 
     this.paymentMethods = this.studentService.paymentMethods;
@@ -49,7 +54,8 @@ export class UpdateStudentFormPageComponent {
     studentEmail: ['', [Validators.required, Validators.pattern(this.validationService.emailPattern)]],
     studentBirthdate: ['', [Validators.required, Validators.pattern(this.validationService.birthdatePattern)]],
     studentPhone: ['', [Validators.required, Validators.pattern(this.validationService.phonePattern)]],
-    studentPhoto: ['', [this.validationService.imageExtensionValidator]],
+    studentPhotoFile: [''], //we dont push this on our DB
+    studentPhoto: [''], //we push the url only don DB
     fkIdAcademicYear: ['', [Validators.required]],
     fkIdPaymentMethod: ['', [Validators.required]],
     selectedSubjects: new FormArray([]),
@@ -71,6 +77,7 @@ export class UpdateStudentFormPageComponent {
   public onSubmit(): void {
     this.updateStudentForm.markAllAsTouched();
     if (this.updateStudentForm.valid) {
+
       this.checkEmail(); //check if some student from teacher has the same email.
     }
   };
@@ -160,8 +167,7 @@ export class UpdateStudentFormPageComponent {
     const element = event.currentTarget as HTMLInputElement;
     let file = element.files?.item(0);
     if (file) {
-      this.updateStudentForm.patchValue({ image: file });
-      this.updateStudentForm.get('image')?.updateValueAndValidity();
+      this.updateStudentForm.patchValue({ studentPhotoFile: file });
     }
   }
 
@@ -172,7 +178,7 @@ export class UpdateStudentFormPageComponent {
         next: (response) => {
           if (response.message === "Email unique") {
             this.emailExist = false;
-            this.updateStudent();
+            this.getTheImageUrl();
           } else {
             this.emailExist = true;
             return alert('Ya tienes un estudiante con ese email, prueba con otro');
@@ -188,12 +194,34 @@ export class UpdateStudentFormPageComponent {
         }
       });
     } else { //si el correo es igual
-      this.updateStudent();
+      this.getTheImageUrl();
     }
   }
 
+  public getTheImageUrl(){
+    const imageControl = this.updateStudentForm.get('studentPhotoFile');
+    const imageFile: File | null = imageControl?.value;
+
+  // Verificar si imageFile no es nulo y si es un archivo válido
+  if (!imageFile || !(imageFile instanceof File)) {
+    // Si no se ha seleccionado ningún archivo, llama a updateStudent directamente
+    this.updateStudent();
+    return;
+  }
+      this.imageBbService.getImageUrlFromFile(imageFile);
+
+      this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
+        if(imageUrl){
+          this.updateStudentForm.patchValue({studentPhoto: imageUrl});
+          this.updateStudent(); //add the new student
+        }
+      });
+
+    this.updateStudentForm.value.studentPhoto = this.imageUrl;
+  }
+
   public updateStudent() {
-    const { selectedSubjects, ...studentFormData } = this.updateStudentForm.value; //dont push subjects cause they go in another table.
+    const { selectedSubjects, studentPhotoFile, ...studentFormData } = this.updateStudentForm.value; //dont push subjects cause they go in another table.
     this.studentService.updateStudent(studentFormData, this.selectedStudentId)
       .subscribe({
         next: (response) => {

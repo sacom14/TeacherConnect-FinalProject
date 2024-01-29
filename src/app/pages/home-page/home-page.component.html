@@ -1,1 +1,26 @@
-<p>home-page works!</p>
+<main>
+  <h1>Hola, Nombre y apellidos Teacher</h1>
+  <section class="row text-center">
+    <article class="col-12 col-md-4 bg-primary">
+      <h3>TUS CLASES DE HOY</h3>
+      <div>
+          <full-calendar [options]="calendarOptions"></full-calendar>
+      </div>
+    </article>
+    <article class="col-12 col-md-4 bg-secondary">
+      <h3>ÚLTIMOS ALUMNOS AÑADIDOS</h3>
+      <div>
+        @for (student of students | async; track $index)
+        {
+          <div class="card">
+            <p>{{student.student_name}} {{student.student_surname}}</p>
+          </div>
+        }
+      </div>
+    </article>
+    <aside class="col-12 col-md-4 bg-warning">
+      <h3>NOTICAS</h3>
+      <div>Lista de noticias (3) o así</div>
+    </aside>
+  </section>
+</main>

@@ -28,13 +28,14 @@ export class CalendarPageComponent implements OnInit {
 
 
   public sessionListFromTeacherId!: SessionFromTeacherId[];
+  public selectedStudentId!: number | null;
+
 
 
   ngOnInit(): void {
     this.sessionService.getAllSessionsFromTeacherId();
     this.sessionService.sessionListFromTeacherId.subscribe((sessions) => {
       this.sessionListFromTeacherId = sessions;
-
       this.loadAllEvents();
     });
   }
@@ -75,7 +76,23 @@ export class CalendarPageComponent implements OnInit {
   }
 
   public openSessionDetailsModal(event: EventClickArg) {
+    this.getStudentIdValue(event.event.extendedProps['id_session']);
+
     const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
     modalRef.componentInstance.selectedSessionId = event.event.extendedProps['id_session']; //get the id_session from selected session
+    modalRef.componentInstance.selectedStudentId = this.selectedStudentId;//get de id_student and send to modalsessiondetail
+
+  }
+
+  private getStudentIdValue(selectedSessionId: number) {
+    if (this.calendarOptions.events && selectedSessionId) {
+      for (const session of this.sessionListFromTeacherId) {
+        if (session.id_session === selectedSessionId) {
+          this.selectedStudentId = session.id_student;
+          console.log('student', this.selectedStudentId)
+          break;
+        }
+      }
+    }
   }
 }

@@ -103,13 +103,12 @@
 
           </div>
         </div>
-
-        <!-- todo: usar api imgBB foto de perfil voluntaria -->
+        <!-- teacher photo -->
         <div class="row mb-3">
           <label class="col-lg-12 col-form-label">Foto de perfil</label>
           <div class="col-md-9 col-lg-12 w-100">
-            <input type="file" class="form-control" formControlName="teacherPhoto" (change)="onImageChange($event)" [accept]="'.jpg,.jpeg,.png,.webp'" placeholder="Repita la contraseña">
-            @if (isValidField('teacherPhoto')){
+            <input type="file" class="form-control" (change)="onImageChange($event)" [accept]="'.jpg,.jpeg,.png,.webp'" placeholder="Repita la contraseña">
+            @if (isValidField('teacherPhotoFile')){
               <span class="form-text text-danger">
                 El archivo debe tener formato .jpg,.jpeg,.png o .webp
               </span>

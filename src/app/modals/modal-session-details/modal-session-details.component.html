@@ -1,6 +1,9 @@
 <h3>Detalles de la sesión</h3>
 <ng-container *ngFor="let data of sessionData | async">
   <p>{{data.session_name}}</p>
+  <p>id_session : {{data.id_session}}</p>
+  <p>student : {{data.id_student}}</p>
+
 </ng-container>
 <button class="btn btn-primary" (click)="goToEditSessionForm()">Editar sesión</button>
 <a class="primary" style="cursor: pointer;" (click)="openStudentListModal()">Volver a lista</a>

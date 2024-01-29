@@ -9,10 +9,15 @@
           <select class="form-select" formControlName="fkIdStudentSubject">
             <option value="" disabled selected>Escoge la asignatura para la sesión</option>
 
-            <ng-container *ngFor="let allSubjects of subjects | async">
+            @for (allSubjects of subjects | async; track $index) {
+              @for (subject of allSubjects.subjects; track $index) {
+                <option [value]="subject.id_student_subject">{{subject.subject_name}}</option>
+              }
+            }
+            <!-- <ng-container *ngFor="let allSubjects of subjects | async">
               <option *ngFor="let subject of allSubjects.subjects" [value]="subject.id_student_subject">
                 {{subject.subject_name}}</option>
-            </ng-container>
+            </ng-container> -->
           </select>
           @if (isValidField('fkIdStudentSubject')){
           <span class="form-text text-danger">
