@@ -17,7 +17,7 @@ $custom-colors: (
 
 @import "../node_modules/bootstrap/scss/mixins";
 @import "../node_modules/bootstrap/scss/variables-dark";
-
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
@@ -25,7 +25,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
-.background-body{   
+.background-body{
   background-color: #f8e4d4;
 }
 

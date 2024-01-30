@@ -1,15 +1,12 @@
 <main>
-  @for (teacher of teacherData | async; track $index) {
-    <h1 class="text-center">Hola {{teacher.teacher_name.toLocaleUpperCase()}} {{teacher.teacher_surname.toLocaleUpperCase()}} !</h1>
-  }
   <section class="row text-center">
-    <article class="col-12 col-md-4 bg-primary">
+    <article class="col-12 col-md-4">
       <h3>TUS CLASES DE HOY</h3>
       <div>
           <full-calendar [options]="calendarOptions"></full-calendar>
       </div>
     </article>
-    <article class="col-12 col-md-4 bg-secondary">
+    <article class="col-12 col-md-4">
       <div>
         <h3>ÚLTIMOS ALUMNOS AÑADIDOS</h3>
         <div>
@@ -35,7 +32,7 @@
       </div>
 
     </article>
-    <aside class="col-12 col-md-4 bg-warning">
+    <aside class="col-12 col-md-4 bg-custom-secondary">
       <h3>ÚLTIMAS NOTÍCIAS</h3>
       @for (article of educationNews | async; track $index)
       {
