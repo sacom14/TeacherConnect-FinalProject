@@ -48,9 +48,10 @@ export class ModalSessionDetailsComponent {
     this.router.navigate(['/edit-session', this.selectedSessionId, this.selectedStudentId]);
   }
 
-
   public openStudentListModal() {
-    const modalRef = this.modalService.open(ModalSessionListComponent, { centered: true });
+    const modalRef = this.modalService.open(ModalSessionListComponent, {
+      centered: true,
+    });
     modalRef.componentInstance.selectedStudentId = this.selectedStudentId;
   }
 

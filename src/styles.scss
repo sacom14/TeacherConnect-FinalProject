@@ -11,6 +11,7 @@ $custom-colors: (
   "custom-primary": #e48a1b,
   "custom-secondary":#D7B490,
   "custom-accent-success": #96B0AE,
+  "custom-light": #f8e4d4,
 );
 
 @import "../node_modules/bootstrap/scss/variables";
@@ -25,8 +26,23 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
+*{
+  font-family: 'Inter', sans-serif;
+}
+
 .background-body{
   background-color: #f8e4d4;
+}
+
+.btn-orange{
+  background: rgba(255, 166, 0, 0.825);
+  color: white;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 23px;
+  font-weight: bold;
+
 }
 
 

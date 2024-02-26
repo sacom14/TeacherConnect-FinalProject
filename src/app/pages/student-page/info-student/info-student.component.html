@@ -1,5 +1,5 @@
 @if(selectedStudentExist){
-<div>
+<div >
   @for (data of dataOfStudentSelected | async; track $index) {
   <div class="row">
     <div class="text-center mb-4">
@@ -39,7 +39,7 @@
       <P>Próxima sesión: FALTA PONERLO CON LINK</P>
     </div>
     <div>
-      <a (click)="openStudentListModal(data.id_student)" class="primary" style="cursor: pointer;">Todas las sesiones</a>
+      <a (click)="openSessionListModal(data.id_student)" class="primary" style="cursor: pointer;">Todas las sesiones</a>
     </div>
     <div>
       <a href="/student-page">Observaciones</a>

@@ -1,6 +1,6 @@
-<section class="d-flex justify-content-center">
+<section class="d-flex justify-content-center" style="padding-top: 65px;">
   <div class="w-75 w-md-100">
-    <div class="col card p-5 rounded-5 mb-3">
+    <div class="col card p-5 rounded-5 mb-3 bg-custom-light shadow-lg">
       @for (sessionData of session | async; track $index) {
         <h1 class="fs-4">Modifica la sesión de {{sessionData.student_name}} </h1>
 

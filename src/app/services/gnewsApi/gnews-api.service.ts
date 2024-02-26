@@ -20,9 +20,9 @@ export class GNewsApiService {
 
   public getEducationNews() {
     let params = new HttpParams()
-    .set ('q', 'ensenanza')
+    .set ('q', 'educacion')
     .set('lang', 'es')
-    .set('max', '5')
+    .set('max', '3')
     .set('apikey', this._apiGNewsApi);
 
     return this.http.get<NewsAPIResponse>(this._newsApiUrl, {params}).subscribe({

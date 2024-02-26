@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"modal-session-list.component.css"}
+{"version":3,"sources":["modal-session-list.component.scss","modal-session-list.component.css"],"names":[],"mappings":"AAAA;EACE,gBAAA;EACA,6BAAA;EACA,mBAAA;EACA,YAAA;EACA,eAAA;ACCF;;ADEA;EACE,oCAAA;EACA,mBAAA;EACA,YAAA;EACA,mBAAA;EACA,kBAAA;EACA,iBAAA;ACCF;;ADEA;EACE,gCAAA;ACCF;;ADEA;EACE,wBAAA;EACA,kBAAA;ACCF;;ADEA;EACE,uBAAA;ACCF;;ADEA;EACE,gBAAA;EACA,kBAAA;ACCF;;ADEA;EACE,qCAAA;EACA,iBAAA;ACCF","file":"modal-session-list.component.css"}

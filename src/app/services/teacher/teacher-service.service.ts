@@ -54,4 +54,15 @@ export class TeacherService {
     return this.http.post<{ token: string, teacherId:number }>(`${this._teacherApiUrl}/login`, {teacher_email: teacherEmail, teacher_password: teacherPassword});
   }
 
+  public getAgeFromBirthdate(birthdate: string): number {
+    const birthDate = new Date(birthdate);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
 }
+

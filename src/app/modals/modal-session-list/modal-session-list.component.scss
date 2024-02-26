@@ -1,0 +1,39 @@
+.listCard{
+  margin: 10px 0px;
+  border-left: 4px solid orange;
+  border-radius: 25px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.time-date{
+  border: 1px solid rgb(219, 214, 214);
+  border-radius: 23px;
+  padding: 6px;
+  padding-right: 10px;
+  padding-left: 10px ;
+  margin-left: 20px
+}
+
+.session-title{
+  font-family: 'Inter', sans-serif;
+}
+
+.fa-graduation-cap{
+  border: 1px solid orange;
+  border-radius: 50%;
+}
+
+i{
+  color: rgb(238, 155, 2)
+}
+
+section{
+  max-height: 90vh;
+  overflow-y: scroll;
+}
+
+h2{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}

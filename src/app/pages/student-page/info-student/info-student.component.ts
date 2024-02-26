@@ -20,22 +20,23 @@ export class InfoStudentComponent implements OnInit {
   private modalService = inject(NgbModal);
   private router = inject(Router);
 
-  public selectedStudentExist!:boolean;
+  public selectedStudentExist!: boolean;
   public selectedStudentId!: number | null;
   public dataOfStudentSelected!: Observable<StudentById[] | null>;
 
   ngOnInit(): void {
     this.studentService.currentStudentIdSelected
-    .subscribe(studentId =>{
-      this.selectedStudentId = studentId;
-      this.dataOfStudentSelected = this.studentService.currentInfoStudentSelected;
+      .subscribe(studentId => {
+        this.selectedStudentId = studentId;
+        this.dataOfStudentSelected = this.studentService.currentInfoStudentSelected;
 
-      this.loadStudentDetails(this.selectedStudentId);
-    });
+        this.loadStudentDetails(this.selectedStudentId);
+
+      });
   }
 
-  private loadStudentDetails(studentId: number | null){
-    if(studentId){
+  private loadStudentDetails(studentId: number | null) {
+    if (studentId) {
       this.selectedStudentExist = true;
     } else {
       this.selectedStudentExist = false;
@@ -46,13 +47,16 @@ export class InfoStudentComponent implements OnInit {
     return this.studentService.getAgeFromBirthdate(birthdate);
   }
 
-  public goEditStudent(){ //todo: CAMBIAR POR MODAL?
+  public goEditStudent() { //todo: CAMBIAR POR MODAL?
     this.modalService.dismissAll();
     this.router.navigate(['/update-student']);
   }
 
-  public openStudentListModal(selectedStudenId: number) {
-    const modalRef = this.modalService.open(ModalSessionListComponent, { centered: true });
+  public openSessionListModal(selectedStudenId: number) {
+    const modalRef = this.modalService.open(ModalSessionListComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
     modalRef.componentInstance.selectedStudentId = selectedStudenId;
   }
 

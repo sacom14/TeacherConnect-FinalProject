@@ -9,12 +9,13 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
 
   let userIsAuthenticated = () => {
     authTeacherService.isAuthenticated;
-    return localStorage.getItem('token') ? true : false; // ejemplo simple
+    return localStorage.getItem('token') ? true : false;
   };
 
   if(userIsAuthenticated()){ //is authenticated
     alert('Ya estas iniciado sesión, no puedes ir a esta página');
     router.navigate(['/home-page']);
+
     return false;
   } else {
     return true;

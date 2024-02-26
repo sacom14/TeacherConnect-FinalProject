@@ -72,3 +72,6 @@ export interface SessionPayed {
   data: number[];
 }
 
+export interface PayedSessionResponse {
+  sessions: Session[];
+}

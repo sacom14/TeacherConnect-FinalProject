@@ -1,5 +1,101 @@
-<main>
-  <section class="row text-center">
+<main style="padding-top: 65px; margin-bottom: 65px;">
+  <section class="row text-center vh-100">
+    <article class="d-none d-md-flex col-12 col-md-3 border border-primary p-3 align-items-center shadow">
+      <div>
+        <app-teacher-details class="w-100 h-auto"></app-teacher-details>
+      </div>
+    </article>
+    <article class="col-12 col-sm-6 col-md-3">
+      <div>
+        <div class="row p-2">
+          <div class="col-12 col-lg-6 p-1">
+            <a href="/add-student" class="btn btn-custom-primary d-flex justify-content-center align-items-center">Nuevo estudiante</a>
+          </div>
+          <div class="col-12 col-lg-6 p-1">
+            <a class="btn btn-custom-accent-success w-100 d-flex justify-content-center align-items-center" (click)="openStudentListModal()">Nueva clase</a>
+          </div>
+        </div>
+        <div class="border border-1 mb-4 border-primary shadow p-2">
+          <h4>Clases para esta semana</h4>
+          <div class="">
+            <!-- Lista de sesiones -->
+            @if(sessionListFromTeacherId.length == 0){
+            <div class="alert alert-warning" role="alert">
+              No tienes ninguna clase organizada para esta semana!
+            </div>
+            } @else {
+            <div>
+              @for (day of getObjectKeys(sessionsByDay); track $index) {
+              @if (sessionsByDay[day].length){
+              <div>
+                <h5>{{day}}</h5>
+              </div>
+              @for (session of sessionsByDay[day]; track session.id_session) {
+              <div>
+                <ul class="list-group">
+                  <li class="list-group-item">{{session.session_name}}</li>
+                </ul>
+              </div>
+              }
+              }
+              }
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="col-12 col-sm-6 col-md-3">
+      <div>
+        <a class="box border bg-warning" href="/student-page">
+          {{studentCount}} Estudiantes
+        </a>
+        <div class="box border bg-success">
+          {{payedSessionCount}} Pagados
+        </div>
+        <div class="box border bg-danger">
+          {{notPayedSessionCount}} Sessiones aún por pagar
+        </div>
+      </div>
+    </article>
+    <aside class=" col-12 col-sm-12 col-md-3 h-100 d-md-block d-none border border-primary shadow">
+      <div class="w-100 h-100 ">
+        <h4>Ponte al día</h4>
+        @for (article of educationNews | async; track $index)
+        {
+        <h6 class="fs-6 mt-4"> {{article.title}}</h6>
+        <img src="{{article.image}}" alt="new image" width="50%">
+        <div class="mb-4">
+          <a href="{{article.url}}">Saber más</a>
+        </div>
+        }
+      </div>
+    </aside>
+    <aside class="d-md-none w-100 h-auto border border-primary shadow">
+      <div class="w-100 h-100">
+        <h4>Ponte al día</h4>
+        <ngb-carousel #carousel [interval]="2500" [pauseOnHover]="pauseOnHover" [pauseOnFocus]="pauseOnFocus"
+          (slide)="onSlide($event)">
+          @for (article of educationNews | async; track $index) {
+          <ng-template ngbSlide>
+            <h6 class="fs-6"> {{article.title}}</h6>
+            <div class="picsum-img-wrapper">
+              <img src="{{article.image}}" alt="new image" class="carousel-img" width="50%">
+            </div>
+            <div>
+              <a href="{{article.url}}">Saber más</a>
+            </div>
+          </ng-template>
+          }
+        </ngb-carousel>
+      </div>
+    </aside>
+  </section>
+</main>
+
+
+
+<!-- <section class="row text-center">
     <article class="col-12 col-md-4">
       <h3>TUS CLASES DE HOY</h3>
       <div>
@@ -28,7 +124,6 @@
       </div>
       <div>
         <img src="../../../assets/img/logo/logo_nombreV2(sin fondo).png" alt="logo" width="70%">
-        <!-- logo -->
       </div>
 
     </article>
@@ -42,5 +137,4 @@
         <a href="{{article.url}}">Leer más</a>
       }
     </aside>
-  </section>
-</main>
+  </section> -->

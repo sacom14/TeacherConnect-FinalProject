@@ -1,19 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Subject } from './../../interfaces/subject.interface';
+import { Component, ViewChild, inject } from '@angular/core';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SessionFromTeacherId } from '../../interfaces/session.interface';
-import { ModalSessionDetailsComponent } from '../../modals/modal-session-details/modal-session-details.component';
+import { NgbCarousel, NgbCarouselModule, NgbModal, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/ng-bootstrap';
+import { Session, SessionFromTeacherId } from '../../interfaces/session.interface';
 import { ModalStudentListComponent } from '../../modals/modal-student-list/modal-student-list.component';
 import { SessionService } from '../../services/session/session.service';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FullCalendarModule } from '@fullcalendar/angular';
 
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import esLocale from '@fullcalendar/core/locales/es';
-import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { StudentService } from '../../services/student/student-service.service';
 import { Observable } from 'rxjs';
 import { Student } from '../../interfaces/student.interface';
@@ -21,97 +16,208 @@ import { TeacherService } from '../../services/teacher/teacher-service.service';
 import { Teacher } from '../../interfaces/teacher.interface';
 import { Article } from '../../interfaces/gnewsApi.interface.';
 import { GNewsApiService } from '../../services/gnewsApi/gnews-api.service';
+import { TeacherDetailsComponent } from './teacher-details/teacher-details.component';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FullCalendarModule],
+  imports: [CommonModule, HttpClientModule, FullCalendarModule, NgbCarouselModule, TeacherDetailsComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })
 export class HomePageComponent {
+[x: string]: any;
   private sessionService = inject(SessionService);
   private modalService = inject(NgbModal);
   private studentService = inject(StudentService);
-  private teacherService = inject(TeacherService);
+  // private teacherService = inject(TeacherService);
   private gnewsApiService = inject(GNewsApiService);
 
 
+
   public sessionListFromTeacherId!: SessionFromTeacherId[];
+  public sessionsByDay: { [day:string]: SessionFromTeacherId[]} = {};
   public selectedStudentId!: number | null;
   public students!: Observable<Student[]>;
-  public teacherData!: Observable<Teacher[]>;
+  public studentCount: number = 0;
+  public payedSession!: Observable<Session[]>;
+  public payedSessionCount: number = 0;
+  public notPayedSession!: Observable<Session[]>;
+  public notPayedSessionCount: number = 0;
+  // public teacherData!: Observable<Teacher[]>;
   public educationNews!: Observable<Article[]>;
 
   constructor(){
     this.students = this.studentService.students;
-    this.teacherData = this.teacherService.teacherData;
+    this.payedSession = this.sessionService.payedSessions;
+    this.notPayedSession = this.sessionService.notPayedSessions;
+    // this.teacherData = this.teacherService.teacherData;
     this.educationNews = this.gnewsApiService.educationNews;
+    // this.sessionListFromTeacherId = this.sessionService.sessionListFromTeacherId;
   }
+
   ngOnInit(): void {
     this.sessionService.getAllSessionsFromTeacherId();
     this.studentService.getStudentsFromTeacher();
-    this.teacherService.getTeacherDataById();
-    this.gnewsApiService.getEducationNews();
+    this.sessionService.getAllPayedSessions();
+    this.sessionService.getAllNotPayedSessions();
+    // this.teacherService.getTeacherDataById();
+    // this.gnewsApiService.getEducationNews();
     this.sessionService.sessionListFromTeacherId.subscribe((sessions) => {
-      this.sessionListFromTeacherId = sessions;
-      this.loadAllEvents();
+      this.sessionListFromTeacherId = this.takeSessionsForThisWeek(sessions);
+      this.groupSessionsByDay(this.sessionListFromTeacherId);
+      // this.loadAllEvents();
     });
-  }
-  
-  public loadAllEvents() {
-    if (this.sessionListFromTeacherId) {
-      const events = this.sessionListFromTeacherId.map((session) => {
-        return {
-          title: session.session_name,
-          start: session.session_start,
-          end: session.session_end,
-          id_session: session.id_session,
-        }
-      });
-      //put the events to calendarOptions
-      this.calendarOptions.events = events;
-    }
+
+    this.getStudentsCountForTeacher();
+    this.getPayedSessionsCount();
+    this.getNotPayedSessionsCount();
+
   }
 
-  public calendarOptions: CalendarOptions = {
-    initialView: 'timeGridDay',
-    locale: esLocale,
-    timeZone: 'Europe/Madrid',
-    fixedWeekCount: false,
-    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, momentTimezonePlugin],
-    headerToolbar: {
-      left: 'prev',
-      center: 'today',
-      right: 'next'
-    },
-    events: [],
-    eventClick: this.openSessionDetailsModal.bind(this),
-    dateClick: this.openStudentListModal.bind(this),
-  };
+	paused = false;
+	unpauseOnArrow = false;
+	pauseOnIndicator = false;
+	pauseOnHover = true;
+	pauseOnFocus = true;
+
+  //carousel news
+	@ViewChild('carousel', { static: true }) carousel!: NgbCarousel;
+
+	public togglePaused() {
+		if (this.paused) {
+			this.carousel.cycle();
+		} else {
+			this.carousel.pause();
+		}
+		this.paused = !this.paused;
+	}
+
+	public onSlide(slideEvent: NgbSlideEvent) {
+		if (
+			this.unpauseOnArrow &&
+			slideEvent.paused &&
+			(slideEvent.source === NgbSlideEventSource.ARROW_LEFT || slideEvent.source === NgbSlideEventSource.ARROW_RIGHT)
+		) {
+			this.togglePaused();
+		}
+		if (this.pauseOnIndicator && !slideEvent.paused && slideEvent.source === NgbSlideEventSource.INDICATOR) {
+			this.togglePaused();
+		}
+	}
+
+  public takeSessionsForThisWeek(sessions: SessionFromTeacherId[]):SessionFromTeacherId[]{
+    let initialDayForThisWeek = new Date();
+    initialDayForThisWeek.setDate(initialDayForThisWeek.getDate() - initialDayForThisWeek.getDate() + 1) //monday for this week
+
+    let lastDayForThisWeek = new Date();
+    lastDayForThisWeek.setDate(lastDayForThisWeek.getDate()+6); //sunday
+
+    let sessionsForThisWeek = sessions.filter(session => {
+      let sessionDate = new Date(session.session_start);
+      return sessionDate >=  initialDayForThisWeek && sessionDate <= lastDayForThisWeek;
+    });
+
+    return sessionsForThisWeek;
+  }
+
+  private groupSessionsByDay(sessions: SessionFromTeacherId[]): void {
+    this.sessionsByDay = sessions.reduce((acc, session) => {
+      const day = new Date(session.session_start).toLocaleDateString('es-ES', { weekday: 'long' });
+      acc[day] = acc[day] || [];
+      acc[day].push(session);
+      return acc;
+    }, {} as { [day: string]: SessionFromTeacherId[] });
+  }
+
+  /**
+ * Returns an array containing the keys of the provided object.
+ * @param obj The object whose keys will be returned.
+ * @returns An array of strings representing the keys of the object.
+ */
+  public getObjectKeys(obj: any): string[] {
+    return Object.keys(obj);
+  }
+
+  public getStudentsCountForTeacher(){
+    this.students.subscribe(student => {
+      console.log('HEGEURVGU',student)
+      this.studentCount = student.length;
+    });
+  }
+
+  public getPayedSessionsCount(){
+
+    this.payedSession.subscribe((session) => {
+      console.log('hola',session.length);
+      this.payedSessionCount = session.length
+    })
+  }
+
+  public getNotPayedSessionsCount(){
+    this.notPayedSession.subscribe(session => {
+      this.notPayedSessionCount = session.length;
+    });
+  }
 
   public openStudentListModal() {
     this.modalService.open(ModalStudentListComponent, { centered: true });
   }
+  // public loadAllEvents() {
+  //   if (this.sessionListFromTeacherId) {
+  //     const events = this.sessionListFromTeacherId.map((session) => {
+  //       return {
+  //         title: session.session_name,
+  //         start: session.session_start,
+  //         end: session.session_end,
+  //         id_session: session.id_session,
+  //       }
+  //     });
+  //     put the events to calendarOptions
+  //     this.calendarOptions.events = events;
+  //   }
+  // }
 
-  public openSessionDetailsModal(event: EventClickArg) {
-    this.getStudentIdValue(event.event.extendedProps['id_session']);
+  // public calendarOptions: CalendarOptions = {
+  //   initialView: 'timeGridDay',
+  //   locale: esLocale,
+  //   timeZone: 'Europe/Madrid',
+  //   fixedWeekCount: false,
+  //   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, momentTimezonePlugin],
+  //   headerToolbar: {
+  //     left: 'prev',
+  //     center: 'today',
+  //     right: 'next'
+  //   },
+  //   events: [],
+  //   eventClick: this.openSessionDetailsModal.bind(this),
+  //   dateClick: this.openStudentListModal.bind(this),
+  // };
 
-    const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
-    modalRef.componentInstance.selectedSessionId = event.event.extendedProps['id_session']; //get the id_session from selected session
-    modalRef.componentInstance.selectedStudentId = this.selectedStudentId;//get de id_student and send to modalsessiondetail
+  // public openStudentListModal() {
+  //   this.modalService.open(ModalStudentListComponent, { centered: true });
+  // }
 
-  }
+  // public openSessionDetailsModal(event: EventClickArg) {
+  //   this.getStudentIdValue(event.event.extendedProps['id_session']);
 
-  private getStudentIdValue(selectedSessionId: number) {
-    if (this.calendarOptions.events && selectedSessionId) {
-      for (const session of this.sessionListFromTeacherId) {
-        if (session.id_session === selectedSessionId) {
-          this.selectedStudentId = session.id_student;
-          console.log('student', this.selectedStudentId)
-          break;
-        }
-      }
-    }
-  }
+  //   const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
+  //   modalRef.componentInstance.selectedSessionId = event.event.extendedProps['id_session']; //get the id_session from selected session
+  //   modalRef.componentInstance.selectedStudentId = this.selectedStudentId;//get de id_student and send to modalsessiondetail
+
+  // }
+
+  // private getStudentIdValue(selectedSessionId: number) {
+  //   if (this.calendarOptions.events && selectedSessionId) {
+  //     for (const session of this.sessionListFromTeacherId) {
+  //       if (session.id_session === selectedSessionId) {
+  //         this.selectedStudentId = session.id_student;
+  //         console.log('student', this.selectedStudentId)
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
+
+
 }
