@@ -1,9 +1,15 @@
 .listCard{
   margin: 10px 0px;
-  border-left: 4px solid orange;
+  border-left: 4px solid #1F1A36;
   border-radius: 25px;
   padding: 5px;
   cursor: pointer;
+}
+.listCard:hover{
+  background-color: #1F1A36;
+  color: white;
+  border-left: 4px solid orange;
+  border-radius: 25px;
 }
 
 .time-date{
@@ -22,6 +28,15 @@
 .fa-graduation-cap{
   border: 1px solid orange;
   border-radius: 50%;
+}
+
+.fa-x{
+  cursor: pointer;
+}
+
+.fa-x:hover{
+  transform: scale(1.2);
+  transition: 0.7s;
 }
 
 i{

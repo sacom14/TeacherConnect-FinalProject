@@ -1,4 +1,4 @@
-<main style="padding-top: 65px; margin-bottom: 65px;">
+<main style="padding-top: 65px; margin-bottom: 65px; position: relative;">
   <!-- ASIDE IZQUIERDA (filtros) -->
   <section class="d-flex row gap-2 justify-content-center">
     <!-- todo: en un futuro hacer los filtros para lsita de estudiantes -->
@@ -30,7 +30,7 @@
               </div>
               <div class="d-flex justify-content-evenly align-items-center flex-wrap custom-footer-card p-3">
                 @for (subject of getSubjectsForStudent(student.id_student) | async; track $index) {
-                <span class="badge text-bg-custom-secondary mx-1">{{subject.subject_name}}</span>
+                <span class="badge bg-white text-black mx-1">{{subject.subject_name}}</span>
                 }
               </div>
             </div>
@@ -39,8 +39,7 @@
       </div>
     </article>
     <!-- aside derecha (info alumno) -->
-    <aside class="col-3 bg- bg-custom-light d-none d-md-block">
-      <h4 class="text-center">Información del estudiante</h4>
+    <aside class="col-3 d-none d-md-block mt-3" style="min-height:auto; max-height: 80vh; max-width: 100%; top: 8rem; position: sticky;">
       <app-info-student></app-info-student>
     </aside>
     <!-- TODO: HACER QUE SALTE EL MODAL DE LA INFO DEL ESTUDIANTE DESPUÉS de hacer click en una card -->
@@ -70,7 +69,7 @@
                 </div>
                 <div class="d-flex justify-content-evenly align-items-center flex-wrap custom-footer-card p-3">
                   @for (subject of getSubjectsForStudent(student.id_student) | async; track $index) {
-                  <span class="badge text-bg-custom-secondary mx-1">{{subject.subject_name}}</span>
+                  <span class="badge text-custom-blue bg-white mx-1">{{subject.subject_name}}</span>
                   }
                 </div>
               </div>
@@ -87,8 +86,11 @@
       <!-- todo: botón para añadir nuevo estudiante -->
     </div>
     }
-
-
   </section>
+    <!-- Botón flotante -->
+    <a href="/add-student" class="btn btn-orange p-3  d-flex justify-content-center align-items-center" id="floating-button" style="position: fixed; bottom: 60px; left: 40px;">
+      <i class="fa fa-plus"></i>
+      <span class="add-student-text">Añadir</span>
+    </a>
 </main>
 

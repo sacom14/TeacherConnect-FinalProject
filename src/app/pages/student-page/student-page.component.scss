@@ -12,6 +12,7 @@
   transition: transform 0.3s;
   text-decoration: none;
   padding: 0px;
+  background-color: white;
 }
 
 
@@ -41,4 +42,32 @@
   border-radius: 0px 0px 20px 20px;
   overflow-x: hidden;
 
+}
+
+#floating-button {
+  transition: width 0.5s ease, border-radius 0.5s ease;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+#floating-button:hover {
+  width: 200px;
+  border-radius: 20px;
+}
+
+#floating-button .fa-plus {
+  transition: transform 0.3s ease;
+}
+
+#floating-button:hover .fa-plus {
+  transform: rotate(45deg);
+}
+
+.add-student-text {
+  display: none;
+}
+
+#floating-button:hover .add-student-text {
+  display: inline-block;
+  margin-left: 10px;
 }

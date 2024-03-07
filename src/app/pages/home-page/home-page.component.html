@@ -58,7 +58,7 @@
         </div>
       </div>
     </article>
-    <aside class=" col-12 col-sm-12 col-md-3 h-100 d-md-block d-none border border-primary shadow">
+    <aside class=" col-12 col-sm-12 col-md-3 h-100 d-md-block d-none border border-primary shadow text-white bg-custom-blue">
       <div class="w-100 h-100 ">
         <h4>Ponte al día</h4>
         @for (article of educationNews | async; track $index)
@@ -71,7 +71,7 @@
         }
       </div>
     </aside>
-    <aside class="d-md-none w-100 h-auto border border-primary shadow">
+    <aside class="d-md-none w-100 h-auto border border-primary shadow text-white bg-custom-blue">
       <div class="w-100 h-100">
         <h4>Ponte al día</h4>
         <ngb-carousel #carousel [interval]="2500" [pauseOnHover]="pauseOnHover" [pauseOnFocus]="pauseOnFocus"

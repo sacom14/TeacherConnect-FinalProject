@@ -1,53 +1,60 @@
 @if(selectedStudentExist){
-<div >
+<div class="p-3 text-white bg-custom-blue rounded-5" id="info-card-student">
   @for (data of dataOfStudentSelected | async; track $index) {
   <div class="row">
     <div class="text-center mb-4">
       @if(data.student_photo){
       <img src="{{data.student_photo}}" class="card-img-top img-fluid" alt="foto_estudiante"
-        style="height:auto; width:40%;">
+        style="height:auto; width: 60%;">
       } @else {
       <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante"
-        style="height:auto; width:40%;">
+        style="height:auto; width:60%;">
       }
     </div>
+    <div>
+      <h5 class="text-center text-uppercase">{{data.student_name}} {{data.student_surname}}</h5>
+    </div>
     <hr>
-    <div>
-      <h5>{{data.student_name}} {{data.student_surname}}</h5>
+    <div class="px-3">
+
+      <div>
+        <p><i class="fa-solid fa-envelope pe-2"></i> {{data.student_email}}</p>
+      </div>
+      <div>
+        <p>
+          <i class="fa-solid fa-phone pe-2"></i>{{data.student_phone}}
+        </p>
+      </div>
+      <div>
+        <p>
+          <i class="fa-regular fa-calendar pe-2"></i> {{ calculateAge(data.student_birthdate.toString())}} años
+        </p>
+      </div>
+      <div>
+        <p> <i class="fa-solid fa-graduation-cap pe-2"></i>{{data.academic_year_name}}</p>
+      </div>
+      <div>
+        <p><i class="fa-regular fa-credit-card pe-2"></i> {{data.payment_method_name}}</p>
+      </div>
+      <!-- <div>
+        <p>Última sesión: FALTA PONERLO CON LINK</p>
+        <P>Próxima sesión: FALTA PONERLO CON LINK</P>
+      </div> -->
     </div>
-    <div>
-      <p>Email: {{data.student_email}}</p>
-    </div>
-    <div>
-      <p>
-        Telf: {{data.student_phone}}
-      </p>
-    </div>
-    <div>
-      <p>
-        Edad: {{ calculateAge(data.student_birthdate.toString())}} años
-      </p>
-    </div>
-    <div>
-      <p>Curso: {{data.academic_year_name}}</p>
-    </div>
-    <div>
-      <p>Método de pago: {{data.payment_method_name}}</p>
-    </div>
-    <div>
-      <p>Última sesión: FALTA PONERLO CON LINK</p>
-      <P>Próxima sesión: FALTA PONERLO CON LINK</P>
-    </div>
-    <div>
-      <a (click)="openSessionListModal(data.id_student)" class="primary" style="cursor: pointer;">Todas las sesiones</a>
-    </div>
-    <div>
+
+    <!-- <div>
       <a href="/student-page">Observaciones</a>
-    </div>
+    </div> -->
     <hr>
-    <div class="text-center">
-      <button class="btn btn-primary" (click)="goEditStudent()">EDITAR</button>
+    <div class="d-flex flex-wrap justify-content-around">
+      <div class="text-center">
+        <button class="btn btn-primary m-2" style="width: 100px;" (click)="openSessionListModal(data.id_student)">SESIONES</button>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-custom-green m-2" style="width: 100px;" (click)="goEditStudent()">EDITAR</button>
+      </div>
     </div>
+
   </div>
   }
 

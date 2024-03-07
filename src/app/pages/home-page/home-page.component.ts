@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { StudentService } from '../../services/student/student-service.service';
-import { Observable } from 'rxjs';
+import { Observable, last } from 'rxjs';
 import { Student } from '../../interfaces/student.interface';
 import { TeacherService } from '../../services/teacher/teacher-service.service';
 import { Teacher } from '../../interfaces/teacher.interface';
@@ -107,17 +107,20 @@ export class HomePageComponent {
 	}
 
   public takeSessionsForThisWeek(sessions: SessionFromTeacherId[]):SessionFromTeacherId[]{
-    let initialDayForThisWeek = new Date();
-    initialDayForThisWeek.setDate(initialDayForThisWeek.getDate() - initialDayForThisWeek.getDate() + 1) //monday for this week
+    let today = new Date();
+    let initialDayForThisWeek = new Date(today);
+    initialDayForThisWeek.setDate(today.getDate() - today.getDay() + 1); // monday
+    initialDayForThisWeek.setHours(0, 0, 0, 0); // 00:00:00 h
 
-    let lastDayForThisWeek = new Date();
-    lastDayForThisWeek.setDate(lastDayForThisWeek.getDate()+6); //sunday
+
+    let lastDayForThisWeek = new Date(initialDayForThisWeek);
+    lastDayForThisWeek.setDate(initialDayForThisWeek.getDate() + 6); // sunday
+    lastDayForThisWeek.setHours(23, 59, 59, 999); // 23:59:59 h
 
     let sessionsForThisWeek = sessions.filter(session => {
       let sessionDate = new Date(session.session_start);
       return sessionDate >=  initialDayForThisWeek && sessionDate <= lastDayForThisWeek;
     });
-
     return sessionsForThisWeek;
   }
 
@@ -141,7 +144,6 @@ export class HomePageComponent {
 
   public getStudentsCountForTeacher(){
     this.students.subscribe(student => {
-      console.log('HEGEURVGU',student)
       this.studentCount = student.length;
     });
   }
@@ -149,7 +151,6 @@ export class HomePageComponent {
   public getPayedSessionsCount(){
 
     this.payedSession.subscribe((session) => {
-      console.log('hola',session.length);
       this.payedSessionCount = session.length
     })
   }

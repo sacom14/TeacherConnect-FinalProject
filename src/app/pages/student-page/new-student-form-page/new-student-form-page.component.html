@@ -55,7 +55,7 @@
             </div>
             <div class="col-xs-12 col-sm-6">
               <select class="form-select" formControlName="fkIdAcademicYear">
-                <option value="" disabled selected>Choose...</option>
+                <option value="" disabled selected>Curso del estudiante</option>
                 @for (academicYear of academicYears | async; track $index) {
                 <option [value]="academicYear.id_academic_year">{{academicYear.academic_year_name}}</option>
                 }
@@ -94,12 +94,12 @@
                     </label>
                   </div>
                   }
-                  @if (isValidField('selectedSubjects')){
-                  <span class="form-text text-danger">
-                    Este campo es obligatorio, debe marcar una asignatura mínimo
-                  </span>
-                  }
               </div>
+              @if (isValidField('selectedSubjects')){
+                <span class="form-text text-danger">
+                  Este campo es obligatorio, debe marcar una asignatura mínimo
+                </span>
+                }
             </div>
             <!-- student photo -->
             <div class="row mb-3">
