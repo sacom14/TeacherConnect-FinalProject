@@ -34,5 +34,8 @@ export class ModalStudentListComponent implements OnInit {
     this.router.navigate(['/add-session', selectedStudentId]);
   }
 
+  public closeModal(){
+    this.modalService.dismissAll();
+  }
 
 }

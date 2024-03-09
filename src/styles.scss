@@ -13,11 +13,13 @@ $custom-colors: (
   "custom-accent-success": #96B0AE,
   "custom-light": #f8e4d4,
   "custom-blue": #1F1A36,
+  "custom-blue-light": #827ca0,
   "custom-sky-blue":#E6F2FF,
   "custom-crame": #F9F6E7,
   "custom-green": #9AD0C2,
   "custom-red": #FA7070,
   "custom-grey": #848582,
+  "custom-yellow": #F9E897,
 );
 
 @import "../node_modules/bootstrap/scss/variables";
@@ -46,24 +48,46 @@ body{
 
 .btn-orange{
   background: rgba(255, 166, 0, 0.825);
-  color: white;
+  color: black;
   padding: 10px;
   padding-left: 15px;
   padding-right: 15px;
   border-radius: 23px;
   font-weight: bold;
 
-}
-.btn-orange:hover{
-  background: rgba(228, 148, 0, 0.825);
-  color:white;
+  &:hover{
+    background: rgba(228, 148, 0, 0.825);
+    color:white;
+  }
+
+  &:active{
+    background: rgba(228, 148, 0, 0.825) !important;
+    color:white !important;
+    border: none;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); /* Sombreado en el estado activo */
+  }
 }
 
-.btn-orange:active{
-  background: rgba(228, 148, 0, 0.825) !important;
-  color:white !important;
-  border: none;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); /* Sombreado en el estado activo */
+.btn-custom-accent-success{
+  background-color: #96B0AE;
+  color: black;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 23px;
+  font-weight: bold;
+
+  &:hover{
+    background: #739895 !important;
+    color:white;
+  }
+
+  &:active{
+    background: #739895 !important;
+    color:white !important;
+    border: none;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); /* Sombreado en el estado activo */
+  }
 }
 
 .header-card{

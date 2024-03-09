@@ -1,6 +1,4 @@
-import { Subject } from './../../interfaces/subject.interface';
 import { Component, ViewChild, inject } from '@angular/core';
-import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import { NgbCarousel, NgbCarouselModule, NgbModal, NgbSlideEvent, NgbSlideEventSource } from '@ng-bootstrap/ng-bootstrap';
 import { Session, SessionFromTeacherId } from '../../interfaces/session.interface';
 import { ModalStudentListComponent } from '../../modals/modal-student-list/modal-student-list.component';
@@ -10,13 +8,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { StudentService } from '../../services/student/student-service.service';
-import { Observable, last } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Student } from '../../interfaces/student.interface';
-import { TeacherService } from '../../services/teacher/teacher-service.service';
-import { Teacher } from '../../interfaces/teacher.interface';
 import { Article } from '../../interfaces/gnewsApi.interface.';
 import { GNewsApiService } from '../../services/gnewsApi/gnews-api.service';
 import { TeacherDetailsComponent } from './teacher-details/teacher-details.component';
+import { ModalSessionDetailsComponent } from '../../modals/modal-session-details/modal-session-details.component';
 
 @Component({
   selector: 'app-home-page',
@@ -26,17 +23,16 @@ import { TeacherDetailsComponent } from './teacher-details/teacher-details.compo
   styleUrl: './home-page.component.scss'
 })
 export class HomePageComponent {
-[x: string]: any;
+  [x: string]: any;
   private sessionService = inject(SessionService);
   private modalService = inject(NgbModal);
   private studentService = inject(StudentService);
-  // private teacherService = inject(TeacherService);
   private gnewsApiService = inject(GNewsApiService);
 
 
 
   public sessionListFromTeacherId!: SessionFromTeacherId[];
-  public sessionsByDay: { [day:string]: SessionFromTeacherId[]} = {};
+  public sessionsByDay: { [day: string]: SessionFromTeacherId[] } = {};
   public selectedStudentId!: number | null;
   public students!: Observable<Student[]>;
   public studentCount: number = 0;
@@ -44,16 +40,13 @@ export class HomePageComponent {
   public payedSessionCount: number = 0;
   public notPayedSession!: Observable<Session[]>;
   public notPayedSessionCount: number = 0;
-  // public teacherData!: Observable<Teacher[]>;
   public educationNews!: Observable<Article[]>;
 
-  constructor(){
+  constructor() {
     this.students = this.studentService.students;
     this.payedSession = this.sessionService.payedSessions;
     this.notPayedSession = this.sessionService.notPayedSessions;
-    // this.teacherData = this.teacherService.teacherData;
     this.educationNews = this.gnewsApiService.educationNews;
-    // this.sessionListFromTeacherId = this.sessionService.sessionListFromTeacherId;
   }
 
   ngOnInit(): void {
@@ -61,12 +54,10 @@ export class HomePageComponent {
     this.studentService.getStudentsFromTeacher();
     this.sessionService.getAllPayedSessions();
     this.sessionService.getAllNotPayedSessions();
-    // this.teacherService.getTeacherDataById();
     // this.gnewsApiService.getEducationNews();
     this.sessionService.sessionListFromTeacherId.subscribe((sessions) => {
       this.sessionListFromTeacherId = this.takeSessionsForThisWeek(sessions);
       this.groupSessionsByDay(this.sessionListFromTeacherId);
-      // this.loadAllEvents();
     });
 
     this.getStudentsCountForTeacher();
@@ -75,38 +66,38 @@ export class HomePageComponent {
 
   }
 
-	paused = false;
-	unpauseOnArrow = false;
-	pauseOnIndicator = false;
-	pauseOnHover = true;
-	pauseOnFocus = true;
+  paused = false;
+  unpauseOnArrow = false;
+  pauseOnIndicator = false;
+  pauseOnHover = true;
+  pauseOnFocus = true;
 
   //carousel news
-	@ViewChild('carousel', { static: true }) carousel!: NgbCarousel;
+  @ViewChild('carousel', { static: true }) carousel!: NgbCarousel;
 
-	public togglePaused() {
-		if (this.paused) {
-			this.carousel.cycle();
-		} else {
-			this.carousel.pause();
-		}
-		this.paused = !this.paused;
-	}
+  public togglePaused() {
+    if (this.paused) {
+      this.carousel.cycle();
+    } else {
+      this.carousel.pause();
+    }
+    this.paused = !this.paused;
+  }
 
-	public onSlide(slideEvent: NgbSlideEvent) {
-		if (
-			this.unpauseOnArrow &&
-			slideEvent.paused &&
-			(slideEvent.source === NgbSlideEventSource.ARROW_LEFT || slideEvent.source === NgbSlideEventSource.ARROW_RIGHT)
-		) {
-			this.togglePaused();
-		}
-		if (this.pauseOnIndicator && !slideEvent.paused && slideEvent.source === NgbSlideEventSource.INDICATOR) {
-			this.togglePaused();
-		}
-	}
+  public onSlide(slideEvent: NgbSlideEvent) {
+    if (
+      this.unpauseOnArrow &&
+      slideEvent.paused &&
+      (slideEvent.source === NgbSlideEventSource.ARROW_LEFT || slideEvent.source === NgbSlideEventSource.ARROW_RIGHT)
+    ) {
+      this.togglePaused();
+    }
+    if (this.pauseOnIndicator && !slideEvent.paused && slideEvent.source === NgbSlideEventSource.INDICATOR) {
+      this.togglePaused();
+    }
+  }
 
-  public takeSessionsForThisWeek(sessions: SessionFromTeacherId[]):SessionFromTeacherId[]{
+  public takeSessionsForThisWeek(sessions: SessionFromTeacherId[]): SessionFromTeacherId[] {
     let today = new Date();
     let initialDayForThisWeek = new Date(today);
     initialDayForThisWeek.setDate(today.getDate() - today.getDay() + 1); // monday
@@ -119,7 +110,7 @@ export class HomePageComponent {
 
     let sessionsForThisWeek = sessions.filter(session => {
       let sessionDate = new Date(session.session_start);
-      return sessionDate >=  initialDayForThisWeek && sessionDate <= lastDayForThisWeek;
+      return sessionDate >= initialDayForThisWeek && sessionDate <= lastDayForThisWeek;
     });
     return sessionsForThisWeek;
   }
@@ -142,83 +133,39 @@ export class HomePageComponent {
     return Object.keys(obj);
   }
 
-  public getStudentsCountForTeacher(){
+  public getStudentsCountForTeacher() {
     this.students.subscribe(student => {
       this.studentCount = student.length;
     });
   }
 
-  public getPayedSessionsCount(){
+  public getPayedSessionsCount() {
 
     this.payedSession.subscribe((session) => {
       this.payedSessionCount = session.length
     })
   }
 
-  public getNotPayedSessionsCount(){
+  public getNotPayedSessionsCount() {
     this.notPayedSession.subscribe(session => {
       this.notPayedSessionCount = session.length;
     });
   }
 
   public openStudentListModal() {
-    this.modalService.open(ModalStudentListComponent, { centered: true });
+    this.modalService.open(ModalStudentListComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
   }
-  // public loadAllEvents() {
-  //   if (this.sessionListFromTeacherId) {
-  //     const events = this.sessionListFromTeacherId.map((session) => {
-  //       return {
-  //         title: session.session_name,
-  //         start: session.session_start,
-  //         end: session.session_end,
-  //         id_session: session.id_session,
-  //       }
-  //     });
-  //     put the events to calendarOptions
-  //     this.calendarOptions.events = events;
-  //   }
-  // }
 
-  // public calendarOptions: CalendarOptions = {
-  //   initialView: 'timeGridDay',
-  //   locale: esLocale,
-  //   timeZone: 'Europe/Madrid',
-  //   fixedWeekCount: false,
-  //   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, momentTimezonePlugin],
-  //   headerToolbar: {
-  //     left: 'prev',
-  //     center: 'today',
-  //     right: 'next'
-  //   },
-  //   events: [],
-  //   eventClick: this.openSessionDetailsModal.bind(this),
-  //   dateClick: this.openStudentListModal.bind(this),
-  // };
-
-  // public openStudentListModal() {
-  //   this.modalService.open(ModalStudentListComponent, { centered: true });
-  // }
-
-  // public openSessionDetailsModal(event: EventClickArg) {
-  //   this.getStudentIdValue(event.event.extendedProps['id_session']);
-
-  //   const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
-  //   modalRef.componentInstance.selectedSessionId = event.event.extendedProps['id_session']; //get the id_session from selected session
-  //   modalRef.componentInstance.selectedStudentId = this.selectedStudentId;//get de id_student and send to modalsessiondetail
-
-  // }
-
-  // private getStudentIdValue(selectedSessionId: number) {
-  //   if (this.calendarOptions.events && selectedSessionId) {
-  //     for (const session of this.sessionListFromTeacherId) {
-  //       if (session.id_session === selectedSessionId) {
-  //         this.selectedStudentId = session.id_student;
-  //         console.log('student', this.selectedStudentId)
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }
-
-
+  public openSessionDetailsModal(selectedSessionId: number) {
+    this.modalService.dismissAll();
+    const modalRef = this.modalService.open(ModalSessionDetailsComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
+    modalRef.componentInstance.selectedSessionId = selectedSessionId; //get the id_session from selected session
+    modalRef.componentInstance.selectedStudentId = this.selectedStudentId;
+  }
 }

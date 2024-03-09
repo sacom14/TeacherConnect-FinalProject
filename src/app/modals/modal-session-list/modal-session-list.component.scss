@@ -1,15 +1,31 @@
+
+i{
+  color: rgb(238, 155, 2)
+}
+
+section{
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+h2{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+
 .listCard{
   margin: 10px 0px;
   border-left: 4px solid #1F1A36;
   border-radius: 25px;
   padding: 5px;
   cursor: pointer;
-}
-.listCard:hover{
-  background-color: #1F1A36;
-  color: white;
-  border-left: 4px solid orange;
-  border-radius: 25px;
+
+  &:hover{
+    background-color:#1f1a36e9;
+    color: white;
+    border-left: 4px solid orange;
+    border-radius: 25px;
+  }
 }
 
 .time-date{
@@ -38,18 +54,4 @@
 .fa-x:hover{
   transform: scale(1.2);
   transition: 0.7s;
-}
-
-i{
-  color: rgb(238, 155, 2)
-}
-
-section{
-  max-height: 90vh;
-  overflow-y: scroll;
-}
-
-h2{
-  font-family: 'Montserrat', sans-serif;
-  font-weight: bold;
 }

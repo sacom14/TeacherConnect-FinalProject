@@ -85,6 +85,7 @@ export class SessionService {
     const teacherId = this.authTeacherService.getTeacherId();
     return this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-payed/${teacherId}`).subscribe({
       next: (response) => {
+        console.log('payed',response)
         this._payedSessions.next(response.sessions);
       },
       error: (error) => {
@@ -96,8 +97,9 @@ export class SessionService {
   //get payed session TRUE and FALSE
   public getAllNotPayedSessions() {
     const teacherId = this.authTeacherService.getTeacherId();
-    this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-payed/${teacherId}`).subscribe({
+    this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-not-payed/${teacherId}`).subscribe({
       next: (response) => {
+        console.log('no',response);
         this._notPayedSessions.next(response.sessions);
       },
       error: (error) => {

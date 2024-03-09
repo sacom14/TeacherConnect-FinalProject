@@ -1,7 +1,7 @@
-<main style="padding-top: 65px; margin-bottom: 65px;">
+<main style="padding-top: 65px; margin-bottom: 30px;">
   <section class="row text-center vh-100">
-    <article class="d-none d-md-flex col-12 col-md-3 border border-primary p-3 align-items-center shadow">
-      <div>
+    <article class="d-none d-md-flex col-12 col-md-3 p-3">
+      <div style="min-height:auto; max-height: 60vh; max-width: 100%; top: 8rem; position: sticky;">
         <app-teacher-details class="w-100 h-auto"></app-teacher-details>
       </div>
     </article>
@@ -9,14 +9,14 @@
       <div>
         <div class="row p-2">
           <div class="col-12 col-lg-6 p-1">
-            <a href="/add-student" class="btn btn-custom-primary d-flex justify-content-center align-items-center">Nuevo estudiante</a>
+            <a href="/add-student" class="btn btn-orange d-flex justify-content-center align-items-center shadow">Nuevo estudiante</a>
           </div>
           <div class="col-12 col-lg-6 p-1">
-            <a class="btn btn-custom-accent-success w-100 d-flex justify-content-center align-items-center" (click)="openStudentListModal()">Nueva clase</a>
+            <a class="btn btn-custom-accent-success w-100 d-flex justify-content-center align-items-center shadow" (click)="openStudentListModal()">Nueva clase</a>
           </div>
         </div>
-        <div class="border border-1 mb-4 border-primary shadow p-2">
-          <h4>Clases para esta semana</h4>
+        <div class="border rounded mb-4 shadow">
+          <h4 class="bg-custom-blue-light p-3 text-white fw-bold" style="margin-bottom: 0px;">Clases para esta semana</h4>
           <div class="">
             <!-- Lista de sesiones -->
             @if(sessionListFromTeacherId.length == 0){
@@ -26,18 +26,18 @@
             } @else {
             <div>
               @for (day of getObjectKeys(sessionsByDay); track $index) {
-              @if (sessionsByDay[day].length){
-              <div>
-                <h5>{{day}}</h5>
-              </div>
-              @for (session of sessionsByDay[day]; track session.id_session) {
-              <div>
-                <ul class="list-group">
-                  <li class="list-group-item">{{session.session_name}}</li>
-                </ul>
-              </div>
-              }
-              }
+                <div class="border">
+                  @if (sessionsByDay[day].length){
+                    <div>
+                      <h5 class="bg-custom-green text-capitalize">{{day}}</h5>
+                    </div>
+                    @for (session of sessionsByDay[day]; track session.id_session) {
+                    <div class="mb-2  sesseion-selected">
+                        <a class="text-decoration-none text-custom-blue" style="cursor: pointer;" (click)="openSessionDetailsModal(session.id_session)">{{session.session_name}}</a>
+                    </div>
+                    }
+                    }
+                </div>
               }
             </div>
             }
@@ -47,33 +47,36 @@
     </article>
     <article class="col-12 col-sm-6 col-md-3">
       <div>
-        <a class="box border bg-warning" href="/student-page">
+        <a class="box border bg-custom-yellow text-decoration-none yellow shadow" href="/student-page">
           {{studentCount}} Estudiantes
         </a>
-        <div class="box border bg-success">
+        <a class="box border bg-custom-green text-decoration-none green shadow">
           {{payedSessionCount}} Pagados
-        </div>
-        <div class="box border bg-danger">
+        </a>
+        <a class="box border bg-custom-red text-decoration-none red shadow">
           {{notPayedSessionCount}} Sessiones aún por pagar
-        </div>
+        </a>
       </div>
     </article>
-    <aside class=" col-12 col-sm-12 col-md-3 h-100 d-md-block d-none border border-primary shadow text-white bg-custom-blue">
+    <aside class=" col-12 col-sm-12 col-md-3 h-100 d-md-block d-none shadow text-white bg-white">
       <div class="w-100 h-100 ">
-        <h4>Ponte al día</h4>
+        <h4 class="text-black fw-bold fs-3 mt-3">Ponte al día</h4>
         @for (article of educationNews | async; track $index)
         {
-        <h6 class="fs-6 mt-4"> {{article.title}}</h6>
-        <img src="{{article.image}}" alt="new image" width="50%">
-        <div class="mb-4">
-          <a href="{{article.url}}">Saber más</a>
-        </div>
+          <div class="bg-custom-blue-light m-1">
+            <h6 class="fs-6 mt-4"> {{article.title}}</h6>
+            <img src="{{article.image}}" alt="new image" width="50%">
+            <div class="mb-4">
+              <a href="{{article.url}}">Saber más</a>
+            </div>
+          </div>
+
         }
       </div>
     </aside>
-    <aside class="d-md-none w-100 h-auto border border-primary shadow text-white bg-custom-blue">
+    <aside class="d-md-none w-100 h-auto shadow text-white bg-custom-blue">
       <div class="w-100 h-100">
-        <h4>Ponte al día</h4>
+        <h4 class="fw-bold mt-1">Ponte al día</h4>
         <ngb-carousel #carousel [interval]="2500" [pauseOnHover]="pauseOnHover" [pauseOnFocus]="pauseOnFocus"
           (slide)="onSlide($event)">
           @for (article of educationNews | async; track $index) {

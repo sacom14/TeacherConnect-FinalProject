@@ -1,37 +1,42 @@
 <section>
-  @for (data of teacherData | async; track $index) {
-  <div class="row">
-    <div class="text-center mb-4">
-      @if(data.teacher_photo){
-      <img src="{{data.teacher_phone}}" class="card-img-top img-fluid" alt="foto_estudiante"
-        style="height:auto; width:90%;">
-      } @else {
-      <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante"
-        style="height:auto; width:90%;">
+  <div class="p-3 text-white bg-custom-blue rounded-5 shadow">
+    @for (data of teacherData | async; track $index) {
+      <div class="row">
+        <div class="text-center mb-4">
+          @if(data.teacher_photo){
+          <img src="{{data.teacher_phone}}" class="card-img-top img-fluid" alt="foto_estudiante"
+            style="height:auto; width:60%;">
+          } @else {
+          <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid border border-2 border-white rounded-4" alt="foto_estudiante"
+            style="height:auto; width:60%;">
+          }
+        </div>
+        <div class="mt-2 ">
+          <h5 class="text-uppercase fw-bold text-center">{{data.teacher_name}} {{data.teacher_surname}}</h5>
+        </div>
+        <hr>
+        <div>
+          <p><i class="fa-solid fa-envelope pe-2"></i>{{data.teacher_email}}</p>
+        </div>
+        <div>
+          <p>
+            <i class="fa-solid fa-phone pe-2"></i>
+            Telf: {{data.teacher_phone}}
+          </p>
+        </div>
+        <div>
+          <p>
+            <i class="fa-regular fa-calendar pe-2"></i>
+            {{ calculateAge(data.teacher_birthdate.toString())}} años
+          </p>
+        </div>
+        <hr>
+        <div class="text-center">
+          <button class="btn btn-custom-green m-2" (click)="goEditTeacher()">Modificar datos</button>
+        </div>
+      </div>
       }
-    </div>
-    <hr>
-    <div>
-      <h5>{{data.teacher_name}} {{data.teacher_surname}}</h5>
-    </div>
-    <div>
-      <p>Email: {{data.teacher_email}}</p>
-    </div>
-    <div>
-      <p>
-        Telf: {{data.teacher_phone}}
-      </p>
-    </div>
-    <div>
-      <p>
-        Edad: {{ calculateAge(data.teacher_birthdate.toString())}} años
-      </p>
-    </div>
-    <hr>
-    <div class="text-center">
-      <button class="btn btn-primary" (click)="goEditTeacher()">Modificar datos</button>
-    </div>
   </div>
-  }
+
 
 </section>

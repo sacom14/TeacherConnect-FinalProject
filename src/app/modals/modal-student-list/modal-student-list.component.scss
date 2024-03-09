@@ -1,0 +1,41 @@
+i{
+  color: rgb(238, 155, 2)
+}
+
+section{
+  max-height: 90vh;
+  overflow-y:auto;
+  overflow-x: hidden;
+}
+
+h2{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+
+a{
+  text-decoration: none;
+}
+
+.fa-users{
+  border: 1px solid orange;
+  border-radius: 50%;
+}
+
+.fa-x{
+  cursor: pointer;
+  color: orange;
+
+  &:hover{
+    transform: scale(1.2);
+    transition: 0.7s;
+  }
+}
+
+.student-list{
+  border-radius: 25px;
+
+  &:hover{
+    background-color: #1f1a36d6;
+  }
+}

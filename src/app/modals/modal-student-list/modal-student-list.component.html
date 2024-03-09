@@ -1,5 +1,26 @@
-<p>modal-student-list works!</p>
-<h3>Escoge el estudiande para añadir la sesión</h3>
-<ng-container *ngFor="let student of studentList |async">
-  <a class="d-flex flex-column" (click)="goToNewSessionForm(student.id_student)" style="cursor: pointer;" >{{student.student_name}}</a>
-</ng-container>
+<section class="modal-container">
+  <div class="modal-header d-flex justify-content-between align-items-center header-card p-4" >
+    <h3 class="fw-bold">
+      <i class="fa-solid fa-users p-3 me-3"></i>
+      Escoge un estudiante
+    </h3>
+    <i class="fa-solid fa-x" (click)="closeModal()"></i>
+  </div>
+  <div class="modal-body row d-flex justify-content-center fw-bold">
+    <ng-container *ngFor="let student of studentList |async">
+      <div class="p-2 m-2 d-flex student-list shadow align-items-center col-12 col-md-5 border border-primary" (click)="goToNewSessionForm(student.id_student)" style="cursor: pointer;">
+        <div>
+          @if(student.student_photo){
+            <img src="{{student.student_photo}}" alt="student_photo" width="50px" height="50px" class="rounded-5 me-4">
+            } @else {
+            <img src="../../../assets/img/student/student.jpg" alt="student_photo" width="50px" height="50px" class="rounded-5 me-4">
+            }
+        </div>
+        <div class="col-12 col-md-5">
+          <a class="d-flex flex-column text-capitalize">{{student.student_name}} {{student.student_surname}}</a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</section>
+

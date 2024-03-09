@@ -9,4 +9,51 @@
   display:flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  color: black;
+  font-size: large;
+  font-weight: bold;
+  border-radius: 20px;
+
+
+}
+
+.yellow{
+  transition: 0.5s;
+
+  &:hover{
+    background-color: #d5d588 !important;
+    transition: 0.5s;
+  }
+}
+
+
+.green{
+  transition: 0.5s;
+
+  &:hover{
+    background-color: #64ae9a !important;
+    transition: 0.5s;
+  }
+}
+
+.red{
+  transition: 0.5s;
+
+  &:hover{
+    background-color: #e25656 !important;
+    transition: 0.5s;
+  }
+}
+
+.sesseion-selected{
+  &:hover{
+    background-color:#cde7e5;
+  }
+}
+
+@media (max-width: 477px) {
+  .box {
+      height: 75px; /* Ajusta la altura para móvil */
+  }
 }

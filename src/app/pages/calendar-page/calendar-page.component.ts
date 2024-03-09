@@ -26,10 +26,8 @@ export class CalendarPageComponent implements OnInit {
   private sessionService = inject(SessionService);
   private modalService = inject(NgbModal);
 
-
   public sessionListFromTeacherId!: SessionFromTeacherId[];
   public selectedStudentId!: number | null;
-
 
 
   ngOnInit(): void {
@@ -61,6 +59,10 @@ export class CalendarPageComponent implements OnInit {
     timeZone: 'Europe/Madrid',
     fixedWeekCount: false,
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin, momentTimezonePlugin],
+    eventColor:'#9AD0C2',
+    eventBackgroundColor: '#1F1A36',
+    eventTextColor:'orange',
+    themeSystem: 'bootstrap5',
     headerToolbar: {
       left: 'prev,next,today',
       center: 'title',
@@ -71,8 +73,12 @@ export class CalendarPageComponent implements OnInit {
     dateClick: this.openStudentListModal.bind(this),
   };
 
+
   public openStudentListModal() {
-    this.modalService.open(ModalStudentListComponent, { centered: true });
+    this.modalService.open(ModalStudentListComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
   }
 
   public openSessionDetailsModal(event: EventClickArg) {
@@ -84,7 +90,6 @@ export class CalendarPageComponent implements OnInit {
     });
     modalRef.componentInstance.selectedSessionId = event.event.extendedProps['id_session']; //get the id_session from selected session
     modalRef.componentInstance.selectedStudentId = this.selectedStudentId;//get de id_student and send to modalsessiondetail
-
   }
 
   private getStudentIdValue(selectedSessionId: number) {
