@@ -35,27 +35,30 @@ export class ModalSessionListComponent {
   }
 
   ngOnInit(): void {
-      this.sessionService.getSession(this.selectedStudentId);
-      this.studentService.getStudentById(this.selectedStudentId);
+    this.sessionService.getSession(this.selectedStudentId);
+    this.studentService.getStudentById(this.selectedStudentId);
   }
 
-  convertToLocalDateTime(utcDate:string):string{
+  convertToLocalDateTime(utcDate: string): string {
     return new Date(utcDate).toLocaleString();
   }
 
-  goToNewSessionForm(){
+  goToNewSessionForm() {
     this.modalService.dismissAll();
     this.router.navigate(['/add-session', this.selectedStudentId]);
   }
 
-  public openSessionDetailsModal(selectedSessionId:number) {
+  public openSessionDetailsModal(selectedSessionId: number) {
     this.modalService.dismissAll();
-    const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
+    const modalRef = this.modalService.open(ModalSessionDetailsComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
     modalRef.componentInstance.selectedSessionId = selectedSessionId; //get the id_session from selected session
     modalRef.componentInstance.selectedStudentId = this.selectedStudentId;
   }
 
-  public closeModal(){
+  public closeModal() {
     this.modalService.dismissAll();
   }
 

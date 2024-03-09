@@ -16,7 +16,8 @@ $custom-colors: (
   "custom-sky-blue":#E6F2FF,
   "custom-crame": #F9F6E7,
   "custom-green": #9AD0C2,
-
+  "custom-red": #FA7070,
+  "custom-grey": #848582,
 );
 
 @import "../node_modules/bootstrap/scss/variables";
@@ -32,7 +33,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 @import 'bootstrap/scss/bootstrap';
 
 *{
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 body{

@@ -1,55 +1,68 @@
 <ng-container *ngFor="let data of sessionData | async">
-  <div class="modal-container">
-    <div class="modal-header">
-      <h3>{{data.session_name}}</h3>
-      <!-- <span class="close-button" (click)="closeModal()">X</span> -->
-    </div>
-    <div class="modal-body">
-      <div class="session-info">
-
-        <div>
-          <label>Hora de inicio:</label>
-          <span>{{ data.session_start }}</span>
+  <section>
+    <div class="modal-container">
+      <div class="modal-header d-flex justify-content-between align-items-center header-card p-4" >
+        <h3 class="fw-bold">
+          <i class="fa-solid fa-school p-3 me-3"></i>
+          {{data.session_name}}
+        </h3>
+        <i class="fa-solid fa-x" (click)="closeModal()"></i>
+      </div>
+      <div class="modal-body">
+        <div class="session-info">
+          <div class="d-flex justify-content-center flex-wrap fw-bold">
+            <div>
+              <p class="outline"> <i class="fa-regular fa-clock pe-2"></i>
+                <label>Inicio:</label>
+                {{(convertToLocalDateTime(data.session_start.toString()).slice(11,16))}} h</p>
+            </div>
+            <div>
+              <p class="outline"> <i class="fa-regular fa-clock pe-2"></i>
+                <label>Final: </label>
+                {{(convertToLocalDateTime(data.session_end.toString()).slice(11,16))}} h</p>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center flex-wrap fw-bold">
+            <div>
+              <p class="outline"> <i class="fa-regular fa-calendar pe-2"></i>
+                {{(convertToLocalDateTime(data.session_start.toString()).slice(0,9))}} </p>
+            </div>
+            <div>
+              <div class="">
+                @if(data.session_payed.data[0]){
+                  <p class="outline"><i class="fa-regular fa-credit-card pe-2"></i><span class="text-success">Pagado</span></p>
+                } @else {
+                  <p class="outline"><i class="fa-regular fa-credit-card pe-2"></i> <span class="text-custom-red">Pendiente</span></p>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column border border-1 mb-2 rounded">
+            <label class="bg-custom-light p-1 fw-bold">Objetivo de la sesión:</label>
+            <span class="p-3">{{ data.session_objective }}</span>
+          </div>
+          <div class="d-flex flex-column border border-1 mb-2 rounded">
+            <label class="bg-custom-light p-1 fw-bold">Tareas de la sesión:</label>
+            <span class="p-3 fs-7">{{ data.session_tasks }}</span>
+          </div>
+          <div class="d-flex flex-column border border-1 mb-2 rounded">
+            <label class="bg-custom-light p-1 fw-bold">Materiales requeridos:</label>
+            @if(data.session_material == ""){
+              <span class="p-3">No se neceseita ningún material especial</span>
+            } @else {
+            <span class="p-3">{{ data.session_material }}</span>
+            }
+          </div>
+          <div>
+            <span class="fs-7 fw-sm text-custom-grey mt-3 p-1">Creado el: {{(convertToLocalDateTime(data.create_at_session.toString()))}} </span>
+          </div>
         </div>
-        <div>
-          <label>Hora final:</label>
-          <span>{{ data.session_end }}</span>
-        </div>
-        <div>
-          <label>Objetivo de la sesión:</label>
-          <span>{{ data.session_objective }}</span>
-        </div>
-        <div>
-          <label>Tareas de la sesión:</label>
-          <span>{{ data.session_tasks }}</span>
-        </div>
-        <div>
-          <label>Materiales requeridos:</label>
-          <span>{{ data.session_material }}</span>
-        </div>
-
-        <div>
-          @if(data.session_payed.data[0]){
-          <label>Pago:</label>
-          <span>{{'Pagado'}}</span>
-          } @else {
-          <label>Pago:</label>
-          <span>{{'Falta por pagar'}}</span>
-          }
-        </div>
-
-        <div>
-          <label>Creado en:</label>
-          <span>{{ data.create_at_session }}</span>
-        </div>
-
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-primary" (click)="goToEditSessionForm()">Editar sesión</button>
-    <a class="primary" style="cursor: pointer;" (click)="openStudentListModal()">Todas las sesiones</a>
-  </div>
+    <div class="modal-footer">
+      <button class="btn btn-orange" (click)="goToEditSessionForm()">Editar sesión</button>
+      <a class="primary" style="cursor: pointer;" (click)="openStudentListModal()">Todas las sesiones</a>
+    </div>
 
-
+  </section>
 </ng-container>

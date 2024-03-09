@@ -13,7 +13,6 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
   };
 
   if(userIsAuthenticated()){ //is authenticated
-    alert('Ya estas iniciado sesión, no puedes ir a esta página');
     router.navigate(['/home-page']);
 
     return false;

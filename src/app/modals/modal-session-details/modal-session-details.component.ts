@@ -49,10 +49,16 @@ export class ModalSessionDetailsComponent {
   }
 
   public openStudentListModal() {
+    this.modalService.dismissAll();
     const modalRef = this.modalService.open(ModalSessionListComponent, {
       centered: true,
+      backdrop: 'static',
     });
     modalRef.componentInstance.selectedStudentId = this.selectedStudentId;
+  }
+
+  public closeModal(){
+    this.modalService.dismissAll();
   }
 
 }

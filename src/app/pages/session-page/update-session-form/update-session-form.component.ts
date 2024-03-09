@@ -128,8 +128,7 @@ export class UpdateSessionFormComponent {
     this.sessionService.updateSession(sessionFormData, sessionId).subscribe({
       next: (response) => {
         alert('Se ha actualizado la sesión correctamente');
-        //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
-        //redirigir al login
+        //todo: hacer que salga un modal (o alert) verde como mensaje de todo correcto!
         this.router.navigate(['/student-page'])
       },
       error: (error) => {

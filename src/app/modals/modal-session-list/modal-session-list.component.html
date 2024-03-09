@@ -1,12 +1,11 @@
-<section class="">
-  <div class="d-flex justify-content-between align-items-center header-card p-4" (click)="closeModal()">
+<section class="modal-container">
+  <div class="d-flex justify-content-between align-items-center header-card p-4" >
     <h2 *ngFor="let student of dataOfStudentSelected | async " class="">
       <i class="fa-solid fa-graduation-cap p-3 me-3"></i>
       {{student.student_name}}
     </h2>
-    <i class="fa-solid fa-x"></i>
+    <i class="fa-solid fa-x" (click)="closeModal()"></i>
   </div>
-
 
   <!-- todo: mostrar lista de sessiones de un alumno -->
   <!-- todo: cuando se haga click, mostrar la infomación detallada de la sesión en un modal? -->

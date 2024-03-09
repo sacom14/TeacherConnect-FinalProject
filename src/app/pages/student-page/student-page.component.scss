@@ -44,24 +44,26 @@
 
 }
 
-#floating-button {
-  transition: width 0.5s ease, border-radius 0.5s ease;
-  overflow: hidden;
-  border-radius: 50%;
-}
+// #floating-button {
+//   transition: width 0.5s ease, border-radius 0.5s ease;
+//   overflow: hidden;
+//   border-radius: 50%;
+// }
 
-#floating-button:hover {
-  width: 200px;
-  border-radius: 20px;
-}
+// #floating-button:hover {
+//   width: 200px;
+//   border-radius: 20px;
+// }
 
-#floating-button .fa-plus {
-  transition: transform 0.3s ease;
-}
+// #floating-button .fa-plus {
+//   transition: transform 0.3s ease;
+// }
 
-#floating-button:hover .fa-plus {
-  transform: rotate(45deg);
-}
+// #floating-button:hover .fa-plus {
+//   transform: rotate(45deg);
+// }
+
+
 
 .add-student-text {
   display: none;
@@ -70,4 +72,47 @@
 #floating-button:hover .add-student-text {
   display: inline-block;
   margin-left: 10px;
+}
+
+
+
+
+
+.square-button {
+  transition: width 0.5s ease, border-radius 0.5s ease;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  height: 50px; /* Ajusta la altura según tus necesidades */
+}
+
+.square-button:hover {
+  width: 200px; /* Ancho aumenta */
+  border-radius: 20px;
+}
+
+.square-button .button-content {
+  position: relative;
+}
+
+.square-button .fa-plus {
+  transition: transform 0.3s ease;
+}
+
+.square-button:hover .fa-plus {
+  transform: rotate(45deg);
+}
+
+.square-button .add-student-text {
+  display: inline-block;
+  position: absolute;
+  left: 100%; /* Empieza fuera del botón */
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+  transition: left 0.5s ease; /* Anima el desplazamiento */
+}
+
+.square-button:hover .add-student-text {
+  left: calc(100% + 10px); /* Desplaza el texto hacia la derecha con un margen de 10px */
 }

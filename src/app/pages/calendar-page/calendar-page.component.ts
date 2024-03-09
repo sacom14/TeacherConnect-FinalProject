@@ -78,7 +78,10 @@ export class CalendarPageComponent implements OnInit {
   public openSessionDetailsModal(event: EventClickArg) {
     this.getStudentIdValue(event.event.extendedProps['id_session']);
 
-    const modalRef = this.modalService.open(ModalSessionDetailsComponent, { centered: true });
+    const modalRef = this.modalService.open(ModalSessionDetailsComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
     modalRef.componentInstance.selectedSessionId = event.event.extendedProps['id_session']; //get the id_session from selected session
     modalRef.componentInstance.selectedStudentId = this.selectedStudentId;//get de id_student and send to modalsessiondetail
 
