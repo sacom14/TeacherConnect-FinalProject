@@ -60,7 +60,13 @@
       </div>
     </div>
     <div class="modal-footer d-flex justify-content-center flex-wrap">
-      <button class="btn btn-orange" (click)="goToEditSessionForm()">Editar sesión</button>
+      <button class="btn btn-orange" (click)="goToEditSessionForm()">
+        Editar sesión
+      </button>
+        <!-- todo: Que aparezca primer el modal de confirmación -->
+        <button class="btn btn-delete" (click)="deleteSession()">
+          Eliminar
+        </button>
       <a class="primary" style="cursor: pointer;" (click)="openStudentListModal()">Todas las sesiones</a>
     </div>
 

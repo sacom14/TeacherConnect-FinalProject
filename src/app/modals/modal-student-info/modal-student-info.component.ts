@@ -29,7 +29,6 @@ export class ModalStudentInfoComponent {
     this.studentService.currentStudentIdSelected
       .subscribe(studentId => {
         this.selectedStudentId = studentId;
-        console.log('llego',this.selectedStudentId);
         this.dataOfStudentSelected = this.studentService.currentInfoStudentSelected;
 
         this.loadStudentDetails(this.selectedStudentId);
@@ -66,5 +65,17 @@ export class ModalStudentInfoComponent {
 
   public closeModal(){
     this.modalService.dismissAll();
+  }
+
+  public deleteStudent(){
+    this.studentService.deleteStudent(this.selectedStudentId).subscribe({
+      next: (response) => {
+        alert('El estudiante se ha eliminado correctamente'); //todo: modal de notificación successfull
+        this.modalService.dismissAll();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el estudiante', error)
+      },
+    })
   }
 }

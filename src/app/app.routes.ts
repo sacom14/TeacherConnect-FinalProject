@@ -13,6 +13,8 @@ import { UpdateStudentFormPageComponent } from './pages/student-page/update-stud
 import { SessionPageComponent } from './pages/session-page/session-page.component';
 import { NewSessionFormComponent } from './pages/session-page/new-session-form/new-session-form.component';
 import { UpdateSessionFormComponent } from './pages/session-page/update-session-form/update-session-form.component';
+import { TeacherPageComponent } from './pages/teacher-page/teacher-page.component';
+import { UpdateTeacherFormComponent } from './pages/teacher-page/update-teacher-form/update-teacher-form.component';
 
 export const routes: Routes = [
   //without aunthenticated
@@ -26,6 +28,9 @@ export const routes: Routes = [
   {path: 'calendar-page', component: CalendarPageComponent, canActivate: [authGuard]},
   {path: 'map-page', component: MapPageComponent, canActivate: [authGuard]},
 
+  {path: 'teacher-page', component: TeacherPageComponent, canActivate: [authGuard]},
+  {path: 'update-teacher', component: UpdateTeacherFormComponent, canActivate: [authGuard]},
+  
   {path: 'add-student', component: NewStudentFormPageComponent, canActivate: [authGuard]},
   {path: 'update-student', component: UpdateStudentFormPageComponent, canActivate: [authGuard]},
 

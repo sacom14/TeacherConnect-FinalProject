@@ -61,4 +61,16 @@ export class ModalSessionDetailsComponent {
     this.modalService.dismissAll();
   }
 
+  public deleteSession(){
+    this.sessionService.deleteSession(this.selectedSessionId).subscribe({
+      next: (response) => {
+        alert('La sesión se ha eliminado correctamente'); //todo: modal de notificación successfull
+        this.modalService.dismissAll();
+      },
+      error: (error) => {
+        console.error('Error al eliminar la sesión', error)
+      },
+    })
+  }
+
 }

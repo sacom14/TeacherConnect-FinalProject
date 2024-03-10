@@ -138,7 +138,10 @@ export class NewStudentFormPageComponent implements OnInit {
     this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
       if(imageUrl){
         this.addStudentForm.patchValue({studentPhoto: imageUrl});
-        this.addNewStudent(); //add the new student
+        this.addNewStudent();
+      } else {
+        this.addStudentForm.patchValue({studentPhoto: 'https://i.ibb.co/tCVgL7j/default-teacher-img.jpg'});
+        this.addNewStudent();
       }
     })
     this.addStudentForm.value.studentPhoto = this.imageUrl;

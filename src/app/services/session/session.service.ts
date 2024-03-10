@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, throwError } from 'rxjs';
 import { Session, SessionFromTeacherIDResponse, SessionFromTeacherId, SessionPost, SessionPut, SessionResponse } from '../../interfaces/session.interface';
 import { AuthTeacherService } from '../teacher/auth-teacher.service';
 
@@ -85,7 +85,6 @@ export class SessionService {
     const teacherId = this.authTeacherService.getTeacherId();
     return this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-payed/${teacherId}`).subscribe({
       next: (response) => {
-        console.log('payed',response)
         this._payedSessions.next(response.sessions);
       },
       error: (error) => {
@@ -99,7 +98,6 @@ export class SessionService {
     const teacherId = this.authTeacherService.getTeacherId();
     this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-not-payed/${teacherId}`).subscribe({
       next: (response) => {
-        console.log('no',response);
         this._notPayedSessions.next(response.sessions);
       },
       error: (error) => {
@@ -140,6 +138,24 @@ export class SessionService {
     }
   }
 
-
+  //delete session
+  public deleteSession(sessionId: number | null): Observable<any> {
+    if (sessionId) {
+      return this.http.delete(`${this._sessionApiUrl}/${sessionId}`).pipe(
+        catchError(error => {
+          let errorMessage = 'Error desconocido';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}`;
+          } else {
+            errorMessage = `Código de error: ${error.status}, Mensaje: ${error.message}`;
+          }
+          console.error(errorMessage);
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+    }else {
+      return throwError(() => new Error('SesionId no disponibles'));
+    }
+  }
 
 }

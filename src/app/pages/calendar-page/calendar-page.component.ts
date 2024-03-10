@@ -97,7 +97,6 @@ export class CalendarPageComponent implements OnInit {
       for (const session of this.sessionListFromTeacherId) {
         if (session.id_session === selectedSessionId) {
           this.selectedStudentId = session.id_student;
-          console.log('student', this.selectedStudentId)
           break;
         }
       }

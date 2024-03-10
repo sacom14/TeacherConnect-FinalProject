@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { Student } from '../../interfaces/student.interface';
 import { Article } from '../../interfaces/gnewsApi.interface.';
 import { GNewsApiService } from '../../services/gnewsApi/gnews-api.service';
-import { TeacherDetailsComponent } from './teacher-details/teacher-details.component';
+import { TeacherDetailsComponent } from '../teacher-page/teacher-details/teacher-details.component';
 import { ModalSessionDetailsComponent } from '../../modals/modal-session-details/modal-session-details.component';
 
 @Component({

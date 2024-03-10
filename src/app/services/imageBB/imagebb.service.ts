@@ -27,7 +27,7 @@ export class ImagebbService {
       this.http.post<ImageBbResponse>(this._imageBBApiUrl, formData,{ params: { key: this._apiKeyImageBB } }).subscribe({
         next: (response) => {
           if (response.data && response.data.url) {
-            this._imageUrlResponse.next(response.data.url); // Almacena la URL de la imagen en el BehaviorSubject
+            this._imageUrlResponse.next(response.data.url);
           } else {
             console.error('Error al obtener la URL de la imagen desde ImageBB', response);
           }

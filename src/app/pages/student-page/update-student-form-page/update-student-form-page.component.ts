@@ -83,7 +83,6 @@ export class UpdateStudentFormPageComponent {
   };
 
   public setInputInitialValues() {
-    //todo: falta poner predefifinido los checkbox y también los
     this.dataOfStudentSelected.subscribe(data => {
       if (data && data.length > 0) {
         const studentData = data[0];

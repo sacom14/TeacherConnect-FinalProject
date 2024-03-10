@@ -2,10 +2,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { AllDataStudentSubjectsResponse, Student, StudentAddedResponse, StudentEmailCheckResponseMessage, StudentResponse, StudentByIdResponse, StudentById, StudentWithSubjects } from '../../interfaces/student.interface';
-import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, throwError } from 'rxjs';
 import { AuthTeacherService } from '../teacher/auth-teacher.service';
 import { PaymentMethod, PaymentMethodResponse } from '../../interfaces/payment-method.interface';
 import { AcademicYear, AcademicYearResponse } from '../../interfaces/academic-year.interface';
+import { er } from '@fullcalendar/core/internal-common';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,9 @@ export class StudentService {
     if (teacherId) {
       this.http.get<StudentResponse>(`${this._studentApiUrl}/teacher/${teacherId}`).subscribe({
         next: (response) => {
-          this._studentsList.next(response.students);
+          if (response.students && response.students.length > 0) {
+            this._studentsList.next(response.students);
+          }
         },
         error: (error) => {
           console.error('Error al obtener los estudiantes', error);
@@ -220,4 +223,24 @@ export class StudentService {
       return throwError(() => new Error('Id del profesor no disponible'));
     }
   }
+
+    //delete student
+    public deleteStudent(studentId: number | null): Observable<any> {
+      if (studentId) {
+        return this.http.delete(`${this._studentApiUrl}/${studentId}`).pipe(
+          catchError(error => {
+            let errorMessage = 'Error desconocido';
+            if (error.error instanceof ErrorEvent) {
+              errorMessage = `Error: ${error.error.message}`;
+            } else {
+              errorMessage = `Código de error: ${error.status}, Mensaje: ${error.message}`;
+            }
+            console.error(errorMessage);
+            return throwError(() => new Error(errorMessage));
+          })
+        );
+      }else {
+        return throwError(() => new Error('studentId no disponible'));
+      }
+    }
 }

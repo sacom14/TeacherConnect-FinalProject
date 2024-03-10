@@ -36,12 +36,13 @@ export class StudentPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.studentService.getStudentsFromTeacher();
-
     this.studentService.students.subscribe(students => {
-      students.forEach(student => {
-        //we obtain all subjects for the diferents students
-        this.studentService.getSubjectsFromStudent(student.id_student);
-      })
+      if (students && students.length > 0) {
+        students.forEach(student => {
+          //we obtain all subjects for the diferents students
+          this.studentService.getSubjectsFromStudent(student.id_student);
+        })
+      }
     });
   }
 
@@ -66,7 +67,7 @@ export class StudentPageComponent implements OnInit {
 
     const mdBreakpoint = 768; //bootstrap mediaquery for "md"
 
-    if (asideElement && windowWidth < mdBreakpoint || asideElement==null && windowWidth < mdBreakpoint ) {
+    if (asideElement && windowWidth < mdBreakpoint || asideElement == null && windowWidth < mdBreakpoint) {
       this.openStudentInfoModal(selectedStudentId);
     }
   }

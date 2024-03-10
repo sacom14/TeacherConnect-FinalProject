@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Teacher, TeacherEmailCheckResponseMessage, TeacherResponse } from '../../interfaces/teacher.interface';
-import { BehaviorSubject, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, throwError } from 'rxjs';
 import { AuthTeacherService } from './auth-teacher.service';
 
 @Injectable({
@@ -10,17 +10,17 @@ import { AuthTeacherService } from './auth-teacher.service';
 })
 export class TeacherService {
   private http = inject(HttpClient)
-  private authTeacherService = inject (AuthTeacherService);
+  private authTeacherService = inject(AuthTeacherService);
 
   private _teacherApiUrl: string = 'http://localhost:3000/api/teacher';
 
   private _teacherData = new BehaviorSubject<Teacher[]>([]);
 
-  get teacherData(){
+  get teacherData() {
     return this._teacherData.asObservable();
   }
 
-  public getTeacherDataById(){
+  public getTeacherDataById() {
     const teacherId = this.authTeacherService.getTeacherId();
     this.http.get<TeacherResponse>(`${this._teacherApiUrl}/${teacherId}`).subscribe({
       next: (response) => {
@@ -34,24 +34,25 @@ export class TeacherService {
   }
 
   //create teacher
-  public createNewTeacher(teacherData: Teacher){
+  public createNewTeacher(teacherData: Teacher) {
     return this.http.post(this._teacherApiUrl, teacherData)
-    .pipe(
-      catchError((error) => {
-        console.error('Error en el servicio: ', error);
-        return throwError(() => new Error('Error al crear el profesor'));
-      })
-    );
+      .pipe(
+        catchError((error) => {
+          console.error('Error en el servicio: ', error);
+          return throwError(() => new Error('Error al crear el profesor'));
+        })
+      );
   }
 
   //chek if the email is already on BD
-  public checkRepeatEmail(teacherEmail: string){
-    return this.http.post<TeacherEmailCheckResponseMessage>(`${this._teacherApiUrl}/check-email`, {teacherEmail});
+  public checkRepeatEmail(teacherEmail: string) {
+    const teacherId = this.authTeacherService.getTeacherId();
+    return this.http.post<TeacherEmailCheckResponseMessage>(`${this._teacherApiUrl}/check-email/${teacherId}`, { teacherEmail });
   }
 
   //login (take token)
   public login(teacherEmail: string, teacherPassword: string) {
-    return this.http.post<{ token: string, teacherId:number }>(`${this._teacherApiUrl}/login`, {teacher_email: teacherEmail, teacher_password: teacherPassword});
+    return this.http.post<{ token: string, teacherId: number }>(`${this._teacherApiUrl}/login`, { teacher_email: teacherEmail, teacher_password: teacherPassword });
   }
 
   public getAgeFromBirthdate(birthdate: string): number {
@@ -63,6 +64,42 @@ export class TeacherService {
       age--;
     }
     return age;
+  }
+
+  //-------------update-student.component---------------------
+  public updateStudent(teacherData: Teacher) {
+    const teacherId = this.authTeacherService.getTeacherId();
+    if (teacherId) {
+      return this.http.put(`${this._teacherApiUrl}/${teacherId}`, teacherData)
+        .pipe(
+          catchError((error) => {
+            console.error('Error en el servicio:', error);
+            return throwError(() => new Error('Error al actualizar el profesor'));
+          })
+        );
+    } else {
+      return throwError(() => new Error('Id del profesor no disponible'));
+    }
+  }
+  //delete student
+  public deleteTeacher(): Observable<any> {
+    const teacherId = this.authTeacherService.getTeacherId();
+    if (teacherId !== null) {
+      return this.http.delete(`${this._teacherApiUrl}/${teacherId}`).pipe(
+        catchError(error => {
+          let errorMessage = 'Error desconocido';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}`;
+          } else {
+            errorMessage = `Código de error: ${error.status}, Mensaje: ${error.message}`;
+          }
+          console.error(errorMessage);
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+    } else {
+      return throwError(() => new Error('teacherId no disponible'));
+    }
   }
 }
 

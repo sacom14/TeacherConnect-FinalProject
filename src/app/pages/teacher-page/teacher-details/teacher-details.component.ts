@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Teacher } from '../../../interfaces/teacher.interface';
 import { TeacherService } from '../../../services/teacher/teacher-service.service';
+import { UpdateTeacherFormComponent } from '../update-teacher-form/update-teacher-form.component';
 
 @Component({
   selector: 'app-teacher-details',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, UpdateTeacherFormComponent],
   templateUrl: './teacher-details.component.html',
   styleUrl: './teacher-details.component.scss'
 })
@@ -33,8 +34,7 @@ export class TeacherDetailsComponent {
   }
 
   public goEditTeacher() {
-    // this.router.navigate(['/update-student']);//todo: uptade teacher
-    this.router.navigate(['/home-page']);
+    this.router.navigate(['/update-teacher']);
   }
 
 }

@@ -60,9 +60,15 @@ export class InfoStudentComponent implements OnInit {
     modalRef.componentInstance.selectedStudentId = selectedStudenId;
   }
 
-  // public goAllSessions(){
-  //   if (this.selectedStudentId !== null) {
-  //   this.router.navigate(['/session-page', this.selectedStudentId]);
-  //   }
-  // }
+  public deleteStudent(){
+    this.studentService.deleteStudent(this.selectedStudentId).subscribe({
+      next: (response) => {
+        alert('El estudiante se ha eliminado correctamente'); //todo: modal de notificación successfull
+        window.location.reload();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el estudiante', error)
+      },
+    })
+  }
 }

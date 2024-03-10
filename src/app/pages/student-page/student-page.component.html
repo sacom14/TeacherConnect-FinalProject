@@ -1,4 +1,4 @@
-<main style="padding-top: 65px; margin-bottom: 65px; position: relative;">
+<main style="padding-top: 65px; margin-bottom: 65px; position: relative; min-height: 100vh;">
   <!-- ASIDE IZQUIERDA (filtros) -->
   <section class="d-flex row gap-2 justify-content-center">
     <!-- todo: en un futuro hacer los filtros para lsita de estudiantes -->
@@ -6,40 +6,43 @@
       <h4 class="text-center">Filtro</h4>
       <app-filterbar-student class="text-center"></app-filterbar-student>
     </aside> -->
-    @if(students){
+    @if(students | async; as studentArray){
+    @if(studentArray.length > 0){
 
     @if(studentSelected){
     <!-- en el centro lista students -->
+
     <article class="col-8">
       <div class="row justify-content-center">
         @for(student of students | async; track $index){
-          <a class="custom-card col-md-3 mt-3" (click)="showAllInfoForStudentIdSelected(student.id_student)">
-            <div class="custom-img-card-container">
-              @if(student.student_photo){
-                <img src="{{student.student_photo}}" class="card-img-top img-fluid" alt="foto_estudiante">
-                } @else {
-                <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
-                }
+        <a class="custom-card col-md-3 mt-3" (click)="showAllInfoForStudentIdSelected(student.id_student)">
+          <div class="custom-img-card-container">
+            @if(student.student_photo){
+            <img src="{{student.student_photo}}" class="card-img-top img-fluid" alt="foto_estudiante">
+            } @else {
+            <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
+            }
+          </div>
+          <div class="custom-content-card text-center">
+            <div class="">
+              <h4 class="card-title text fs-2 fw-bold text-uppercase">{{student.student_name}}</h4>
             </div>
-            <div class="custom-content-card text-center">
-              <div class="">
-                <h4 class="card-title text fs-2 fw-bold text-uppercase">{{student.student_name}}</h4>
-              </div>
-              <div>
-                <p class="text-black fw-bolder text-uppercase">{{student.student_surname}}</p>
-              </div>
-              <div class="d-flex justify-content-evenly align-items-center flex-wrap custom-footer-card p-3">
-                @for (subject of getSubjectsForStudent(student.id_student) | async; track $index) {
-                <span class="badge bg-white text-black mx-1">{{subject.subject_name}}</span>
-                }
-              </div>
+            <div>
+              <p class="text-black fw-bolder text-uppercase">{{student.student_surname}}</p>
             </div>
-          </a>
+            <div class="d-flex justify-content-evenly align-items-center flex-wrap custom-footer-card p-3">
+              @for (subject of getSubjectsForStudent(student.id_student) | async; track $index) {
+              <span class="badge bg-white text-black mx-1">{{subject.subject_name}}</span>
+              }
+            </div>
+          </div>
+        </a>
         }
       </div>
     </article>
     <!-- aside derecha (info alumno) -->
-    <aside id="infoStudentAside" class="col-3 d-none d-md-block mt-3" style="min-height:auto; max-height: 80vh; max-width: 100%; top: 8rem; position: sticky;">
+    <aside id="infoStudentAside" class="col-3 d-none d-md-block mt-3"
+      style="min-height:auto; max-height: 80vh; max-width: 100%; top: 8rem; position: sticky;">
       <app-info-student></app-info-student>
     </aside>
 
@@ -50,45 +53,54 @@
       <div class="custom-card-container">
         <div class="row justify-content-center">
           @for(student of students | async; track $index){
-            <a class="custom-card col-md-3 mt-3" (click)="showAllInfoForStudentIdSelected(student.id_student)">
-              <div class="custom-img-card-container">
-                @if(student.student_photo){
-                  <img src="{{student.student_photo}}" class="card-img-top img-fluid" alt="foto_estudiante">
-                  } @else {
-                  <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
-                  }
+          <a class="custom-card col-md-3 mt-3" (click)="showAllInfoForStudentIdSelected(student.id_student)">
+            <div class="custom-img-card-container">
+              @if(student.student_photo){
+              <img src="{{student.student_photo}}" class="card-img-top img-fluid" alt="foto_estudiante">
+              } @else {
+              <img src="../../../assets/img/student/student.jpg" class="card-img-top img-fluid" alt="foto_estudiante">
+              }
+            </div>
+            <div class="custom-content-card text-center">
+              <div class="">
+                <h4 class="card-title text fs-2 fw-bold text-uppercase">{{student.student_name}}</h4>
               </div>
-              <div class="custom-content-card text-center">
-                <div class="">
-                  <h4 class="card-title text fs-2 fw-bold text-uppercase">{{student.student_name}}</h4>
-                </div>
-                <div>
-                  <p class="text-black fw-bolder text-uppercase">{{student.student_surname}}</p>
-                </div>
-                <div class="d-flex justify-content-evenly align-items-center flex-wrap custom-footer-card p-3">
-                  @for (subject of getSubjectsForStudent(student.id_student) | async; track $index) {
-                  <span class="badge text-custom-blue bg-white mx-1">{{subject.subject_name}}</span>
-                  }
-                </div>
+              <div>
+                <p class="text-black fw-bolder text-uppercase">{{student.student_surname}}</p>
               </div>
-            </a>
+              <div class="d-flex justify-content-evenly align-items-center flex-wrap custom-footer-card p-3">
+                @for (subject of getSubjectsForStudent(student.id_student) | async; track $index) {
+                <span class="badge text-custom-blue bg-white mx-1">{{subject.subject_name}}</span>
+                }
+              </div>
+            </div>
+          </a>
           }
 
         </div>
       </div>
     </article>
     }
+    <!-- Botón flotante -->
+    <div>
+      <a href="/add-student" class="btn btn-orange p-3  d-flex justify-content-center align-items-center"
+        id="floating-button" style="position: fixed; bottom: 60px; left: 40px;">
+        <i class="fa fa-plus"></i>
+        <span class="add-student-text">Añadir</span>
+      </a>
+    </div>
+
     } @else {
-    <div class="alert alert-warning" role="alert">
-      Aún no tienes ningún estudiante, añade tu primer estudiante
-      <!-- todo: botón para añadir nuevo estudiante -->
+    <div class="alert alert-warning w-50 border rounded-5 text-center" role="alert">
+      <p>
+        Aún no tienes ningún estudiante, añade a tu primer estudiante
+      </p>
+      <a href="/add-student" class="btn btn-orange p-3 d-flex justify-content-center align-items-center">
+        <i class="fa fa-plus"></i>
+      </a>
     </div>
     }
+    }
   </section>
-    <!-- Botón flotante -->
-    <a href="/add-student" class="btn btn-orange p-3  d-flex justify-content-center align-items-center" id="floating-button" style="position: fixed; bottom: 60px; left: 40px;">
-      <i class="fa fa-plus"></i>
-      <span class="add-student-text">Añadir</span>
-    </a>
-</main>
 
+</main>

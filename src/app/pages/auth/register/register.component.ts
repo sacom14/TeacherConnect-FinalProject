@@ -102,7 +102,10 @@ export class RegisterComponent {
     this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
       if(imageUrl){
         this.myFormRegister.patchValue({teacherPhoto: imageUrl});
-        this.newRegisterUser(); //add the new student
+        this.newRegisterUser();
+      } else {
+        this.myFormRegister.patchValue({teacherPhoto: 'https://i.ibb.co/tCVgL7j/default-teacher-img.jpg'});
+        this.newRegisterUser();
       }
     })
     this.myFormRegister.value.teacherPhoto = this.imageUrl;
