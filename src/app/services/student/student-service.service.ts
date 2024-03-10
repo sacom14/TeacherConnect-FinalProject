@@ -31,7 +31,8 @@ export class StudentService {
   public getStudentsFromTeacher() {
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId) {
-      this.http.get<StudentResponse>(`${this._studentApiUrl}/teacher/${teacherId}`).subscribe({
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+      this.http.get<StudentResponse>(`${this._studentApiUrl}/teacher/${teacherId}`, { headers }).subscribe({
         next: (response) => {
           if (response.students && response.students.length > 0) {
             this._studentsList.next(response.students);
@@ -47,7 +48,8 @@ export class StudentService {
   }
 
   public getPaymentMethod() {
-    this.http.get<PaymentMethodResponse>(this._paymentMethodApiUrl).subscribe({
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+    this.http.get<PaymentMethodResponse>(this._paymentMethodApiUrl, { headers }).subscribe({
       next: (response) => {
         this._paymentMethodList.next(response.paymentMethods);
       },
@@ -58,7 +60,8 @@ export class StudentService {
   }
 
   public getAcademicYear() {
-    this.http.get<AcademicYearResponse>(this._academicYearApiUrl).subscribe({
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+    this.http.get<AcademicYearResponse>(this._academicYearApiUrl, { headers }).subscribe({
       next: (response) => {
         this._academicYearList.next(response.academicYears);
       },
@@ -96,9 +99,10 @@ export class StudentService {
   //chek if the email is already on BD by teacher ID
   public checkRepeatEmail(studentEmail: string) {
     const teacherId = this.authTeacherService.getTeacherId();
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
 
     this.getStudentsFromTeacher();
-    return this.http.post<StudentEmailCheckResponseMessage>(`${this._studentApiUrl}/check-email/${teacherId}`, { studentEmail });
+    return this.http.post<StudentEmailCheckResponseMessage>(`${this._studentApiUrl}/check-email/${teacherId}`, studentEmail, { headers });
   }
 
   //we obtain all subjects for the diferents students
@@ -137,7 +141,9 @@ export class StudentService {
 
   //get all subjects from studentId
   public getTheStudentSubjects(studentId: number) {
-    return this.http.get<AllDataStudentSubjectsResponse>(`${this._studentSubjectApiUrl}/student/${studentId}`)
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+    return this.http.get<AllDataStudentSubjectsResponse>(`${this._studentSubjectApiUrl}/student/${studentId}`, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error en el servicio', error);
@@ -151,7 +157,8 @@ export class StudentService {
   public createNewStudent(studentData: Student) {
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId) {
-      return this.http.post<StudentAddedResponse>(`${this._studentApiUrl}/${teacherId}`, studentData)
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+      return this.http.post<StudentAddedResponse>(`${this._studentApiUrl}/${teacherId}`, studentData, { headers })
         .pipe(
           catchError((error) => {
             console.error('Error en el servicio:', error);
@@ -164,8 +171,8 @@ export class StudentService {
   }
   //create studentSubject
   public createNewStudentSubject(studentId: number, subjectId: number) {
-    //todo: comprobaciones para que no se repita el id de subject y no se duplique información?
-    return this.http.post(this._studentSubjectApiUrl, { studentId, subjectId })
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+    return this.http.post(this._studentSubjectApiUrl, { studentId, subjectId }, { headers })
       .pipe(
         catchError((error) => {
           console.error('Error en el servicio', error);
@@ -182,7 +189,8 @@ export class StudentService {
 
   public getStudentById(studentIdSelected: number | null) {
     if (studentIdSelected) {
-      this.http.get<StudentByIdResponse>(`${this._studentApiUrl}/${studentIdSelected}`).subscribe({
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+      this.http.get<StudentByIdResponse>(`${this._studentApiUrl}/${studentIdSelected}`, { headers }).subscribe({
         next: (response) => {
           this._dataOfStudentSelected.next(response.studentById);
         },
@@ -209,10 +217,11 @@ export class StudentService {
   updateStudent(studentData: Student, selectedStudentId: number | null) {
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId) {
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
       //add the teacherId value on fkIdTeacher for body query for back.
       const studentDataWithTeacherId = { ...studentData, fkIdTeacher: teacherId };
 
-      return this.http.put(`${this._studentApiUrl}/${selectedStudentId}`, studentDataWithTeacherId)
+      return this.http.put(`${this._studentApiUrl}/${selectedStudentId}`, studentDataWithTeacherId, { headers })
         .pipe(
           catchError((error) => {
             console.error('Error en el servicio:', error);
@@ -224,23 +233,25 @@ export class StudentService {
     }
   }
 
-    //delete student
-    public deleteStudent(studentId: number | null): Observable<any> {
-      if (studentId) {
-        return this.http.delete(`${this._studentApiUrl}/${studentId}`).pipe(
-          catchError(error => {
-            let errorMessage = 'Error desconocido';
-            if (error.error instanceof ErrorEvent) {
-              errorMessage = `Error: ${error.error.message}`;
-            } else {
-              errorMessage = `Código de error: ${error.status}, Mensaje: ${error.message}`;
-            }
-            console.error(errorMessage);
-            return throwError(() => new Error(errorMessage));
-          })
-        );
-      }else {
-        return throwError(() => new Error('studentId no disponible'));
-      }
+  //delete student
+  public deleteStudent(studentId: number | null): Observable<any> {
+    if (studentId) {
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+      return this.http.delete(`${this._studentApiUrl}/${studentId}`, { headers }).pipe(
+        catchError(error => {
+          let errorMessage = 'Error desconocido';
+          if (error.error instanceof ErrorEvent) {
+            errorMessage = `Error: ${error.error.message}`;
+          } else {
+            errorMessage = `Código de error: ${error.status}, Mensaje: ${error.message}`;
+          }
+          console.error(errorMessage);
+          return throwError(() => new Error(errorMessage));
+        })
+      );
+    } else {
+      return throwError(() => new Error('studentId no disponible'));
     }
+  }
 }

@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -19,25 +20,32 @@ export class AuthTeacherService {
     this._isAuthenticated.next(!!token); // Emit the new state
   }
 
-    // after login we put the token on localstorage
-    public login(token: string, teacherId: number) {
-      localStorage.setItem('token', token);
-      localStorage.setItem('teacherId', teacherId.toString());
-      this._isAuthenticated.next(true);
-    }
+  // after login we put the token on localstorage
+  public login(token: string, teacherId: number) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('teacherId', teacherId.toString());
+    this._isAuthenticated.next(true);
+  }
 
-    // When logout for remove token from localstorage
-    public removeToken() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('teacherId');
-      this._isAuthenticated.next(false);
-    }
+  public getHeadersWithAuthorization(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
 
-    //get the teacherId
-    public getTeacherId():number | null {
-      const teacherId = localStorage.getItem('teacherId');
-      return teacherId ? parseInt(teacherId) : null;
-    }
+  // When logout for remove token from localstorage
+  public removeToken() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('teacherId');
+    this._isAuthenticated.next(false);
+  }
+
+  //get the teacherId
+  public getTeacherId(): number | null {
+    const teacherId = localStorage.getItem('teacherId');
+    return teacherId ? parseInt(teacherId) : null;
+  }
 
 
 }
