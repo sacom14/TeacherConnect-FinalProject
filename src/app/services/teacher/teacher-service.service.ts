@@ -21,8 +21,9 @@ export class TeacherService {
   }
 
   public getTeacherDataById() {
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
     const teacherId = this.authTeacherService.getTeacherId();
-    this.http.get<TeacherResponse>(`${this._teacherApiUrl}/${teacherId}`).subscribe({
+    this.http.get<TeacherResponse>(`${this._teacherApiUrl}/${teacherId}`, {headers}).subscribe({
       next: (response) => {
         this._teacherData.next(response.teachers);
       },
@@ -35,7 +36,8 @@ export class TeacherService {
 
   //create teacher
   public createNewTeacher(teacherData: Teacher) {
-    return this.http.post(this._teacherApiUrl, teacherData)
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+    return this.http.post(this._teacherApiUrl, teacherData,  {headers})
       .pipe(
         catchError((error) => {
           console.error('Error en el servicio: ', error);
@@ -46,13 +48,15 @@ export class TeacherService {
 
   //chek if the email is already on BD
   public checkRepeatEmail(teacherEmail: string) {
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
     const teacherId = this.authTeacherService.getTeacherId();
-    return this.http.post<TeacherEmailCheckResponseMessage>(`${this._teacherApiUrl}/check-email/${teacherId}`, { teacherEmail });
+    return this.http.post<TeacherEmailCheckResponseMessage>(`${this._teacherApiUrl}/check-email/${teacherId}`, { teacherEmail }, {headers});
   }
 
   //login (take token)
   public login(teacherEmail: string, teacherPassword: string) {
-    return this.http.post<{ token: string, teacherId: number }>(`${this._teacherApiUrl}/login`, { teacher_email: teacherEmail, teacher_password: teacherPassword });
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+    return this.http.post<{ token: string, teacherId: number }>(`${this._teacherApiUrl}/login`, { teacher_email: teacherEmail, teacher_password: teacherPassword }, {headers});
   }
 
   public getAgeFromBirthdate(birthdate: string): number {
@@ -67,10 +71,11 @@ export class TeacherService {
   }
 
   //-------------update-student.component---------------------
-  public updateStudent(teacherData: Teacher) {
+  public updateTeacher(teacherData: Teacher) {
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId) {
-      return this.http.put(`${this._teacherApiUrl}/${teacherId}`, teacherData)
+      return this.http.put(`${this._teacherApiUrl}/${teacherId}`, teacherData, {headers})
         .pipe(
           catchError((error) => {
             console.error('Error en el servicio:', error);
@@ -85,7 +90,8 @@ export class TeacherService {
   public deleteTeacher(): Observable<any> {
     const teacherId = this.authTeacherService.getTeacherId();
     if (teacherId !== null) {
-      return this.http.delete(`${this._teacherApiUrl}/${teacherId}`).pipe(
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+      return this.http.delete(`${this._teacherApiUrl}/${teacherId}`, {headers}).pipe(
         catchError(error => {
           let errorMessage = 'Error desconocido';
           if (error.error instanceof ErrorEvent) {

@@ -70,10 +70,9 @@ export class RegisterComponent {
 
   public checkEmail() {
     const email: string = this.myFormRegister.get('teacherEmail')?.value;
-
     this.teacherService.checkRepeatEmail(email).subscribe({
       next: (response) => {
-        if (response.message === "Email unique") {
+        if (response.message === "Valid email" || response.message === "This email belongs to the current teacher") {
           this.emailExist = false;
           this.getTheImageUrl();
         } else {
@@ -82,15 +81,16 @@ export class RegisterComponent {
         }
       },
       error: (errorResponse) => {
-        if (errorResponse.status === 409) {
+        if (errorResponse.status === 500) {
           this.emailExist = true;
           alert('El correo electrónico ya está registrado, ponga otro Email');
         } else {
           console.error('Error checking email: ', errorResponse);
         }
       }
-    });
+    })
   }
+
 
 
   public getTheImageUrl(){

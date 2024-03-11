@@ -158,7 +158,7 @@ export class UpdateTeacherFormComponent implements OnInit {
 
   public updateTeacherData() {
     const { password2, teacherPhotoFile, ...formData } = this.updateTeacherForm.value;
-    this.teacherService.updateStudent(formData)
+    this.teacherService.updateTeacher(formData)
       .subscribe({
         next: (response) => {
           alert('Los datos se han actualizado correctamente');
