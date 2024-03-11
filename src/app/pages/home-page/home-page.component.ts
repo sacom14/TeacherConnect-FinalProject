@@ -161,13 +161,14 @@ export class HomePageComponent {
     });
   }
 
-  public openSessionDetailsModal(selectedSessionId: number) {
+  public openSessionDetailsModal(selectedSessionId: number, selectedStudentId: number) {
     this.modalService.dismissAll();
+    console.log(selectedStudentId)
     const modalRef = this.modalService.open(ModalSessionDetailsComponent, {
       centered: true,
       backdrop: 'static',
     });
     modalRef.componentInstance.selectedSessionId = selectedSessionId; //get the id_session from selected session
-    modalRef.componentInstance.selectedStudentId = this.selectedStudentId;
+    modalRef.componentInstance.selectedStudentId = selectedStudentId;
   }
 }

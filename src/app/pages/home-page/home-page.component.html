@@ -33,7 +33,7 @@
                     </div>
                     @for (session of sessionsByDay[day]; track session.id_session) {
                     <div class="mb-2  sesseion-selected">
-                        <a class="text-decoration-none text-custom-blue" style="cursor: pointer;" (click)="openSessionDetailsModal(session.id_session)">{{session.session_name}}</a>
+                        <a class="text-decoration-none text-custom-blue" style="cursor: pointer;" (click)="openSessionDetailsModal(session.id_session, session.id_student)">{{session.session_name}}</a>
                     </div>
                     }
                     }
