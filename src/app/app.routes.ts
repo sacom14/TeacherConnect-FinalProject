@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { StudentPageComponent } from './pages/student-page/student-page.component';
-import { MapPageComponent } from './pages/map-page/map-page.component';
 import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { CalendarPageComponent } from './pages/calendar-page/calendar-page.component';
@@ -26,11 +25,10 @@ export const routes: Routes = [
   {path: 'home-page', component: HomePageComponent, canActivate: [authGuard]},
   {path: 'student-page', component: StudentPageComponent, canActivate: [authGuard]},
   {path: 'calendar-page', component: CalendarPageComponent, canActivate: [authGuard]},
-  {path: 'map-page', component: MapPageComponent, canActivate: [authGuard]},
 
   {path: 'teacher-page', component: TeacherPageComponent, canActivate: [authGuard]},
   {path: 'update-teacher', component: UpdateTeacherFormComponent, canActivate: [authGuard]},
-  
+
   {path: 'add-student', component: NewStudentFormPageComponent, canActivate: [authGuard]},
   {path: 'update-student', component: UpdateStudentFormPageComponent, canActivate: [authGuard]},
 
