@@ -47,6 +47,9 @@ export class HomePageComponent {
     this.payedSession = this.sessionService.payedSessions;
     this.notPayedSession = this.sessionService.notPayedSessions;
     this.educationNews = this.gnewsApiService.educationNews;
+    this.educationNews.subscribe((news) => {
+      console.log(news);
+    })
   }
 
   ngOnInit(): void {
@@ -63,7 +66,6 @@ export class HomePageComponent {
     this.getStudentsCountForTeacher();
     this.getPayedSessionsCount();
     this.getNotPayedSessionsCount();
-
   }
 
   paused = false;
