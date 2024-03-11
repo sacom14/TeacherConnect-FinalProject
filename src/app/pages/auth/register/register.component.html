@@ -1,126 +1,119 @@
 <section class="d-flex justify-content-center align-items-center" style="padding-top: 60px;">
-  <div class="w-75 w-md-100">
-    <div class="col card p-5 rounded-5 mb-3 bg-custom-blue shadow-lg">
+  <div class="col-9 col-lg-7">
+    <div class="col card p-5 rounded-5 mb-3 bg-custom-blue text-white shadow-lg">
       <h1 class="fs-2 fw-bold text-primary">Únete a TeacherConnect</h1>
-      <hr style="color: white;">
+      <hr>
       <form [formGroup]="myFormRegister" (ngSubmit)="onSubmit()" autocomplete="off">
-        <div class="d-flex flex-wrap justify-content-center text-white">
-        <!-- Name -->
-          <div class="row mb-1 col-12 col-md-6 me-md-1">
-            <label class="col-lg-12 col-form-label">Nombre (*)</label>
-            <div class="col-md-9 col-lg-12 w-100">
-              <input type="text" class="form-control" formControlName="teacherName" placeholder="Tu nombre">
-              @if (isValidField('teacherName'))
-              {
+
+        <div>
+          <div class="d-flex row">
+            <!-- Name -->
+            <div class="col-xs-12 col-md-6 mb-3">
+              <label class="col-lg-12 col-form-label">Nombre (*)</label>
+              <div class="col-md-9 col-lg-12 w-100">
+                <input type="text" class="form-control" formControlName="teacherName" placeholder="Tu nombre">
+                @if (isValidField('teacherName'))
+                {
                 <span class="form-text text-danger">
                   Debe introducir un nombre de mínimo 2 letras y sin números
                 </span>
-              }
+                }
+              </div>
             </div>
-          </div>
-          <!-- Surname -->
-          <div class="row mb-1 col-12 col-md-6 ms-md-1">
-            <label class="col-lg-12 col-form-label">Apellidos (*)</label>
-            <div class="col-md-9 col-lg-12 w-100">
-              <input type="text" class="form-control" formControlName="teacherSurname" placeholder="Tus apellidos">
-              @if (isValidField('teacherSurname')){
+            <!-- Surname -->
+            <div class="col-xs-12 col-md-6 mb-3">
+              <label class="col-lg-12 col-form-label">Apellidos (*)</label>
+              <div class="col-md-9 col-lg-12 w-100">
+                <input type="text" class="form-control" formControlName="teacherSurname" placeholder="Tus apellidos">
+                @if (isValidField('teacherSurname')){
                 <span class="form-text text-danger">
                   Debe introducir uno o dos apellidos sin números
                 </span>
-              }
+                }
+              </div>
             </div>
-          </div>
-
-        </div>
-        <div class="d-flex flex-wrap justify-content-center text-white">
-        <!-- Email -->
-        <div class="row mb-1 col-12 col-md-6 me-md-1">
-          <label class="col-lg-12 col-form-label">Email (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="email" class="form-control" formControlName="teacherEmail" placeholder="xxx@xxx.xx">
-            @if (isValidField('teacherEmail')){
-              <span class="form-text text-danger">
-                Debe tener el formato de email correcto..
-              </span>
-            } @else if (emailExist){
-              <span class="form-text text-danger">
-                Ya existe una cuenta con este email
-              </span>
-            }
-
-          </div>
-        </div>
-
-        <!-- Phone -->
-        <div class="row mb-1 col-12 col-md-6 ms-md-1">
-          <label class="col-lg-12 col-form-label">Teléfono (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="tel" class="form-control" pattern="^\d{1,9}$" formControlName="teacherPhone" placeholder="XXXXXXXXX">
-            @if (isValidField('teacherPhone')){
-              <span class="form-text text-danger">
-                Introduce un número valido de 9 dígitos
-              </span>
-            }
-          </div>
-        </div>
-        </div>
-
-        <div class="d-flex flex-wrap justify-content-center text-white">
-        <!-- Password -->
-        <div class="row mb-1 col-12 col-md-6 me-md-1">
-          <label class="col-lg-12 col-form-label">Contraseña (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="password" class="form-control" formControlName="teacherPassword" placeholder="Escriba su contraseña">
-            @if (isValidField('teacherPassword')){
+            <!-- Email -->
+            <div class="col-xs-12 col-lg-6 mb-3">
+              <label class="col-lg-12 col-form-label">Email (*)</label>
+              <div class="col-md-9 col-lg-12 w-100">
+                <input type="email" class="form-control" formControlName="teacherEmail" placeholder="xxx@xxx.xx">
+                @if (isValidField('teacherEmail')){
+                <span class="form-text text-danger">
+                  Debe tener el formato de email correcto..
+                </span>
+                } @else if (emailExist){
+                <span class="form-text text-danger">
+                  Ya existe una cuenta con este email
+                </span>
+                }
+              </div>
+            </div>
+            <!-- Phone -->
+            <div class="col-xs-12 col-lg-6 mb-3">
+              <label class="col-lg-12 col-form-label">Teléfono (*)</label>
+              <div class="col-md-9 col-lg-12 w-100">
+                <input type="tel" class="form-control" pattern="^\d{1,9}$" formControlName="teacherPhone"
+                  placeholder="XXXXXXXXX">
+                @if (isValidField('teacherPhone')){
+                <span class="form-text text-danger">
+                  Introduce un número valido de 9 dígitos
+                </span>
+                }
+              </div>
+            </div>
+          <!-- Password -->
+          <div class="col-xs-12 col-md-6 mb-3">
+            <label class="col-lg-12 col-form-label">Contraseña (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <input type="password" class="form-control" formControlName="teacherPassword"
+                placeholder="Escriba su contraseña">
+              @if (isValidField('teacherPassword')){
               <span class="form-text text-danger">
                 La contraseña debe tener una longitud mínima de 6
               </span>
-            }
-
+              }
+            </div>
           </div>
-        </div>
-        <!-- Password2 -->
-        <div class="row mb-1 col-12 col-md-6 ms-md-1">
-          <label class="col-lg-12 col-form-label">Confirmar contraseña (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="password" class="form-control" formControlName="password2" placeholder="Repita la contraseña">
-            @if (isValidField('password2')){
+          <div class="col-xs-12 col-md-6 mb-3">
+            <label class="col-lg-12 col-form-label">Confirmar contraseña (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <input type="password" class="form-control" formControlName="password2"
+                placeholder="Repita la contraseña">
+              @if (isValidField('password2')){
               <span class="form-text text-danger">
                 Las contraseñas no coinciden
               </span>
-            }
+              }
+            </div>
           </div>
-        </div>
-        </div>
-
-        <div class="d-flex flex-wrap justify-content-center text-white">
-        <!-- Birthdate -->
-        <div class="row mb-1 col-12 col-md-6 me-md-1">
-          <label class="col-lg-12 col-form-label">Fecha de nacimiento (*)</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="date" class="form-control" formControlName="teacherBirthdate">
-            @if (isValidField('teacherBirthdate')){
+          <!-- Birthdate -->
+          <div class="col-xs-12 col-md-6 mb-3">
+            <label class="col-lg-12 col-form-label">Fecha de nacimiento (*)</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <input type="date" class="form-control" formControlName="teacherBirthdate">
+              @if (isValidField('teacherBirthdate')){
               <span class="form-text text-danger">
                 Tiene que ser una fecha válida
               </span>
-            }
+              }
+            </div>
           </div>
-        </div>
-
-        <!-- teacher photo -->
-        <div class="row mb-1 col-12 col-md-6 ms-md-1">
-          <label class="col-lg-12 col-form-label">Foto de perfil</label>
-          <div class="col-md-9 col-lg-12 w-100">
-            <input type="file" class="form-control" (change)="onImageChange($event)" [accept]="'.jpg,.jpeg,.png,.webp'" placeholder="Repita la contraseña">
-            @if (isValidField('teacherPhotoFile')){
+          <!-- teacher photo -->
+          <div class="col-xs-12 col-md-6 mb-3">
+            <label class="col-lg-12 col-form-label">Foto de perfil</label>
+            <div class="col-md-9 col-lg-12 w-100">
+              <input type="file" class="form-control" (change)="onImageChange($event)"
+                [accept]="'.jpg,.jpeg,.png,.webp'" placeholder="Repita la contraseña">
+              @if (isValidField('teacherPhotoFile')){
               <span class="form-text text-danger">
                 El archivo debe tener formato .jpg,.jpeg,.png o .webp
               </span>
-            }
+              }
+            </div>
+          </div>
           </div>
         </div>
-        </div>
-
+        <hr>
         <!-- Submit button -->
         <div class="row">
           <div class="d-md-flex justify-content-around align-items-center text-center">
@@ -130,7 +123,7 @@
               </button>
             </div>
             <div class="mt-3">
-            <a aria-current="page" href="/login-page">¿Ya tienes una cuenta? Inicia Sesión</a>
+              <a aria-current="page" href="/login-page">¿Ya tienes una cuenta? Inicia Sesión</a>
             </div>
           </div>
         </div>

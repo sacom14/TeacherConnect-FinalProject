@@ -42,6 +42,9 @@ body{
   background-color: #E6F2FF;
 }
 
+a{
+  text-decoration: none;
+}
 .background-body{
   background-color: #f8e4d4;
 }
@@ -85,6 +88,28 @@ body{
 
   &:active{
     background: #c64f4f !important;
+    color:white !important;
+    border: none;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); /* Sombreado en el estado activo */
+  }
+}
+
+.btn-green{
+  background: #9AD0C2;
+  color: black;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 23px;
+  font-weight: bold;
+
+  &:hover{
+    background: #73ac9d;
+    color:white;
+  }
+
+  &:active{
+    background: #73ac9d !important;
     color:white !important;
     border: none;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); /* Sombreado en el estado activo */

@@ -61,12 +61,10 @@ export class GNewsApiService {
         if (response) {
           this._educationNews.next(response.articles);
         } else {
-          console.error('Error al obtener la noticias', response);
           this._educationNews.next(this.mockNews);
         }
       },
       error: (error) => {
-        console.error('Error al conectar con la api', error);
         this._educationNews.next(this.mockNews);
       }
     })

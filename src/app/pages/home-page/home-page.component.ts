@@ -47,9 +47,6 @@ export class HomePageComponent {
     this.payedSession = this.sessionService.payedSessions;
     this.notPayedSession = this.sessionService.notPayedSessions;
     this.educationNews = this.gnewsApiService.educationNews;
-    this.educationNews.subscribe((news) => {
-      console.log(news);
-    })
   }
 
   ngOnInit(): void {
@@ -163,7 +160,6 @@ export class HomePageComponent {
 
   public openSessionDetailsModal(selectedSessionId: number, selectedStudentId: number) {
     this.modalService.dismissAll();
-    console.log(selectedStudentId)
     const modalRef = this.modalService.open(ModalSessionDetailsComponent, {
       centered: true,
       backdrop: 'static',
