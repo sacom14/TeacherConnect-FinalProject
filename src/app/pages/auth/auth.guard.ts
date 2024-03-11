@@ -9,13 +9,14 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   let userIsAuthenticated = () => {
     authTeacherService.isAuthenticated;
-    return localStorage.getItem('token') ? true : false; // ejemplo simple
+    return localStorage.getItem('token') ? true : false;
   };
 
   if(userIsAuthenticated()){ //is authenticated
     return true;
   } else {
     alert('Aún no has iniciado sesión');
+    //todo: modal alert
     router.navigate(['/login-page']);
     return false;
   }
