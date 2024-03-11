@@ -40,7 +40,6 @@ export class ImagebbService {
       console.error('Error al subir la imagen a imageBB');
       return;
     }
-
   }
 
 }
