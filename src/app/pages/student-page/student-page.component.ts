@@ -3,7 +3,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
-import { FilterbarStudentComponent } from './filterbar-student/filterbar-student.component';
 import { InfoStudentComponent } from './info-student/info-student.component';
 import { Observable, map } from 'rxjs';
 import { StudentService } from '../../services/student/student-service.service';
@@ -16,7 +15,7 @@ import { ModalStudentInfoComponent } from '../../modals/modal-student-info/modal
 @Component({
   selector: 'app-student-page',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FilterbarStudentComponent, InfoStudentComponent, ModalStudentInfoComponent],
+  imports: [CommonModule, HttpClientModule, InfoStudentComponent, ModalStudentInfoComponent],
   templateUrl: './student-page.component.html',
   styleUrl: './student-page.component.scss'
 })
