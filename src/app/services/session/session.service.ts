@@ -11,7 +11,7 @@ export class SessionService {
   private http = inject(HttpClient);
   private authTeacherService = inject(AuthTeacherService);
 
-  private _sessionApiUrl: string = 'http://localhost:3000/api/session';
+  private _sessionApiUrl: string = 'https://teacherconnect-backend.onrender.com/api/session';
 
   private _sessionList = new BehaviorSubject<Session[]>([]);
   private _sessionListFromTeacherId = new BehaviorSubject<SessionFromTeacherId[]>([]);

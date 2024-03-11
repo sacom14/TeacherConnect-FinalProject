@@ -11,7 +11,7 @@ export class SubjectService {
   private http = inject(HttpClient);
   private authTeacherService = inject(AuthTeacherService);
 
-  private _subjectApiUrl: string = 'http://localhost:3000/api/subject';
+  private _subjectApiUrl: string = 'https://teacherconnect-backend.onrender.com/api/subject';
 
   private _subjects = new BehaviorSubject<Subject[]>([]);
 

@@ -15,10 +15,10 @@ export class StudentService {
   private http = inject(HttpClient);
   private authTeacherService = inject(AuthTeacherService);
 
-  private _studentApiUrl: string = 'http://localhost:3000/api/student';
-  private _paymentMethodApiUrl: string = 'http://localhost:3000/api/payment-method';
-  private _academicYearApiUrl: string = 'http://localhost:3000/api/academic-year';
-  private _studentSubjectApiUrl: string = 'http://localhost:3000/api/studentSubject';
+  private _studentApiUrl: string = 'https://teacherconnect-backend.onrender.com/api/student';
+  private _paymentMethodApiUrl: string = 'https://teacherconnect-backend.onrender.com/api/payment-method';
+  private _academicYearApiUrl: string = 'https://teacherconnect-backend.onrender.com/api/academic-year';
+  private _studentSubjectApiUrl: string = 'https://teacherconnect-backend.onrender.com/api/studentSubject';
 
   private _studentsList = new BehaviorSubject<Student[]>([]);
   private _paymentMethodList = new BehaviorSubject<PaymentMethod[]>([]);

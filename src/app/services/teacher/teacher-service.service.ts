@@ -12,7 +12,7 @@ export class TeacherService {
   private http = inject(HttpClient)
   private authTeacherService = inject(AuthTeacherService);
 
-  private _teacherApiUrl: string = 'http://localhost:3000/api/teacher';
+  private _teacherApiUrl: string = 'https://teacherconnect-backend.onrender.com/api/teacher';
 
   private _teacherData = new BehaviorSubject<Teacher[]>([]);
 
