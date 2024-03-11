@@ -54,7 +54,7 @@ export class HomePageComponent {
     this.studentService.getStudentsFromTeacher();
     this.sessionService.getAllPayedSessions();
     this.sessionService.getAllNotPayedSessions();
-    // this.gnewsApiService.getEducationNews();
+    this.gnewsApiService.getEducationNews();
     this.sessionService.sessionListFromTeacherId.subscribe((sessions) => {
       this.sessionListFromTeacherId = this.takeSessionsForThisWeek(sessions);
       this.groupSessionsByDay(this.sessionListFromTeacherId);
