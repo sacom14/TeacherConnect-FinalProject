@@ -41,7 +41,9 @@ export class SessionService {
 
   //from student Id
   public getSession(studentId: number | null) {
-    this.http.get<SessionResponse>(`${this._sessionApiUrl}/student/${studentId}`).subscribe({
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+    this.http.get<SessionResponse>(`${this._sessionApiUrl}/student/${studentId}`, {headers}).subscribe({
       next: (response) => {
         this._sessionList.next(response.sessions);
       },
@@ -54,7 +56,9 @@ export class SessionService {
   //get session info from sessionId
   public getSessionDataFromSessionId(sessionId: number | null) {
     if (sessionId) {
-      this.http.get<SessionResponse>(`${this._sessionApiUrl}/${sessionId}`).subscribe({
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+      this.http.get<SessionResponse>(`${this._sessionApiUrl}/${sessionId}`, {headers}).subscribe({
         next: (response) => {
           this._sessionData.next(response.sessions);
         },
@@ -70,7 +74,9 @@ export class SessionService {
   //Al sessions from teacher Id
   public getAllSessionsFromTeacherId() {
     const teacherId = this.authTeacherService.getTeacherId();
-    this.http.get<SessionFromTeacherIDResponse>(`${this._sessionApiUrl}/teacher/${teacherId}`).subscribe({
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+    this.http.get<SessionFromTeacherIDResponse>(`${this._sessionApiUrl}/teacher/${teacherId}`, {headers}).subscribe({
       next: (response) => {
         this._sessionListFromTeacherId.next(response.sessions);
       },
@@ -83,7 +89,9 @@ export class SessionService {
   //get payed session TRUE and FALSE
   public getAllPayedSessions() {
     const teacherId = this.authTeacherService.getTeacherId();
-    return this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-payed/${teacherId}`).subscribe({
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+    return this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-payed/${teacherId}`, {headers}).subscribe({
       next: (response) => {
         this._payedSessions.next(response.sessions);
       },
@@ -96,7 +104,9 @@ export class SessionService {
   //get payed session TRUE and FALSE
   public getAllNotPayedSessions() {
     const teacherId = this.authTeacherService.getTeacherId();
-    this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-not-payed/${teacherId}`).subscribe({
+    const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+    this.http.get<SessionResponse>(`${this._sessionApiUrl}/session-not-payed/${teacherId}`, {headers}).subscribe({
       next: (response) => {
         this._notPayedSessions.next(response.sessions);
       },
@@ -110,8 +120,9 @@ export class SessionService {
   public createNewSession(sessionData: SessionPost, fkIdStudentSubject: number) {
 
     if (fkIdStudentSubject && sessionData) {
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
 
-      return this.http.post<SessionResponse>(`${this._sessionApiUrl}/student-subject/${fkIdStudentSubject}`, sessionData)
+      return this.http.post<SessionResponse>(`${this._sessionApiUrl}/student-subject/${fkIdStudentSubject}`, sessionData, {headers})
         .pipe(
           catchError((error) => {
             console.error('Error en el servicio:', error);
@@ -126,7 +137,9 @@ export class SessionService {
   //update session
   public updateSession(sessionData: SessionPut, sessionId: number | null) {
     if (sessionId && sessionData) {
-      return this.http.put<SessionResponse>(`${this._sessionApiUrl}/${sessionId}`, sessionData)
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+      return this.http.put<SessionResponse>(`${this._sessionApiUrl}/${sessionId}`, sessionData, {headers})
         .pipe(
           catchError((error) => {
             console.error('Error en el servicio:', error);
@@ -141,7 +154,9 @@ export class SessionService {
   //delete session
   public deleteSession(sessionId: number | null): Observable<any> {
     if (sessionId) {
-      return this.http.delete(`${this._sessionApiUrl}/${sessionId}`).pipe(
+      const headers = this.authTeacherService.getHeadersWithAuthorization();
+
+      return this.http.delete(`${this._sessionApiUrl}/${sessionId}`, {headers}).pipe(
         catchError(error => {
           let errorMessage = 'Error desconocido';
           if (error.error instanceof ErrorEvent) {
@@ -153,7 +168,7 @@ export class SessionService {
           return throwError(() => new Error(errorMessage));
         })
       );
-    }else {
+    } else {
       return throwError(() => new Error('SesionId no disponibles'));
     }
   }
