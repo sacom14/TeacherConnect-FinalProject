@@ -9,13 +9,14 @@ import { ValidationService } from '../../../services/validations/validations-ser
 import { TeacherService } from '../../../services/teacher/teacher-service.service';
 import { ImagebbService } from '../../../services/imageBB/imagebb.service';
 import { Observable } from 'rxjs';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, ToastrModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -25,6 +26,7 @@ export class RegisterComponent {
   private teacherService = inject(TeacherService);
   private imageBbService = inject(ImagebbService);
   private router = inject(Router);
+  private toastrService = inject(ToastrService);
 
   private imageUrl!: Observable<string>;
   public emailExist:boolean = false;
@@ -77,14 +79,15 @@ export class RegisterComponent {
           this.getTheImageUrl();
         } else {
           this.emailExist = true;
-          return alert('El correo electrónico ya está registrado, ponga otro Email');
+          this.showErrorRepeatEmail();
         }
       },
       error: (errorResponse) => {
         if (errorResponse.status === 500) {
           this.emailExist = true;
-          alert('El correo electrónico ya está registrado, ponga otro Email');
+          this.showErrorRepeatEmail();
         } else {
+          this.showError();
           console.error('Error checking email: ', errorResponse);
         }
       }
@@ -116,14 +119,24 @@ export class RegisterComponent {
     this.teacherService.createNewTeacher(formData)
       .subscribe({
         next: (response) => {
-          alert('El registro se ha completado correctamente');
-          //hacer que salga un modal (o alert) verde como mensaje de todo correcto!
-          //redirigir al login
+          this.showSuccess();
           this.router.navigate(['/login-page'])
         },
         error: (error) => {
+          this.showError();
           console.error('Error al registrarse', error)
         },
       });
+  }
+
+  private showSuccess() {
+    this.toastrService.success('Se ha creado la cuenta correctamente!', 'Felicidades!');
+  }
+
+  private showError() {
+    this.toastrService.error('Ha habido un error en la creación de su cuenta', 'Ups!');
+  }
+  private showErrorRepeatEmail(){
+    this.toastrService.error('Ya existe una cuenta con ese email, prueba con otro', 'Ups');
   }
 }

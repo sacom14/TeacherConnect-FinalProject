@@ -12,11 +12,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { StudentById } from '../../../interfaces/student.interface';
 import { ImagebbService } from '../../../services/imageBB/imagebb.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-student-form-page',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, ToastrModule],
   templateUrl: './update-student-form-page.component.html',
   styleUrl: './update-student-form-page.component.scss'
 })
@@ -34,13 +35,13 @@ export class UpdateStudentFormPageComponent {
 
   private imageUrl!: Observable<string>;
 
-
   constructor(
     private fb: FormBuilder,
     private validationService: ValidationService,
     private studentService: StudentService,
     private subjectService: SubjectService,
-    private imageBbService:ImagebbService,
+    private imageBbService: ImagebbService,
+    private toastrService: ToastrService,
     private router: Router) {
 
     this.paymentMethods = this.studentService.paymentMethods;
@@ -180,13 +181,13 @@ export class UpdateStudentFormPageComponent {
             this.getTheImageUrl();
           } else {
             this.emailExist = true;
-            return alert('Ya tienes un estudiante con ese email, prueba con otro');
+            this.showErrorRepeatEmail();
           }
         },
         error: (errorResponse) => {
           if (errorResponse.status === 409) {
             this.emailExist = true;
-            alert('Ya tienes un estudiante con ese email, prueba con otro');
+            this.showErrorRepeatEmail();
           } else {
             console.error('Error checking email: ', errorResponse);
           }
@@ -197,24 +198,24 @@ export class UpdateStudentFormPageComponent {
     }
   }
 
-  public getTheImageUrl(){
+  public getTheImageUrl() {
     const imageControl = this.updateStudentForm.get('studentPhotoFile');
     const imageFile: File | null = imageControl?.value;
 
-  // Verificar si imageFile no es nulo y si es un archivo válido
-  if (!imageFile || !(imageFile instanceof File)) {
-    // Si no se ha seleccionado ningún archivo, llama a updateStudent directamente
-    this.updateStudent();
-    return;
-  }
-      this.imageBbService.getImageUrlFromFile(imageFile);
+    // Verificar si imageFile no es nulo y si es un archivo válido
+    if (!imageFile || !(imageFile instanceof File)) {
+      // Si no se ha seleccionado ningún archivo, llama a updateStudent directamente
+      this.updateStudent();
+      return;
+    }
+    this.imageBbService.getImageUrlFromFile(imageFile);
 
-      this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
-        if(imageUrl){
-          this.updateStudentForm.patchValue({studentPhoto: imageUrl});
-          this.updateStudent(); //add the new student
-        }
-      });
+    this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
+      if (imageUrl) {
+        this.updateStudentForm.patchValue({ studentPhoto: imageUrl });
+        this.updateStudent(); //add the new student
+      }
+    });
 
     this.updateStudentForm.value.studentPhoto = this.imageUrl;
   }
@@ -227,11 +228,10 @@ export class UpdateStudentFormPageComponent {
           if (response && this.selectedStudentId) {
             this.addNewStudentSubject(this.selectedStudentId);
             this.studentService.getSubjectsFromStudent(this.selectedStudentId);
-            alert('El alumno se ha actualizado correctamente');
-            //todo:hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+            this.showSuccess();
             this.router.navigate(['/student-page']);
           } else {
-            alert('No se ha obtenido correctamente el Id de estudiante');
+            this.showError();
           }
         },
         error: (error) => {
@@ -267,5 +267,18 @@ export class UpdateStudentFormPageComponent {
       }
     });
   }
+
+  private showSuccess() {
+    this.toastrService.success('Los datos del estudiante se han actualizado!', 'Felicidades!');
+  }
+
+  private showError() {
+    this.toastrService.error('Ha habido un error para actualizar los datos del estudiante', 'Ups!');
+  }
+
+  private showErrorRepeatEmail() {
+    this.toastrService.error('Ya tienes un estudiante con ese email, prueba con otro', 'Ups');
+  }
+
 
 }

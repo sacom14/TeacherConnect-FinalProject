@@ -1,7 +1,7 @@
 import { PaymentMethod } from './../../../interfaces/payment-method.interface';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -12,11 +12,12 @@ import { SubjectService } from '../../../services/subject/subject.service';
 import { ValidationService } from '../../../services/validations/validations-service.service';
 import { AcademicYear } from '../../../interfaces/academic-year.interface';
 import { ImagebbService } from '../../../services/imageBB/imagebb.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-new-student-form-page',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, ToastrModule],
   templateUrl: './new-student-form-page.component.html',
   styleUrl: './new-student-form-page.component.scss'
 })
@@ -28,6 +29,7 @@ export class NewStudentFormPageComponent implements OnInit {
 
   private imageUrl!: Observable<string>;
 
+  private toastrService = inject(ToastrService);
   constructor(
     private fb: FormBuilder,
     private validationService: ValidationService,
@@ -115,13 +117,13 @@ export class NewStudentFormPageComponent implements OnInit {
           this.getTheImageUrl();
         } else {
           this.emailExist = true;
-          return alert('Ya tienes un estudiante con ese email, prueba con otro');
+          this.showErrorRepeatEmail();
         }
       },
       error: (errorResponse) => {
         if (errorResponse.status === 409) {
           this.emailExist = true;
-          alert('Ya tienes un estudiante con ese email, prueba con otro');
+          this.showErrorRepeatEmail();
         } else {
           console.error('Error checking email: ', errorResponse);
         }
@@ -155,11 +157,10 @@ export class NewStudentFormPageComponent implements OnInit {
           if (response.id_student) {
             const studentId = response.id_student;
             this.addNewStudentSubject(studentId);
-            alert('El alumno se ha registrado correctamente');
-            //todo:hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+            this.showSuccess();
             this.router.navigate(['/student-page'])
           }else {
-            alert('No se ha obtenido correctamente el Id de estudiante');
+            this.showError();
           }
         },
         error: (error) => {
@@ -181,4 +182,18 @@ export class NewStudentFormPageComponent implements OnInit {
       });
     });
   }
+
+  private showSuccess() {
+    this.toastrService.success('Estudiante añadido correctamente!', 'Felicidades!');
+  }
+
+  private showError(){
+    this.toastrService.error('Ha habido un error para añadir el estudiante', 'Ups!');
+  }
+
+  private showErrorRepeatEmail(){
+    this.toastrService.error('Ya tienes un estudiante con ese email, prueba con otro', 'Ups');
+  }
+
+
 }

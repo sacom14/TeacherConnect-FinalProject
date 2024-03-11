@@ -1,30 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { StudentService } from '../../services/student/student-service.service';
 import { Observable } from 'rxjs';
 import { Session } from '../../interfaces/session.interface';
 import { SessionService } from '../../services/session/session.service';
 import { ModalSessionListComponent } from '../modal-session-list/modal-session-list.component';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modal-session-details',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, ToastrModule],
   templateUrl: './modal-session-details.component.html',
   styleUrl: './modal-session-details.component.scss'
 })
 export class ModalSessionDetailsComponent {
   private router = inject(Router);
-  private studentService = inject(StudentService); //todo: revisra si es necesario
   private modalService = inject(NgbModal);
+  private toastrService = inject(ToastrService);
 
   private sessionService = inject(SessionService);
-  private activatedRoute = inject(ActivatedRoute); //we obtains the studentId from the info-page.component //todo: revisra si es necesario
 
-  // public selectedSessionExist!: boolean;
   public selectedSessionId!: number | null;
   public sessionData!: Observable<Session[] | null>;
   public selectedStudentId!:number | null;
@@ -64,13 +62,22 @@ export class ModalSessionDetailsComponent {
   public deleteSession(){
     this.sessionService.deleteSession(this.selectedSessionId).subscribe({
       next: (response) => {
-        alert('La sesión se ha eliminado correctamente'); //todo: modal de notificación successfull
+        this,this.showSuccess(); //Todo: need the confirm modal
         this.modalService.dismissAll();
       },
       error: (error) => {
+        this.showError();
         console.error('Error al eliminar la sesión', error)
       },
-    })
+    });
+  }
+
+  private showSuccess() {
+    this.toastrService.success('Los sesión se ha eliminado correctamente!', 'Felicidades!');
+  }
+
+  private showError() {
+    this.toastrService.error('Ha habido un error para elimnar la sesión', 'Ups!');
   }
 
 }

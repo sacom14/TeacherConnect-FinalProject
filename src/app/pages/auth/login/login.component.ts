@@ -48,7 +48,6 @@ export class LoginComponent {
         error: (error) => {
           console.error('Error during login: ', error);
           if (error.status === 401 || error.status === 404) {
-            // Cambiar el booleano para mostrar el mensaje de error
             this.correctEmailAndPassword = false;
           }
         }

@@ -1,10 +1,12 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthTeacherService } from '../../services/teacher/auth-teacher.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
+  const toastrService = inject(ToastrService);
   const authTeacherService = inject(AuthTeacherService);
 
   let userIsAuthenticated = () => {
@@ -15,11 +17,11 @@ export const authGuard: CanActivateFn = (route, state) => {
   if(userIsAuthenticated()){ //is authenticated
     return true;
   } else {
-    alert('Aún no has iniciado sesión');
-    //todo: modal alert
+    toastrService.warning('Primero debes iniciar sesión')
     router.navigate(['/login-page']);
     return false;
   }
+
 };
 
 

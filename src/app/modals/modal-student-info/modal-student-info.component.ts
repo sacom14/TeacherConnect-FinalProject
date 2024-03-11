@@ -7,11 +7,12 @@ import { StudentService } from '../../services/student/student-service.service';
 import { ModalSessionListComponent } from '../modal-session-list/modal-session-list.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modal-student-info',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, ToastrModule],
   templateUrl: './modal-student-info.component.html',
   styleUrl: './modal-student-info.component.scss'
 })
@@ -19,6 +20,7 @@ export class ModalStudentInfoComponent {
   private studentService = inject(StudentService);
   private modalService = inject(NgbModal);
   private router = inject(Router);
+  private toastrService = inject(ToastrService);
 
   public selectedStudentExist!: boolean;
   public selectedStudentId!: number | null;
@@ -70,12 +72,22 @@ export class ModalStudentInfoComponent {
   public deleteStudent(){
     this.studentService.deleteStudent(this.selectedStudentId).subscribe({
       next: (response) => {
-        alert('El estudiante se ha eliminado correctamente'); //todo: modal de notificación successfull
+        this.showSuccess();//todo: need confirm delete
         this.modalService.dismissAll();
       },
       error: (error) => {
+        this.showError();
         console.error('Error al eliminar el estudiante', error)
       },
     })
   }
+
+  private showSuccess() {
+    this.toastrService.success('Estudiante eliminado correctamente!', 'Felicidades!');
+  }
+
+  private showError(){
+    this.toastrService.error('Ha habido un error para eliminar el estudiante', 'Ups!');
+  }
+
 }

@@ -8,11 +8,12 @@ import { ImagebbService } from '../../../services/imageBB/imagebb.service';
 import { TeacherService } from '../../../services/teacher/teacher-service.service';
 import { ValidationService } from '../../../services/validations/validations-service.service';
 import { Teacher, TeacherResponse } from '../../../interfaces/teacher.interface';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-teacher-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, ToastrModule],
   templateUrl: './update-teacher-form.component.html',
   styleUrl: './update-teacher-form.component.scss'
 })
@@ -23,6 +24,7 @@ export class UpdateTeacherFormComponent implements OnInit {
   private teacherService = inject(TeacherService);
   private imageBbService = inject(ImagebbService);
   private router = inject(Router);
+  private toastrService = inject(ToastrService);
 
   private imageUrl!: Observable<string>;
   public currentTeacherEmail!: string | null;
@@ -124,14 +126,15 @@ export class UpdateTeacherFormComponent implements OnInit {
           this.getTheImageUrl();
         } else {
           this.emailExist = true;
-          return alert('El correo electrónico ya está registrado, ponga otro Email');
+          this.showErrorRepeatEmail();
         }
       },
       error: (errorResponse) => {
         if (errorResponse.status === 500) {
           this.emailExist = true;
-          alert('El correo electrónico ya está registrado, ponga otro Email');
+          this.showErrorRepeatEmail();
         } else {
+          this.showError();
           console.error('Error checking email: ', errorResponse);
         }
       }
@@ -161,13 +164,25 @@ export class UpdateTeacherFormComponent implements OnInit {
     this.teacherService.updateTeacher(formData)
       .subscribe({
         next: (response) => {
-          alert('Los datos se han actualizado correctamente');
-          //todo: hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+          this.showSuccess();
           this.router.navigate(['/teacher-page'])
         },
         error: (error) => {
+          this.showError()
           console.error('Error al actualizar los datos del profesor', error)
         },
       });
   }
+
+  private showSuccess() {
+    this.toastrService.success('Se han actualizado los datos correctamente!', 'Felicidades!');
+  }
+
+  private showError() {
+    this.toastrService.error('Ha habido un error en la actualización de su cuenta', 'Ups!');
+  }
+  private showErrorRepeatEmail(){
+    this.toastrService.error('Ya existe una cuenta con ese email, prueba con otro', 'Ups');
+  }
+
 }

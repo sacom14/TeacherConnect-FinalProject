@@ -11,11 +11,12 @@ import { StudentService } from '../../../services/student/student-service.servic
 import { SubjectService } from '../../../services/subject/subject.service';
 import { ValidationService } from '../../../services/validations/validations-service.service';
 import { Session } from '../../../interfaces/session.interface';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-session-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, ToastrModule],
   templateUrl: './update-session-form.component.html',
   styleUrl: './update-session-form.component.scss'
 })
@@ -28,6 +29,7 @@ export class UpdateSessionFormComponent {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private sessionService = inject(SessionService);
+  private toastrService = inject(ToastrService);
 
   public selectedSessionId!: number | null;
   public selectedStudentId!:number | null;
@@ -127,13 +129,21 @@ export class UpdateSessionFormComponent {
     const sessionId = this.selectedSessionId;
     this.sessionService.updateSession(sessionFormData, sessionId).subscribe({
       next: (response) => {
-        alert('Se ha actualizado la sesión correctamente');
-        //todo: hacer que salga un modal (o alert) verde como mensaje de todo correcto!
+        this.showSuccess();
         this.router.navigate(['/student-page'])
       },
       error: (error) => {
+        this.showError();
         console.error('Error al actualizar la sesión', error)
       },
     });
+  }
+
+  private showSuccess() {
+    this.toastrService.success('Los datos de la sesión se han actualizado!', 'Felicidades!');
+  }
+
+  private showError() {
+    this.toastrService.error('Ha habido un error para actualizar los datos de la sesión', 'Ups!');
   }
 }
