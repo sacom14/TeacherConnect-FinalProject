@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ImageBbResponse } from '../../interfaces/imagebb-interface';
-import { environment } from '../../../environments/environment.development.';
+import { environment } from '../../../environments/environment.development';
 
 
 @Injectable({
