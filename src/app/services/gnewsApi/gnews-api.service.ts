@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { } from '../../../environments/environment';
 import { Article, NewsAPIResponse } from '../../interfaces/gnewsApi.interface.';
+import { environment } from '../../../environments/environment.development.ts';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Article, NewsAPIResponse } from '../../interfaces/gnewsApi.interface.';
 export class GNewsApiService {
   private http = inject(HttpClient);
   private _newsApiUrl: string = 'https://gnews.io/api/v4/search?';
-  private _apiGNewsApi: string = environment.apiKeyGNewsApi;
+  private _apiGNewsApi: string = environment.API_KEY_GNEWSAPI;
 
   private _educationNews = new BehaviorSubject<Article[]>([]);
 

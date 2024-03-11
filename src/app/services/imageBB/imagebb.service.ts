@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import { ImageBbResponse } from '../../interfaces/imagebb-interface';
+import { environment } from '../../../environments/environment.development.ts';
 
 
 @Injectable({
@@ -11,7 +11,7 @@ import { ImageBbResponse } from '../../interfaces/imagebb-interface';
 export class ImagebbService {
   private http = inject(HttpClient);
   private _imageBBApiUrl: string = 'https://api.imgbb.com/1/upload';
-  private _apiKeyImageBB: string = environment.apiKeyImageBB;
+  private _apiKeyImageBB: string = environment.API_KEY_IMAGEBB;
 
   private _imageUrlResponse = new BehaviorSubject<string>('');
 
