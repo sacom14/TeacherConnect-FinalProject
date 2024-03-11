@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { } from '../../../environments/environment';
 import { Article, NewsAPIResponse } from '../../interfaces/gnewsApi.interface.';
-import { environment } from '../../../environments/environment.development.ts';
+import { environment } from '../../../environments/environment.development.';
 
 @Injectable({
   providedIn: 'root'
