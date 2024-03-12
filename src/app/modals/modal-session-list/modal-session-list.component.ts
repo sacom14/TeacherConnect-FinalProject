@@ -22,9 +22,9 @@ export class ModalSessionListComponent {
   private studentService = inject(StudentService);
   private modalService = inject(NgbModal);
 
-  private router = inject(Router); //Todo quitar?
+  private router = inject(Router);
 
-  public selectedStudentExist!: boolean; //Todo quitar?
+  public selectedStudentExist!: boolean;
   public selectedStudentId!: number | null;
   public sessionList!: Observable<Session[] | null>;
   public dataOfStudentSelected!: Observable<StudentById[] | null>;

@@ -1,1 +1,22 @@
-<p>confirm-modal works!</p>
+<section class="modal-container">
+  <div class="modal-header d-flex justify-content-between align-items-center" >
+    <i class="fa-solid fa-triangle-exclamation"></i>
+  </div>
+  <div class="modal-body row d-flex justify-content-center fw-bold">
+    <h3 class="fw-bold">
+      ¿Estás seguro?
+    </h3>
+    <p>
+      No vas a poder volver a recuperar los datos eliminados
+    </p>
+  </div>
+  <div class="modal-footer d-flex justify-content-center flex-wrap">
+    <button class="btn btn-delete" (click)="confirmDelete()">
+      Eliminar definitivamente
+    </button>
+      <!-- todo: Que aparezca primer el modal de confirmación -->
+      <button class="btn btn-green" (click)="cancelDelete()">
+        Cancelar
+      </button>
+  </div>
+</section>

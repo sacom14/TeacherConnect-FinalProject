@@ -8,6 +8,8 @@ import { ModalSessionListComponent } from '../modal-session-list/modal-session-l
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { ConfirmService } from '../../services/confirm.service';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-modal-student-info',
@@ -21,10 +23,16 @@ export class ModalStudentInfoComponent {
   private modalService = inject(NgbModal);
   private router = inject(Router);
   private toastrService = inject(ToastrService);
+  private confirmService = inject(ConfirmService);
 
   public selectedStudentExist!: boolean;
   public selectedStudentId!: number | null;
   public dataOfStudentSelected!: Observable<StudentById[] | null>;
+  public confirmDeleteElement: Observable<boolean>;
+
+  constructor() {
+    this.confirmDeleteElement = this.confirmService.confirmDeleteElement;
+  }
 
   ngOnInit(): void {
 
@@ -51,7 +59,7 @@ export class ModalStudentInfoComponent {
     return this.studentService.getAgeFromBirthdate(birthdate);
   }
 
-  public goEditStudent() { //todo: CAMBIAR POR MODAL?
+  public goEditStudent() {
     this.modalService.dismissAll();
     this.router.navigate(['/update-student']);
   }
@@ -65,28 +73,44 @@ export class ModalStudentInfoComponent {
     modalRef.componentInstance.selectedStudentId = selectedStudenId;
   }
 
-  public closeModal(){
-    this.modalService.dismissAll();
+
+  public deleteStudent() {
+    this.openConfirmModal();
+    this.confirmDeleteElement.subscribe((value: boolean) => {
+      if (value) {
+        this.studentService.deleteStudent(this.selectedStudentId).subscribe({
+          next: (response) => {
+            this.showSuccess();
+            this.modalService.dismissAll();
+            window.location.reload();
+          },
+          error: (error) => {
+            this.showError();
+            console.error('Error al eliminar el estudiante', error)
+          },
+        });
+      }
+    });
   }
 
-  public deleteStudent(){
-    this.studentService.deleteStudent(this.selectedStudentId).subscribe({
-      next: (response) => {
-        this.showSuccess();//todo: need confirm delete
-        this.modalService.dismissAll();
-      },
-      error: (error) => {
-        this.showError();
-        console.error('Error al eliminar el estudiante', error)
-      },
-    })
+  public openConfirmModal() {
+    const modalRef = this.modalService.open(ConfirmModalComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
+    (modalRef.componentInstance as ConfirmModalComponent).setModalRef(modalRef);
+  }
+
+
+  public closeModal() {
+    this.modalService.dismissAll();
   }
 
   private showSuccess() {
     this.toastrService.success('Estudiante eliminado correctamente!', 'Felicidades!');
   }
 
-  private showError(){
+  private showError() {
     this.toastrService.error('Ha habido un error para eliminar el estudiante', 'Ups!');
   }
 
