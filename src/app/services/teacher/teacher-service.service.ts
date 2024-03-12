@@ -36,8 +36,7 @@ export class TeacherService {
 
   //create teacher
   public createNewTeacher(teacherData: Teacher) {
-    const headers = this.authTeacherService.getHeadersWithAuthorization();
-    return this.http.post(this._teacherApiUrl, teacherData,  {headers})
+    return this.http.post(this._teacherApiUrl, teacherData)
       .pipe(
         catchError((error) => {
           console.error('Error en el servicio: ', error);
