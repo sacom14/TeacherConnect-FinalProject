@@ -7,10 +7,10 @@ import { AbstractControl, FormArray, FormGroup, ValidationErrors, ValidatorFn } 
 export class ValidationService {
 
   //name
-  public namePattern: string = '^[a-zA-Z]{2,}(?: [a-zA-Z]+)*$';
+  public namePattern: string = '^[a-zA-ZÀ-ÿ]{2,}(?: [a-zA-ZÀ-ÿ]+)*$';
 
   //surname
-  public surnamePattern: string = '^[a-zA-Z]{2,}(?: [a-zA-Z]+)*$';
+  public surnamePattern: string = '^[a-zA-ZÀ-ÿ]{2,}(?: [a-zA-ZÀ-ÿ]+)*$';
 
   //email
   public emailPattern: string = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
