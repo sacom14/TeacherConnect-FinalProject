@@ -12,9 +12,8 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
     return localStorage.getItem('token') ? true : false;
   };
 
-  if(userIsAuthenticated()){ //is authenticated
+  if (userIsAuthenticated()) { //is authenticated
     router.navigate(['/home-page']);
-
     return false;
   } else {
     return true;

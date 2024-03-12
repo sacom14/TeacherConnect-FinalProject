@@ -48,15 +48,13 @@ export class TeacherService {
 
   //chek if the email is already on BD
   public checkRepeatEmail(teacherEmail: string) {
-    const headers = this.authTeacherService.getHeadersWithAuthorization();
     const teacherId = this.authTeacherService.getTeacherId();
-    return this.http.post<TeacherEmailCheckResponseMessage>(`${this._teacherApiUrl}/check-email/${teacherId}`, { teacherEmail }, {headers});
+    return this.http.post<TeacherEmailCheckResponseMessage>(`${this._teacherApiUrl}/check-email/${teacherId}`, { teacherEmail });
   }
 
   //login (take token)
   public login(teacherEmail: string, teacherPassword: string) {
-    const headers = this.authTeacherService.getHeadersWithAuthorization();
-    return this.http.post<{ token: string, teacherId: number }>(`${this._teacherApiUrl}/login`, { teacher_email: teacherEmail, teacher_password: teacherPassword }, {headers});
+    return this.http.post<{ token: string, teacherId: number }>(`${this._teacherApiUrl}/login`, { teacher_email: teacherEmail, teacher_password: teacherPassword });
   }
 
   public getAgeFromBirthdate(birthdate: string): number {
