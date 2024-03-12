@@ -94,8 +94,6 @@ export class RegisterComponent {
     })
   }
 
-
-
   public getTheImageUrl(){
     const imageControl = this.myFormRegister.get('teacherPhotoFile');
     const imageFile: File | null = imageControl?.value;

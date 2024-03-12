@@ -35,7 +35,7 @@ export class TeacherService {
   }
 
   //create teacher
-  public createNewTeacher(teacherData: Teacher) {
+  public createNewTeacher(teacherData: Teacher){
     return this.http.post(this._teacherApiUrl, teacherData)
       .pipe(
         catchError((error) => {
