@@ -213,7 +213,7 @@ export class UpdateStudentFormPageComponent {
     this.imageBbService.imageUrlResponse.subscribe((imageUrl) => {
       if (imageUrl) {
         this.updateStudentForm.patchValue({ studentPhoto: imageUrl });
-        this.updateStudent(); //add the new student
+        this.updateStudent(); //update the new student
       }
     });
 

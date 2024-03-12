@@ -154,7 +154,7 @@ export class NewStudentFormPageComponent implements OnInit {
     this.studentService.createNewStudent(studentFormData)
       .subscribe({
         next: (response) => {
-          if (response.id_student) {
+          if (response && response.id_student) {
             const studentId = response.id_student;
             this.addNewStudentSubject(studentId);
             this.showSuccess();

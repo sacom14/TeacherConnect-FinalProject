@@ -165,7 +165,7 @@ export class UpdateTeacherFormComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.showSuccess();
-          this.router.navigate(['/teacher-page'])
+          this.router.navigate(['/home-page']);
         },
         error: (error) => {
           this.showError()
