@@ -50,10 +50,10 @@
         <a class="box border bg-custom-yellow text-decoration-none yellow shadow" href="/student-page">
           {{studentCount}} Estudiantes
         </a>
-        <a class="box border bg-custom-green text-decoration-none green shadow">
+        <a class="box border bg-custom-green text-decoration-none green shadow" (click)="openPayedSessionModal()">
           {{payedSessionCount}} Pagados
         </a>
-        <a class="box border bg-custom-red text-decoration-none red shadow">
+        <a class="box border bg-custom-red text-decoration-none red shadow" (click)="openNotPayedSessionModal()">
           {{notPayedSessionCount}} Sessiones aún por pagar
         </a>
       </div>

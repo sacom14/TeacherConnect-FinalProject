@@ -53,6 +53,7 @@ export class TeacherService {
 
   //login (take token)
   public login(teacherEmail: string, teacherPassword: string) {
+    console.log('h')
     return this.http.post<{ token: string, teacherId: number }>(`${this._teacherApiUrl}/login`, { teacher_email: teacherEmail, teacher_password: teacherPassword });
   }
 

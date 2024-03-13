@@ -14,6 +14,8 @@ import { Article } from '../../interfaces/gnewsApi.interface.';
 import { GNewsApiService } from '../../services/gnewsApi/gnews-api.service';
 import { TeacherDetailsComponent } from '../teacher-page/teacher-details/teacher-details.component';
 import { ModalSessionDetailsComponent } from '../../modals/modal-session-details/modal-session-details.component';
+import { ModalPayedSessionComponent } from '../../modals/modal-payed-session/modal-payed-session.component';
+import { NotPayedSessionComponent } from '../../modals/not-payed-session/not-payed-session.component';
 
 @Component({
   selector: 'app-home-page',
@@ -166,5 +168,21 @@ export class HomePageComponent {
     });
     modalRef.componentInstance.selectedSessionId = selectedSessionId; //get the id_session from selected session
     modalRef.componentInstance.selectedStudentId = selectedStudentId;
+  }
+
+  public openPayedSessionModal(){
+    this.modalService.dismissAll();
+    this.modalService.open(ModalPayedSessionComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
+  }
+
+  public openNotPayedSessionModal(){
+    this.modalService.dismissAll();
+    this.modalService.open(NotPayedSessionComponent, {
+      centered: true,
+      backdrop: 'static',
+    });
   }
 }
