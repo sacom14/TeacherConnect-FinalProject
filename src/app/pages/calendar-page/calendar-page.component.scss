@@ -1,12 +1,15 @@
-.container{
-  max-width: 600px;
-  height: 0 auto;
-  margin-bottom: 65px;
-  cursor: pointer;
-}
+// .container{
+//   max-width: 600px;
+//   height: 0 auto;
+//   margin-bottom: 65px;
+//   cursor: pointer;
+// }
 
 full-calendar{
-  text-decoration: none;
+  height: 75vh;
+  overflow: auto;
+  padding: 1rem;
+  cursor: pointer;
 }
 
 // :root{

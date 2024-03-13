@@ -58,12 +58,12 @@
         </a>
       </div>
     </article>
-    <aside class=" col-12 col-sm-12 col-md-3 h-100 d-md-block d-none shadow text-white bg-white">
+    <aside class=" col-12 col-sm-12 col-md-3 h-100 d-md-block d-none shadow text-white bg-custom-secondary rounded-5">
       <div class="w-100 h-100 ">
         <h4 class="text-black fw-bold fs-3 mt-3">Ponte al día</h4>
         @for (article of educationNews | async; track $index)
         {
-          <div class="bg-custom-blue-light m-1">
+          <div class="bg-custom-light m-1 text-black rounded px-1">
             <h6 class="fs-6 mt-4"> {{article.title}}</h6>
             <img src="{{article.image}}" alt="new image" width="50%">
             <div class="mb-4">

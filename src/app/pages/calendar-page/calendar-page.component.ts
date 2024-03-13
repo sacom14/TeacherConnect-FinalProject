@@ -62,7 +62,7 @@ export class CalendarPageComponent implements OnInit {
     eventColor:'#9AD0C2',
     eventBackgroundColor: '#1F1A36',
     eventTextColor:'orange',
-    themeSystem: 'bootstrap5',
+    eventBorderColor: '#1F1A36',
     headerToolbar: {
       left: 'prev,next,today',
       center: 'title',
