@@ -43,11 +43,9 @@ export class LoginComponent {
       this.teacherService.login(email, password).subscribe({
         next: (response) => {
           this.authTeacherService.login(response.token, response.teacherId)//save token on localstorage?
-          console.log('1')
           this.router.navigate(['/home-page']);
         },
         error: (error) => {
-          console.log('2')
           console.error('Error during login: ', error);
           if (error.status === 401 || error.status === 404) {
             this.correctEmailAndPassword = false;
